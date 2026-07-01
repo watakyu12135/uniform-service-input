@@ -94,7 +94,57 @@ function createTable(data) {
     <th>採寸</th>
   </tr>`;
 
-  const products = data.jobs[0].products;
+  function createTable(data, selectedJob, selectedGender) {
+
+  const table = document.getElementById("table");
+
+  let html = `<tr>
+    <th>商品</th>
+    <th>色</th>
+    <th>サイズ</th>
+    <th>数量</th>
+    <th>採寸</th>
+  </tr>`;
+
+  const jobData = data.jobs.find(j =>
+    j.job === selectedJob && j.gender === selectedGender
+  );
+
+  if (!jobData) {
+    table.innerHTML = "<tr><td colspan='5'>該当データなし</td></tr>";
+    return;
+  }
+
+  jobData.products.forEach(p => {
+    p.colors.forEach(color => {
+
+      let row = `<tr><td>${p.name}</td><td>${color}</td>`;
+
+      row += `<td>
+        <select onchange="checkSize(this)">
+          <option value="">選択</option>`;
+
+      p.sizes.forEach(size => {
+        if (!p.disabledSizes?.includes(size)) {
+          row += `<option value="${size}">${size}</option>`;
+        }
+      });
+
+      row += `<option value="別寸">別寸</option>`;
+      row += `</select></td>`;
+
+      row += `<td><input type="number" min="0"></td>`;
+      row += `<td><button class="measure hidden">採寸</button></td>`;
+      row += "</tr>";
+
+      html += row;
+
+    });
+  });
+
+  table.innerHTML = html;
+}
+
 
   products.forEach(p => {
     p.colors.forEach(color => {
