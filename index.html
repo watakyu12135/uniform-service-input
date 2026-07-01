@@ -9,11 +9,17 @@
 body {
   font-family: sans-serif;
   padding: 20px;
+  overflow-x: hidden; /* ←追加 */
 }
 
 table {
   border-collapse: collapse;
   width: 100%;
+  min-width: 900px; /* ←追加 */
+}
+
+.table-wrap {
+  overflow-x: auto;
 }
 
 th, td {
@@ -52,6 +58,7 @@ button {
 .table-wrap {
   overflow-x: auto;
 }
+
   
 </style>
 </head>
