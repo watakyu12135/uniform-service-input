@@ -92,11 +92,6 @@ function changeJob() {
   const job = document.getElementById("job").value;
   const gender = document.getElementById("gender").value;
 
-  function changeJob() {
-
-  const job = document.getElementById("job").value;
-  const gender = document.getElementById("gender").value;
-
   if (!job || !gender) {
     document.getElementById("table").innerHTML =
       "<tr><td colspan='5'>性別と職種を選択してください</td></tr>";
@@ -105,11 +100,6 @@ function changeJob() {
 
   createTable(currentData, job, gender);
 }
-
-
-  createTable(currentData, job, gender);
-}
-
 // ✅ 表生成（正しい版）
 function createTable(data, selectedJob, selectedGender) {
 
