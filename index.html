@@ -78,7 +78,13 @@ const ALL_SIZES = ["S","M","L","LL","EL","BL"];
 // JSON読み込み
 function getCustomer() {
   const url = new URL(window.location.href);
-  return url.searchParams.get("customer") || "customerA";
+  const customer = url.searchParams.get("customer") || "customerA";
+
+  if (customer === "A") {
+    return "customerA";
+  }
+
+  return customer;
 }
 
 fetch(`config/${getCustomer()}.json`)
