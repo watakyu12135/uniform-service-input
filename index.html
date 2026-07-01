@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>ユニフォーム入力</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+    h1 {
+      text-align: center;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px;
+      width: 100%;
+      font-size: 16px;
+    }
+    .result {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<h1>ユニフォーム申請フォーム</h1>
+
+<label>名前</label>
+<input type="text" id="name">
+
+<label>部署</label>
+<select id="dept">
+  <option value="">選択してください</option>
+  <option value="看護部">看護部</option>
+  <option value="リハビリ">リハビリ</option>
+</select>
+
+<label>性別</label>
+<select id="gender">
+  <option value="">選択してください</option>
+  <option value="male">男性</option>
+  <option value="female">女性</option>
+</select>
+
+<h2>上衣（最大5枚）</h2>
+<label>S</label><input type="number" id="top_s" min="0">
+<label>M</label><input type="number" id="top_m" min="0">
+<label>L</label><input type="number" id="top_l" min="0">
+
+<button onclick="checkInput()">入力チェック</button>
+
+<div class="result" id="result"></div>
+
+<script>
+function getParam(name) {
+  const url = new URL(window.location.href);
+  return url.searchParams.get(name);
+}
+
+// 顧客表示確認
+const customer = getParam("customer");
+if (customer) {
+  document.body.insertAdjacentHTML("afterbegin", "<p>顧客: " + customer + "</p>");
+}
+
+function checkInput() {
+  let s = Number(document.getElementById("top_s").value) || 0;
+  let m = Number(document.getElementById("top_m").value) || 0;
+  let l = Number(document.getElementById("top_l").value) || 0;
+
+  let total = s + m + l;
+
+  if (total === 5) {
+    document.getElementById("result").innerText = "OK（合計5枚）";
+  } else {
+    document.getElementById("result").innerText = "NG：合計は5枚にしてください（現在 " + total + "枚）";
+  }
+}
+</script>
+
+</body>
+</html>
