@@ -203,8 +203,22 @@ function checkSize(select) {
 
   const common = {
     id: Date.now(),
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    const now = new Date();
+
+const common = {
+  id: Date.now(),
+
+  createdAt: now.toLocaleString('ja-JP'),
+  updatedAt: now.toLocaleString('ja-JP'),
+
+  customerCode: "A001",
+  customerName: "A病院",
+
+  sei: document.getElementById("sei").value,
+  mei: document.getElementById("mei").value,
+  gender: document.getElementById("gender").value,
+  job: document.getElementById("job").value
+};
     customerCode: "A001",
     customerName: "A病院",
     sei: document.getElementById("sei").value,
