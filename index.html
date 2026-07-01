@@ -80,6 +80,10 @@ fetch(`config/${getCustomer()}.json`)
   .then(res => res.json())
   .then(data => {
     currentData = data;
+
+    // ✅ 初期表示メッセージ
+    document.getElementById("table").innerHTML =
+      "<tr><td colspan='5'>性別と職種を選択してください</td></tr>";
   });
 
 // ✅ 職種変更で表生成
@@ -183,6 +187,32 @@ function checkSize(select) {
 // ✅ 登録
 function submitData() {
 
+  function submitData() {
+
+  // ✅ 入力チェックここから
+  if (!document.getElementById("sei").value) {
+    alert("氏を入力してください");
+    return;
+  }
+
+  if (!document.getElementById("mei").value) {
+    alert("名を入力してください");
+    return;
+  }
+
+  if (!document.getElementById("gender").value) {
+    alert("性別を選択してください");
+    return;
+  }
+
+  if (!document.getElementById("job").value) {
+    alert("職種を選択してください");
+    return;
+  }
+
+  // ✅ ここから元の処理
+
+
   const common = {
     id: Date.now(),
     createdAt: new Date().toISOString(),
@@ -221,6 +251,11 @@ function submitData() {
     }
   });
 
+  if (data.length === 0) {
+  alert("商品が入力されていません（サイズ・数量）");
+  return;
+}
+    
   console.log(data);
 
   fetch("https://script.google.com/macros/s/AKfycbycFkYteNOah_vtLt0lTbugo7W5o-oSPHkRWpwKC-p-5G3JW_DkIAF5pxUjw6piJYeRRw/exec", {
