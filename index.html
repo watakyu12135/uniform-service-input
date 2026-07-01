@@ -72,6 +72,8 @@ button {
 </div>
 
 <button onclick="checkTotal()">入力チェック</button>
+<button onclick="submitData()">登録</button>
+
 
 <div id="result"></div>
 
@@ -163,6 +165,78 @@ function checkTotal() {
   }
 }
 
+function submitData() {
+
+  const rows = document.querySelectorAll("#table tr");
+  let data = [];
+
+  rows.forEach((row, i) => {
+    if (i === 0) return; // ヘッダ
+
+    const cells = row.querySelectorAll("td");
+
+    const product = cells[0].innerText;
+    const color = cells[1].innerText;
+
+    // サイズごとの入力
+    for (let j = 0; j < ALL_SIZES.length; j++) {
+
+      const input = cells[j + 2].querySelector("input");
+
+      if (input) {
+        const value = Number(input.value) || 0;
+
+        if (value > 0) {
+          data.push({
+  ...common,
+  product: product,
+  color: color,
+  size: ALL_SIZES[j],
+  qty: value
+});
+
+        }
+      }
+    }
+
+    // 別寸
+    const special = cells[ALL_SIZES.length + 2].querySelector("input");
+    if (special && Number(special.value) > 0) {
+      data.push({
+        product: product,
+        color: color,
+        size: "別寸",
+        qty: Number(special.value)
+      });
+    }
+
+  });
+
+const common = {
+  id: Date.now(),
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
+
+  customerCode: "A001",
+  customerName: "A病院",
+
+  sei: "山田",
+  mei: "太郎",
+  gender: "male",
+  job: "看護部"
+};
+  
+  console.log(data);
+　fetch(https://script.google.com/macros/s/AKfycbycFkYteNOah_vtLt0lTbugo7W5o-oSPHkRWpwKC-p-5G3JW_DkIAF5pxUjw6piJYeRRw/exec", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify(data)
+});
+
+}
+  
 </script>
 
 </body>
