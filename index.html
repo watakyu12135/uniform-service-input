@@ -75,14 +75,25 @@ function getCustomer() {
   return "customerA";
 }
 
+let currentData;
+
 fetch(`config/${getCustomer()}.json`)
   .then(res => res.json())
   .then(data => {
-    createTable(data);
+    currentData = data;
   });
 
+function changeJob() {
+  const job = document.getElementById("job").value;
+  const gender = document.getElementById("gender").value;
+
+  if (!job || !gender) return;
+
+  createTable(currentData, job, gender);
+}
+
 // ✅ 表生成
-function createTable(data) {
+function createTable(data, selectedJob, selectedGender) {
 
   const table = document.getElementById("table");
 
@@ -205,10 +216,19 @@ function submitData() {
     updatedAt: new Date().toISOString(),
     customerCode: "A001",
     customerName: "A病院",
-    sei: "山田",
-    mei: "太郎",
-    gender: "male",
-    job: "看護部"
+    const common = {
+  id: Date.now(),
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
+
+  customerCode: "A001",
+  customerName: "A病院",
+
+  sei: document.getElementById("sei").value,
+  mei: document.getElementById("mei").value,
+  gender: document.getElementById("gender").value,
+  job: document.getElementById("job").value
+};
   };
 
   const rows = document.querySelectorAll("#table tr");
