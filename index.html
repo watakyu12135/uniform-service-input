@@ -48,7 +48,7 @@ button {
 名：<input id="mei"><br><br>
 
 性別：
-<select id="gender">
+<select id="gender" onchange="changeJob()">
   <option value="">選択</option>
   <option value="male">男性</option>
   <option value="female">女性</option>
@@ -88,7 +88,20 @@ function changeJob() {
   const job = document.getElementById("job").value;
   const gender = document.getElementById("gender").value;
 
-  if (!job || !gender) return;
+  function changeJob() {
+
+  const job = document.getElementById("job").value;
+  const gender = document.getElementById("gender").value;
+
+  if (!job || !gender) {
+    document.getElementById("table").innerHTML =
+      "<tr><td colspan='5'>性別と職種を選択してください</td></tr>";
+    return;
+  }
+
+  createTable(currentData, job, gender);
+}
+
 
   createTable(currentData, job, gender);
 }
