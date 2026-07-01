@@ -101,8 +101,7 @@ function createTable(data) {
   let html = "";
 
   let header = "<tr><th>商品</th><th>色</th>";
-  ALL_SIZES.forEach(s => header += `<th>${s}</th>`);
-  header += "<th>別寸</th><th>採寸</th></tr>";
+  header += "<th>サイズ</th><th>数量</th><th>採寸</th>";
 
   html += header;
 
@@ -113,13 +112,27 @@ function createTable(data) {
 
       let row = `<tr><td>${p.name}</td><td>${color}</td>`;
 
-      ALL_SIZES.forEach(size => {
-        if (!p.sizes.includes(size) || p.disabledSizes?.includes(size)) {
-          row += "<td>/</td>";
-        } else {
-          row += `<td><input type="number" min="0"></td>`;
-        }
-      });
+      // サイズ選択
+row += `<td>
+  <select class="sizeSelect" onchange="checkSize(this)">
+    <option value="">選択</option>
+`;
+
+p.sizes.forEach(size => {
+  if (!p.disabledSizes?.includes(size)) {
+    row += `<option value="${size}">${size}</option>`;
+  }
+});
+
+row += `<option value="別寸">別寸</option>`;
+row += `</select>
+</td>`;
+
+// 数量
+row += `<td><input type="number" min="0"></td>`;
+
+// 採寸
+row += `<td><button class="measure hidden">採寸</button></td>`;
 
       row += `<td><input type="number" class="special" onchange="checkSpecial(this)"></td>`;
       row += `<td><button class="measure hidden">採寸</button></td>`;
@@ -145,6 +158,17 @@ function checkSpecial(el) {
   }
 }
 
+function checkSize(select) {
+  const row = select.closest("tr");
+  const btn = row.querySelector(".measure");
+
+  if (select.value === "別寸") {
+    btn.classList.remove("hidden");
+  } else {
+    btn.classList.add("hidden");
+  }
+}
+  
 // 合計チェック
 function checkTotal() {
   let inputs = document.querySelectorAll("input[type='number']");
