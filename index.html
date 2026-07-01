@@ -44,8 +44,8 @@ button {
 
 顧客：A病院<br><br>
 
-氏：<input type="text" id="sei">
-名：<input type="text" id="mei"><br><br>
+氏：<input id="sei">
+名：<input id="mei"><br><br>
 
 性別：
 <select id="gender">
@@ -67,8 +67,6 @@ button {
 
 <button onclick="submitData()">登録</button>
 
-<div id="result"></div>
-
 <script>
 
 function getCustomer() {
@@ -77,13 +75,16 @@ function getCustomer() {
 
 let currentData;
 
+// ✅ JSON読み込み
 fetch(`config/${getCustomer()}.json`)
   .then(res => res.json())
   .then(data => {
     currentData = data;
   });
 
+// ✅ 職種変更で表生成
 function changeJob() {
+
   const job = document.getElementById("job").value;
   const gender = document.getElementById("gender").value;
 
@@ -92,20 +93,8 @@ function changeJob() {
   createTable(currentData, job, gender);
 }
 
-// ✅ 表生成
+// ✅ 表生成（正しい版）
 function createTable(data, selectedJob, selectedGender) {
-
-  const table = document.getElementById("table");
-
-  let html = `<tr>
-    <th>商品</th>
-    <th>色</th>
-    <th>サイズ</th>
-    <th>数量</th>
-    <th>採寸</th>
-  </tr>`;
-
-  function createTable(data, selectedJob, selectedGender) {
 
   const table = document.getElementById("table");
 
@@ -127,62 +116,31 @@ function createTable(data, selectedJob, selectedGender) {
   }
 
   jobData.products.forEach(p => {
-    p.colors.forEach(color => {
 
-      let row = `<tr><td>${p.name}</td><td>${color}</td>`;
-
-      row += `<td>
-        <select onchange="checkSize(this)">
-          <option value="">選択</option>`;
-
-      p.sizes.forEach(size => {
-        if (!p.disabledSizes?.includes(size)) {
-          row += `<option value="${size}">${size}</option>`;
-        }
-      });
-
-      row += `<option value="別寸">別寸</option>`;
-      row += `</select></td>`;
-
-      row += `<td><input type="number" min="0"></td>`;
-      row += `<td><button class="measure hidden">採寸</button></td>`;
-      row += "</tr>";
-
-      html += row;
-
-    });
-  });
-
-  table.innerHTML = html;
-}
-
-
-  products.forEach(p => {
     p.colors.forEach(color => {
 
       let row = `<tr>
         <td>${p.name}</td>
         <td>${color}</td>`;
 
-      // ✅ サイズプルダウン
+      // サイズ
       row += `<td>
         <select onchange="checkSize(this)">
           <option value="">選択</option>`;
 
       p.sizes.forEach(size => {
         if (!p.disabledSizes?.includes(size)) {
-          row += `<option value="${size}">${size}</option>`;
+          row += `<option>${size}</option>`;
         }
       });
 
       row += `<option value="別寸">別寸</option>`;
-      row += `</select>
-      </td>`;
+      row += `</select></td>`;
 
-      // ✅ 数量
+      // 数量
       row += `<td><input type="number" min="0"></td>`;
 
-      // ✅ 採寸ボタン
+      // 採寸
       row += `<td><button class="measure hidden">採寸</button></td>`;
 
       row += `</tr>`;
@@ -190,13 +148,15 @@ function createTable(data, selectedJob, selectedGender) {
       html += row;
 
     });
+
   });
 
   table.innerHTML = html;
 }
 
-// ✅ 別寸 → 採寸表示
+// ✅ 別寸チェック
 function checkSize(select) {
+
   const row = select.closest("tr");
   const btn = row.querySelector(".measure");
 
@@ -216,25 +176,17 @@ function submitData() {
     updatedAt: new Date().toISOString(),
     customerCode: "A001",
     customerName: "A病院",
-    const common = {
-  id: Date.now(),
-  createdAt: new Date().toISOString(),
-  updatedAt: new Date().toISOString(),
-
-  customerCode: "A001",
-  customerName: "A病院",
-
-  sei: document.getElementById("sei").value,
-  mei: document.getElementById("mei").value,
-  gender: document.getElementById("gender").value,
-  job: document.getElementById("job").value
-};
+    sei: document.getElementById("sei").value,
+    mei: document.getElementById("mei").value,
+    gender: document.getElementById("gender").value,
+    job: document.getElementById("job").value
   };
 
   const rows = document.querySelectorAll("#table tr");
   let data = [];
 
   rows.forEach((row, i) => {
+
     if (i === 0) return;
 
     const cells = row.querySelectorAll("td");
@@ -267,7 +219,7 @@ function submitData() {
     body: JSON.stringify(data)
   });
 
-  alert("登録送信しました（シート確認して）");
+  alert("登録送信しました（シート確認）");
 }
 
 </script>
