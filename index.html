@@ -22,9 +22,17 @@ th, td {
   text-align: center;
 }
 
-input[type="number"] {
-  width: 60px;
+
+@media (max-width: 600px) {
+  input[type="number"] {
+    width: 45px;
+  }
+
+  table {
+    font-size: 12px;
+  }
 }
+
 
 .hidden {
   display: none;
@@ -33,6 +41,11 @@ input[type="number"] {
 button {
   margin-top: 10px;
 }
+
+.table-wrap {
+  overflow-x: auto;
+}
+  
 </style>
 </head>
 
@@ -42,7 +55,9 @@ button {
 
 名前：<input type="text"><br><br>
 
-<table id="table"></table>
+<div class="table-wrap">
+  <table id="table"></table>
+</div>
 
 <button onclick="checkTotal()">入力チェック</button>
 
