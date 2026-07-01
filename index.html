@@ -18,14 +18,21 @@ table {
 
 th, td {
   border: 1px solid #ccc;
-  padding: 5px;
+  padding: px;
   text-align: center;
 }
 
+td {
+  white-space: nowrap;
+}
 
+td:first-child, th:first-child {
+  min-width: 80px;
+}
+  
 @media (max-width: 600px) {
   input[type="number"] {
-    width: 45px;
+    width: 40px;
   }
 
   table {
