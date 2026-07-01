@@ -14,7 +14,7 @@ body {
 
 table {
   border-collapse: collapse;
-  min-width: 900px;
+  min-width: 600px;
 }
 
 .table-wrap {
@@ -26,24 +26,6 @@ th, td {
   border: 1px solid #ccc;
   padding: 4px;
   text-align: center;
-}
-
-td {
-  white-space: nowrap;
-}
-
-td:first-child, th:first-child {
-  min-width: 80px;
-}
-
-@media (max-width: 600px) {
-  input[type="number"] {
-    width: 40px;
-  }
-
-  table {
-    font-size: 12px;
-  }
 }
 
 .hidden {
@@ -66,25 +48,14 @@ button {
   <table id="table"></table>
 </div>
 
-<button onclick="checkTotal()">入力チェック</button>
 <button onclick="submitData()">登録</button>
 
 <div id="result"></div>
 
 <script>
 
-const ALL_SIZES = ["S","M","L","LL","EL","BL"];
-
-// JSON読み込み
 function getCustomer() {
-  const url = new URL(window.location.href);
-  const customer = url.searchParams.get("customer") || "customerA";
-
-  if (customer === "A") {
-    return "customerA";
-  }
-
-  return customer;
+  return "customerA";
 }
 
 fetch(`config/${getCustomer()}.json`)
@@ -93,50 +64,50 @@ fetch(`config/${getCustomer()}.json`)
     createTable(data);
   });
 
-// テーブル生成
+// ✅ 表生成
 function createTable(data) {
 
   const table = document.getElementById("table");
 
-  let html = "";
-
-  let header = "<tr><th>商品</th><th>色</th>";
-  header += "<th>サイズ</th><th>数量</th><th>採寸</th>";
-
-  html += header;
+  let html = `<tr>
+    <th>商品</th>
+    <th>色</th>
+    <th>サイズ</th>
+    <th>数量</th>
+    <th>採寸</th>
+  </tr>`;
 
   const products = data.jobs[0].products;
 
   products.forEach(p => {
     p.colors.forEach(color => {
 
-      let row = `<tr><td>${p.name}</td><td>${color}</td>`;
+      let row = `<tr>
+        <td>${p.name}</td>
+        <td>${color}</td>`;
 
-      // サイズ選択
-row += `<td>
-  <select class="sizeSelect" onchange="checkSize(this)">
-    <option value="">選択</option>
-`;
+      // ✅ サイズプルダウン
+      row += `<td>
+        <select onchange="checkSize(this)">
+          <option value="">選択</option>`;
 
-p.sizes.forEach(size => {
-  if (!p.disabledSizes?.includes(size)) {
-    row += `<option value="${size}">${size}</option>`;
-  }
-});
+      p.sizes.forEach(size => {
+        if (!p.disabledSizes?.includes(size)) {
+          row += `<option value="${size}">${size}</option>`;
+        }
+      });
 
-row += `<option value="別寸">別寸</option>`;
-row += `</select>
-</td>`;
+      row += `<option value="別寸">別寸</option>`;
+      row += `</select>
+      </td>`;
 
-// 数量
-row += `<td><input type="number" min="0"></td>`;
+      // ✅ 数量
+      row += `<td><input type="number" min="0"></td>`;
 
-// 採寸
-row += `<td><button class="measure hidden">採寸</button></td>`;
-
-      row += `<td><input type="number" class="special" onchange="checkSpecial(this)"></td>`;
+      // ✅ 採寸ボタン
       row += `<td><button class="measure hidden">採寸</button></td>`;
-      row += "</tr>";
+
+      row += `</tr>`;
 
       html += row;
 
@@ -146,18 +117,7 @@ row += `<td><button class="measure hidden">採寸</button></td>`;
   table.innerHTML = html;
 }
 
-// 別寸チェック
-function checkSpecial(el) {
-  const row = el.closest("tr");
-  const btn = row.querySelector(".measure");
-
-  if (Number(el.value) > 0) {
-    btn.classList.remove("hidden");
-  } else {
-    btn.classList.add("hidden");
-  }
-}
-
+// ✅ 別寸 → 採寸表示
 function checkSize(select) {
   const row = select.closest("tr");
   const btn = row.querySelector(".measure");
@@ -168,35 +128,16 @@ function checkSize(select) {
     btn.classList.add("hidden");
   }
 }
-  
-// 合計チェック
-function checkTotal() {
-  let inputs = document.querySelectorAll("input[type='number']");
-  let total = 0;
 
-  inputs.forEach(i => {
-    total += Number(i.value) || 0;
-  });
-
-  if (total === 5) {
-    document.getElementById("result").innerText = "OK（合計5）";
-  } else {
-    document.getElementById("result").innerText = "NG 合計：" + total;
-  }
-}
-
-// 登録処理
+// ✅ 登録
 function submitData() {
 
-  // ✅ 共通データ
   const common = {
     id: Date.now(),
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
-
     customerCode: "A001",
     customerName: "A病院",
-
     sei: "山田",
     mei: "太郎",
     gender: "male",
@@ -210,57 +151,36 @@ function submitData() {
     if (i === 0) return;
 
     const cells = row.querySelectorAll("td");
+
     const product = cells[0].innerText;
     const color = cells[1].innerText;
 
-    // サイズ
-    for (let j = 0; j < ALL_SIZES.length; j++) {
+    const size = cells[2].querySelector("select").value;
+    const qty = Number(cells[3].querySelector("input").value) || 0;
 
-      const input = cells[j + 2].querySelector("input");
-
-      if (input) {
-        const value = Number(input.value) || 0;
-
-        if (value > 0) {
-          data.push({
-            ...common,
-            product: product,
-            color: color,
-            size: ALL_SIZES[j],
-            qty: value
-          });
-        }
-      }
-    }
-
-    // 別寸
-    const special = cells[ALL_SIZES.length + 2].querySelector("input");
-    if (special && Number(special.value) > 0) {
+    if (size && qty > 0) {
       data.push({
         ...common,
-        product: product,
-        color: color,
-        size: "別寸",
-        qty: Number(special.value)
+        product,
+        color,
+        size,
+        qty
       });
     }
-
   });
 
   console.log(data);
 
-  // ✅ GASへ送信
- fetch("https://script.google.com/macros/s/AKfycbycFkYteNOah_vtLt0lTbugo7W5o-oSPHkRWpwKC-p-5G3JW_DkIAF5pxUjw6piJYeRRw/exec", {
-  method: "POST",
-  mode: "no-cors",
-  headers: {
-    "Content-Type": "text/plain;charset=utf-8"
-  },
-  body: JSON.stringify(data)
-});
+  fetch("https://script.google.com/macros/s/AKfycbycFkYteNOah_vtLt0lTbugo7W5o-oSPHkRWpwKC-p-5G3JW_DkIAF5pxUjw6piJYeRRw/exec", {
+    method: "POST",
+    mode: "no-cors",
+    headers: {
+      "Content-Type": "text/plain;charset=utf-8"
+    },
+    body: JSON.stringify(data)
+  });
 
-alert("登録送信しました。スプレッドシートを確認してください。");
-
+  alert("登録送信しました（シート確認して）");
 }
 
 </script>
