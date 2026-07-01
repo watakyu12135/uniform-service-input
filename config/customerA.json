@@ -2,22 +2,15 @@
   "customer": "A病院",
 
   "jobs": [
+
     {
       "job": "看護部",
       "gender": "female",
-
       "products": [
         {
           "name": "上衣A",
           "colors": ["白", "青"],
-          "sizes": ["S", "M", "L", "LL", "EL"],
-          "disabledSizes": ["BL"]
-        },
-        {
-          "name": "上衣B",
-          "colors": ["赤"],
-          "sizes": ["S", "M", "L"],
-          "disabledSizes": ["LL", "EL", "BL"]
+          "sizes": ["S", "M", "L", "LL", "EL"]
         },
         {
           "name": "ワンピース",
@@ -25,6 +18,58 @@
           "sizes": ["S", "M", "L", "LL"]
         }
       ]
+    },
+
+    {
+      "job": "看護部",
+      "gender": "male",
+      "products": [
+        {
+          "name": "上衣B",
+          "colors": ["白"],
+          "sizes": ["M", "L", "LL", "EL", "BL"]
+        },
+        {
+          "name": "パンツ",
+          "colors": ["ネイビー"],
+          "sizes": ["M", "L", "LL", "3L"]
+        }
+      ]
+    },
+
+    {
+      "job": "リハ",
+      "gender": "female",
+      "products": [
+        {
+          "name": "ポロシャツ",
+          "colors": ["白", "ピンク"],
+          "sizes": ["SS", "S", "M", "L", "LL"]
+        },
+        {
+          "name": "パンツ",
+          "colors": ["黒"],
+          "sizes": ["S", "M", "L", "LL"]
+        }
+      ]
+    },
+
+    {
+      "job": "リハ",
+      "gender": "male",
+      "products": [
+        {
+          "name": "ポロシャツ",
+          "colors": ["白", "青"],
+          "sizes": ["S", "M", "L", "LL", "3L"]
+        },
+        {
+          "name": "パンツ",
+          "colors": ["黒"],
+          "sizes": ["M", "L", "LL", "3L"]
+        }
+      ]
     }
+
   ]
 }
