@@ -42,7 +42,24 @@ button {
 
 <h2>ユニフォーム申請</h2>
 
-名前：<input type="text"><br><br>
+顧客：A病院<br><br>
+
+氏：<input type="text" id="sei">
+名：<input type="text" id="mei"><br><br>
+
+性別：
+<select id="gender">
+  <option value="">選択</option>
+  <option value="male">男性</option>
+  <option value="female">女性</option>
+</select><br><br>
+
+職種：
+<select id="job" onchange="changeJob()">
+  <option value="">選択</option>
+  <option value="看護部">看護部</option>
+  <option value="リハ">リハ</option>
+</select><br><br>
 
 <div class="table-wrap">
   <table id="table"></table>
