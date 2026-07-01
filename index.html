@@ -9,19 +9,18 @@
 body {
   font-family: sans-serif;
   padding: 20px;
-  overflow-x: hidden; /* ←追加 */
+  overflow-x: hidden;
 }
 
 table {
   border-collapse: collapse;
-    min-width: 900px; /* ←追加 */
+  min-width: 900px;
 }
 
 .table-wrap {
   overflow-x: auto;
-　width: 100%;
+  width: 100%;
 }
-
 
 th, td {
   border: 1px solid #ccc;
@@ -36,7 +35,7 @@ td {
 td:first-child, th:first-child {
   min-width: 80px;
 }
-  
+
 @media (max-width: 600px) {
   input[type="number"] {
     width: 40px;
@@ -47,7 +46,6 @@ td:first-child, th:first-child {
   }
 }
 
-
 .hidden {
   display: none;
 }
@@ -55,9 +53,6 @@ td:first-child, th:first-child {
 button {
   margin-top: 10px;
 }
-
-
-  
 </style>
 </head>
 
@@ -73,7 +68,6 @@ button {
 
 <button onclick="checkTotal()">入力チェック</button>
 <button onclick="submitData()">登録</button>
-
 
 <div id="result"></div>
 
@@ -100,7 +94,6 @@ function createTable(data) {
 
   let html = "";
 
-  // ヘッダ
   let header = "<tr><th>商品</th><th>色</th>";
   ALL_SIZES.forEach(s => header += `<th>${s}</th>`);
   header += "<th>別寸</th><th>採寸</th></tr>";
@@ -134,8 +127,6 @@ function createTable(data) {
   table.innerHTML = html;
 }
 
-
-
 // 別寸チェック
 function checkSpecial(el) {
   const row = el.closest("tr");
@@ -148,8 +139,7 @@ function checkSpecial(el) {
   }
 }
 
-
-// 合計チェック（シンプル版）
+// 合計チェック
 function checkTotal() {
   let inputs = document.querySelectorAll("input[type='number']");
   let total = 0;
@@ -165,20 +155,35 @@ function checkTotal() {
   }
 }
 
+// 登録処理
 function submitData() {
+
+  // ✅ 共通データ
+  const common = {
+    id: Date.now(),
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+
+    customerCode: "A001",
+    customerName: "A病院",
+
+    sei: "山田",
+    mei: "太郎",
+    gender: "male",
+    job: "看護部"
+  };
 
   const rows = document.querySelectorAll("#table tr");
   let data = [];
 
   rows.forEach((row, i) => {
-    if (i === 0) return; // ヘッダ
+    if (i === 0) return;
 
     const cells = row.querySelectorAll("td");
-
     const product = cells[0].innerText;
     const color = cells[1].innerText;
 
-    // サイズごとの入力
+    // サイズ
     for (let j = 0; j < ALL_SIZES.length; j++) {
 
       const input = cells[j + 2].querySelector("input");
@@ -188,13 +193,12 @@ function submitData() {
 
         if (value > 0) {
           data.push({
-  ...common,
-  product: product,
-  color: color,
-  size: ALL_SIZES[j],
-  qty: value
-});
-
+            ...common,
+            product: product,
+            color: color,
+            size: ALL_SIZES[j],
+            qty: value
+          });
         }
       }
     }
@@ -203,6 +207,7 @@ function submitData() {
     const special = cells[ALL_SIZES.length + 2].querySelector("input");
     if (special && Number(special.value) > 0) {
       data.push({
+        ...common,
         product: product,
         color: color,
         size: "別寸",
@@ -212,31 +217,21 @@ function submitData() {
 
   });
 
-const common = {
-  id: Date.now(),
-  createdAt: new Date().toISOString(),
-  updatedAt: new Date().toISOString(),
-
-  customerCode: "A001",
-  customerName: "A病院",
-
-  sei: "山田",
-  mei: "太郎",
-  gender: "male",
-  job: "看護部"
-};
-  
   console.log(data);
-　fetch(https://script.google.com/macros/s/AKfycbycFkYteNOah_vtLt0lTbugo7W5o-oSPHkRWpwKC-p-5G3JW_DkIAF5pxUjw6piJYeRRw/exec", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify(data)
-});
+
+  // ✅ GASへ送信
+  fetch("https://script.google.com/macros/s/AKfycbycFkYteNOah_vtLt0lTbugo7W5o-oSPHkRWpwKC-p-5G3JW_DkIAF5pxUjw6piJYeRRw/exec", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data)
+  });
+
+  alert("登録送信しました");
 
 }
-  
+
 </script>
 
 </body>
