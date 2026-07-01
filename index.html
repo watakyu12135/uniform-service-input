@@ -1,95 +1,125 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <title>ユニフォーム入力</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      font-family: sans-serif;
-      padding: 20px;
-      max-width: 600px;
-      margin: auto;
-    }
-    h1 {
-      text-align: center;
-    }
-    label {
-      display: block;
-      margin-top: 15px;
-    }
-    input, select {
-      width: 100%;
-      padding: 8px;
-      margin-top: 5px;
-    }
-    button {
-      margin-top: 20px;
-      padding: 10px;
-      width: 100%;
-      font-size: 16px;
-    }
-    .result {
-      margin-top: 20px;
-      font-weight: bold;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>ユニフォーム申請</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+  font-family: sans-serif;
+  padding: 20px;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 5px;
+  text-align: center;
+}
+
+input[type="number"] {
+  width: 60px;
+}
+
+.hidden {
+  display: none;
+}
+
+button {
+  margin-top: 10px;
+}
+</style>
 </head>
+
 <body>
 
-<h1>ユニフォーム申請フォーム</h1>
+<h2>ユニフォーム申請</h2>
 
-<label>名前</label>
-<input type="text" id="name">
+名前：<input type="text"><br><br>
 
-<label>部署</label>
-<select id="dept">
-  <option value="">選択してください</option>
-  <option value="看護部">看護部</option>
-  <option value="リハビリ">リハビリ</option>
-</select>
+<table>
+<tr>
+  <th>商品</th>
+  <th>色</th>
+  <th>S</th>
+  <th>M</th>
+  <th>L</th>
+  <th>LL</th>
+  <th>EL</th>
+  <th>BL</th>
+  <th>別寸</th>
+  <th>採寸</th>
+</tr>
 
-<label>性別</label>
-<select id="gender">
-  <option value="">選択してください</option>
-  <option value="male">男性</option>
-  <option value="female">女性</option>
-</select>
+<tr>
+  <td>商品A</td>
+  <td>白</td>
+  <td><input type="number" class="size"></td>
+  <td><input type="number" class="size"></td>
+  <td><input type="number" class="size"></td>
+  <td><input type="number" class="size"></td>
+  <td><input type="number" class="size"></td>
+  <td>/</td>
+  <td><input type="number" class="special" onchange="checkSpecial()"></td>
+  <td><button class="measure hidden">採寸</button></td>
+</tr>
 
-<h2>上衣（最大5枚）</h2>
-<label>S</label><input type="number" id="top_s" min="0">
-<label>M</label><input type="number" id="top_m" min="0">
-<label>L</label><input type="number" id="top_l" min="0">
+<tr>
+  <td>商品A</td>
+  <td>青</td>
+  <td><input type="number" class="size"></td>
+  <td><input type="number" class="size"></td>
+  <td><input type="number" class="size"></td>
+  <td><input type="number" class="size"></td>
+  <td><input type="number" class="size"></td>
+  <td>/</td>
+  <td><input type="number" class="special" onchange="checkSpecial()"></td>
+  <td><button class="measure hidden">採寸</button></td>
+</tr>
 
-<button onclick="checkInput()">入力チェック</button>
+</table>
 
-<div class="result" id="result"></div>
+<button onclick="checkTotal()">入力チェック</button>
+
+<div id="result"></div>
 
 <script>
-function getParam(name) {
-  const url = new URL(window.location.href);
-  return url.searchParams.get(name);
+
+// 別寸チェック → 採寸ボタン表示
+function checkSpecial() {
+  let specials = document.querySelectorAll(".special");
+  let measures = document.querySelectorAll(".measure");
+
+  specials.forEach((input, i) => {
+    if (Number(input.value) > 0) {
+      measures[i].classList.remove("hidden");
+    } else {
+      measures[i].classList.add("hidden");
+    }
+  });
 }
 
-// 顧客表示確認
-const customer = getParam("customer");
-if (customer) {
-  document.body.insertAdjacentHTML("afterbegin", "<p>顧客: " + customer + "</p>");
-}
+// 合計チェック（例）
+function checkTotal() {
+  let inputs = document.querySelectorAll(".size, .special");
+  let total = 0;
 
-function checkInput() {
-  let s = Number(document.getElementById("top_s").value) || 0;
-  let m = Number(document.getElementById("top_m").value) || 0;
-  let l = Number(document.getElementById("top_l").value) || 0;
-
-  let total = s + m + l;
+  inputs.forEach(i => {
+    total += Number(i.value) || 0;
+  });
 
   if (total === 5) {
-    document.getElementById("result").innerText = "OK（合計5枚）";
+    document.getElementById("result").innerText = "OK（合計5）";
   } else {
-    document.getElementById("result").innerText = "NG：合計は5枚にしてください（現在 " + total + "枚）";
+    document.getElementById("result").innerText = "NG 合計：" + total;
   }
 }
+
 </script>
 
 </body>
