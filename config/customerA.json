@@ -1,0 +1,30 @@
+{
+  "customer": "A病院",
+
+  "jobs": [
+    {
+      "job": "看護部",
+      "gender": "female",
+
+      "products": [
+        {
+          "name": "上衣A",
+          "colors": ["白", "青"],
+          "sizes": ["S", "M", "L", "LL", "EL"],
+          "disabledSizes": ["BL"]
+        },
+        {
+          "name": "上衣B",
+          "colors": ["赤"],
+          "sizes": ["S", "M", "L"],
+          "disabledSizes": ["LL", "EL", "BL"]
+        },
+        {
+          "name": "ワンピース",
+          "colors": ["白"],
+          "sizes": ["S", "M", "L", "LL"]
+        }
+      ]
+    }
+  ]
+}
