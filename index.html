@@ -42,47 +42,7 @@ button {
 
 名前：<input type="text"><br><br>
 
-<table>
-<tr>
-  <th>商品</th>
-  <th>色</th>
-  <th>S</th>
-  <th>M</th>
-  <th>L</th>
-  <th>LL</th>
-  <th>EL</th>
-  <th>BL</th>
-  <th>別寸</th>
-  <th>採寸</th>
-</tr>
-
-<tr>
-  <td>商品A</td>
-  <td>白</td>
-  <td><input type="number" class="size"></td>
-  <td><input type="number" class="size"></td>
-  <td><input type="number" class="size"></td>
-  <td><input type="number" class="size"></td>
-  <td><input type="number" class="size"></td>
-  <td>/</td>
-  <td><input type="number" class="special" onchange="checkSpecial()"></td>
-  <td><button class="measure hidden">採寸</button></td>
-</tr>
-
-<tr>
-  <td>商品A</td>
-  <td>青</td>
-  <td><input type="number" class="size"></td>
-  <td><input type="number" class="size"></td>
-  <td><input type="number" class="size"></td>
-  <td><input type="number" class="size"></td>
-  <td><input type="number" class="size"></td>
-  <td>/</td>
-  <td><input type="number" class="special" onchange="checkSpecial()"></td>
-  <td><button class="measure hidden">採寸</button></td>
-</tr>
-
-</table>
+<table id="table"></table>
 
 <button onclick="checkTotal()">入力チェック</button>
 
@@ -90,23 +50,79 @@ button {
 
 <script>
 
-// 別寸チェック → 採寸ボタン表示
-function checkSpecial() {
-  let specials = document.querySelectorAll(".special");
-  let measures = document.querySelectorAll(".measure");
+const ALL_SIZES = ["S","M","L","LL","EL","BL"];
 
-  specials.forEach((input, i) => {
-    if (Number(input.value) > 0) {
-      measures[i].classList.remove("hidden");
-    } else {
-      measures[i].classList.add("hidden");
-    }
-  });
+// JSON読み込み
+function getCustomer() {
+  const url = new URL(window.location.href);
+  return url.searchParams.get("customer") || "customerA";
 }
 
-// 合計チェック（例）
+fetch(`config/${getCustomer()}.json`)
+  .then(res => res.json())
+  .then(data => {
+    createTable(data);
+  });
+
+// テーブル生成
+function createTable(data) {
+
+  const table = document.getElementById("table");
+
+  let html = "";
+
+  // ヘッダ
+  let header = "<tr><th>商品</th><th>色</th>";
+  ALL_SIZES.forEach(s => header += `<th>${s}</th>`);
+  header += "<th>別寸</th><th>採寸</th></tr>";
+
+  html += header;
+
+  const products = data.jobs[0].products;
+
+  products.forEach(p => {
+    p.colors.forEach(color => {
+
+      let row = `<tr><td>${p.name}</td><td>${color}</td>`;
+
+      ALL_SIZES.forEach(size => {
+        if (!p.sizes.includes(size) || p.disabledSizes?.includes(size)) {
+          row += "<td>/</td>";
+        } else {
+          row += `<td><input type="number" min="0"></td>`;
+        }
+      });
+
+      row += `<td><input type="number" class="special" onchange="checkSpecial(this)"></td>`;
+      row += `<td><button class="measure hidden">採寸</button></td>`;
+      row += "</tr>";
+
+      html += row;
+
+    });
+  });
+
+  table.innerHTML = html;
+}
+
+
+
+// 別寸チェック
+function checkSpecial(el) {
+  const row = el.closest("tr");
+  const btn = row.querySelector(".measure");
+
+  if (Number(el.value) > 0) {
+    btn.classList.remove("hidden");
+  } else {
+    btn.classList.add("hidden");
+  }
+}
+
+
+// 合計チェック（シンプル版）
 function checkTotal() {
-  let inputs = document.querySelectorAll(".size, .special");
+  let inputs = document.querySelectorAll("input[type='number']");
   let total = 0;
 
   inputs.forEach(i => {
