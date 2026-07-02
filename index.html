@@ -519,7 +519,7 @@ button {
   </section>
 
   <button onclick="saveMeasurement()">採寸表を保存して戻る</button>
- <button onclick="cancelMeasurement()">保存せず戻る</button>
+  <button onclick="cancelMeasurement()">保存せず戻る</button>
 
 
 </div>
@@ -846,8 +846,6 @@ function openMeasurement(button) {
 
 function closeMeasurement() {
 
-  function closeMeasurement() {
-
   document.getElementById("measurementArea").classList.add("hidden");
   document.querySelector(".table-wrap").classList.remove("hidden");
   document.getElementById("categoryStatus").classList.remove("hidden");
@@ -868,7 +866,7 @@ function cancelMeasurement() {
     behavior: "smooth"
   });
 }
-}
+
 
 function setSectionEnabled(sectionId, enabled) {
 
