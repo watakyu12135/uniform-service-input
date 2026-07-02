@@ -101,6 +101,7 @@ button {
   color: red;
 }
 
+/* スマホ表示 */
 @media (max-width: 600px) {
 
   table {
@@ -108,12 +109,10 @@ button {
     width: 100%;
   }
 
-  /* 商品ヘッダー行はスマホでは非表示 */
-  tr:not(.category-header):has(th) {
+  .product-header {
     display: none;
   }
 
-  /* 商品行をグリッド化 */
   tr.product-row {
     display: grid;
     grid-template-columns: 1.4fr 1fr 1.2fr;
@@ -184,7 +183,6 @@ button {
     margin-top: 14px;
   }
 }
-  
 </style>
 </head>
 
@@ -223,7 +221,6 @@ button {
 <button onclick="submitData()">登録</button>
 
 <script>
-
 function getCustomer() {
   const url = new URL(window.location.href);
   return url.searchParams.get("customer") || "gvhp8hex";
@@ -246,13 +243,13 @@ fetch(`config/${getCustomer()}.json`)
       "顧客：" + currentData.customerName;
 
     document.getElementById("table").innerHTML =
-      "<tr><td colspan='5'>性別と職種を選択してください</td></tr>";
+      "<tr><td colspan='6'>性別と職種を選択してください</td></tr>";
 
     document.getElementById("categoryStatus").innerHTML = "";
   })
   .catch(error => {
     document.getElementById("table").innerHTML =
-      "<tr><td colspan='5'>読み込みに失敗しました：" + error.message + "</td></tr>";
+      "<tr><td colspan='6'>読み込みに失敗しました：" + error.message + "</td></tr>";
   });
 
 
@@ -264,14 +261,14 @@ function changeJob() {
 
   if (!job || !gender) {
     document.getElementById("table").innerHTML =
-      "<tr><td colspan='5'>性別と職種を選択してください</td></tr>";
+      "<tr><td colspan='6'>性別と職種を選択してください</td></tr>";
     document.getElementById("categoryStatus").innerHTML = "";
     return;
   }
 
   if (!currentData) {
     document.getElementById("table").innerHTML =
-      "<tr><td colspan='5'>データ読み込み中です</td></tr>";
+      "<tr><td colspan='6'>データ読み込み中です</td></tr>";
     return;
   }
 
@@ -296,7 +293,6 @@ function createTable(data, selectedJob, selectedGender) {
 
   let html = "";
 
-  // categoryDisplay がある場合は表示順通り、なければ商品カテゴリ順にする
   let categoryDisplay = jobData.categoryDisplay || [];
 
   if (categoryDisplay.length === 0) {
@@ -324,12 +320,11 @@ function createTable(data, selectedJob, selectedGender) {
 
       // カテゴリ見出し
       html += `<tr class="category-header">
-  <td colspan="6">
-    <div class="category-heading" data-category-heading="${category}">
-      <span class="category-title">${category}を選択</span>
-      <span class="category-count"></span>
-    </div>
-`;
+        <td colspan="6">
+          <div class="category-heading" data-category-heading="${category}">
+            <span class="category-title">${category}を選択</span>
+            <span class="category-count"></span>
+          </div>`;
 
       if (categoryInfo.note) {
         html += `<div class="category-note">${categoryInfo.note}</div>`;
@@ -338,9 +333,9 @@ function createTable(data, selectedJob, selectedGender) {
       html += `</td></tr>`;
 
       // 商品テーブルの見出し
-      html += `<tr>
+      html += `<tr class="product-header">
         <th>商品</th>
-	<th>品番</th>
+        <th>品番</th>
         <th>色</th>
         <th>サイズ</th>
         <th>数量</th>
@@ -349,19 +344,19 @@ function createTable(data, selectedJob, selectedGender) {
 
       products.forEach(p => {
 
-       let row = `<tr
-  data-product-code="${p.productCode}"
-  data-product-category="${p.productCategory}"
-  class="product-row"
->
-  <td class="cell-product">${p.name}</td>
-  <td class="cell-code">${p.productCode}</td>
-  <td class="cell-color">${p.color}</td>`;
+        let row = `<tr
+          data-product-code="${p.productCode}"
+          data-product-category="${p.productCategory}"
+          class="product-row"
+        >
+          <td class="cell-product">${p.name}</td>
+          <td class="cell-code">${p.productCode}</td>
+          <td class="cell-color">${p.color}</td>`;
 
         const standardSizes = p.sizes.filter(size => size.type === "standard");
         const specialSizes = p.sizes.filter(size => size.type !== "standard");
 
-        row += `<td>
+        row += `<td class="cell-size">
           <select class="mainSize" onchange="checkMainSize(this); updateCategorySummary();">
             <option value="">選択</option>`;
 
@@ -394,16 +389,15 @@ function createTable(data, selectedJob, selectedGender) {
           </div>
         </div>`;
 
-        row += `<td class="cell-size">
+        row += `</td>`;
 
         row += `<td class="cell-qty">
-  <input type="number" min="0" oninput="updateCategorySummary()">
-</td>`;
+          <input type="number" min="0" oninput="updateCategorySummary()">
+        </td>`;
 
-
-        row += `<td>
-  <button class="measure hidden">採寸</button>
-</td>`;
+        row += `<td class="cell-measure">
+          <button class="measure hidden">採寸</button>
+        </td>`;
 
         row += `</tr>`;
 
@@ -415,6 +409,7 @@ function createTable(data, selectedJob, selectedGender) {
 
   updateCategorySummary();
 }
+
 
 // 通常サイズ／その他の切替
 function checkMainSize(select) {
@@ -538,7 +533,6 @@ function getRowSizeInfo(row) {
 
 
 // 枚数計算
-// 枚数計算
 function updateCategorySummary() {
 
   const jobData = getSelectedJobData();
@@ -561,7 +555,7 @@ function updateCategorySummary() {
 
   const rows = document.querySelectorAll("#table tr");
 
-  rows.forEach((row, i) => {
+  rows.forEach(row => {
 
     const productCategory = row.dataset.productCategory;
 
@@ -573,18 +567,15 @@ function updateCategorySummary() {
 
     if (qty <= 0) return;
 
-    // サイズ未選択の場合は枚数計算しない
     const sizeInfo = getRowSizeInfo(row);
     if (!sizeInfo.valid) return;
 
-    // その商品カテゴリ内で何枚選ばれているか
     if (selectedByProductCategory[productCategory] === undefined) {
       selectedByProductCategory[productCategory] = 0;
     }
 
     selectedByProductCategory[productCategory] += qty;
 
-    // 消費カテゴリへの換算
     const rules = jobData.conversionRules.filter(r =>
       r.fromProductCategory === productCategory
     );
@@ -599,7 +590,6 @@ function updateCategorySummary() {
     });
   });
 
-  // 上部の現在貸与枚数エリア
   let html = "<h3>現在の貸与枚数</h3>";
 
   Object.keys(limits).forEach(category => {
@@ -624,7 +614,6 @@ function updateCategorySummary() {
 
   area.innerHTML = html;
 
-  // 各カテゴリ見出しにも枚数を反映
   const headingElements = document.querySelectorAll("[data-category-heading]");
 
   headingElements.forEach(el => {
@@ -644,7 +633,6 @@ function updateCategorySummary() {
       "category-count-over"
     );
 
-    // 貸与数があるカテゴリ
     if (limit !== undefined) {
 
       countSpan.innerText = `（合計${limit}枚） 選択中 ${current}/${limit}`;
@@ -659,7 +647,6 @@ function updateCategorySummary() {
 
     } else {
 
-      // ワンピースなど、直接の貸与数を持たないカテゴリ
       if (selected > 0) {
         countSpan.innerText = `選択中 ${selected}枚`;
       } else {
@@ -668,6 +655,7 @@ function updateCategorySummary() {
     }
   });
 }
+
 
 // 登録
 function submitData() {
@@ -710,18 +698,17 @@ function submitData() {
   let data = [];
   let errorMessage = "";
 
-  rows.forEach((row, i) => {
+  rows.forEach(row => {
 
-    // カテゴリ見出し行・商品ヘッダー行は登録対象外
     if (!row.dataset.productCategory) return;
 
     const cells = row.querySelectorAll("td");
 
     const product = cells[0].innerText;
-const productCode = cells[1].innerText;
-const color = cells[2].innerText;
+    const productCode = cells[1].innerText;
+    const color = cells[2].innerText;
 
-const qty = Number(cells[4].querySelector("input").value) || 0;
+    const qty = Number(cells[4].querySelector("input").value) || 0;
 
     if (qty <= 0) return;
 
@@ -738,16 +725,16 @@ const qty = Number(cells[4].querySelector("input").value) || 0;
     }
 
     data.push({
-  ...common,
-  product,
-  productCode,
-  color,
-  size: sizeInfo.size,
-  sizeType: sizeInfo.sizeType,
-  bespokeText: sizeInfo.bespokeText,
-  qty,
-  productCategory: row.dataset.productCategory
-});
+      ...common,
+      product,
+      productCode,
+      color,
+      size: sizeInfo.size,
+      sizeType: sizeInfo.sizeType,
+      bespokeText: sizeInfo.bespokeText,
+      qty,
+      productCategory: row.dataset.productCategory
+    });
   });
 
   if (errorMessage) {
