@@ -182,6 +182,37 @@ button {
   .category-heading {
     margin-top: 14px;
   }
+
+/* スマホ用：セル内罫線 */
+  .cell-product {
+    border-right: 1px solid #ddd !important;
+  }
+
+  .cell-code {
+    border-right: 1px solid #ddd !important;
+    border-bottom: 1px solid #ddd !important;
+  }
+
+  .cell-color {
+    border-right: 1px solid #ddd !important;
+  }
+
+  .cell-size {
+    border-bottom: 1px solid #ddd !important;
+  }
+
+/* スマホ入力時の自動ズーム対策 */
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+
+  .cell-qty input,
+  .cell-size select,
+  .specialSize {
+    min-height: 36px;
+  }
 }
 </style>
 </head>
