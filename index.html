@@ -326,17 +326,18 @@ button {
   }
 
   .measure-section label {
-    min-width: 105px;
-    width: 105px;
-    display: inline-block;
-    margin-top: 10px;
-    vertical-align: middle;
-  }
+  min-width: 140px;
+  width: 140px;
+  display: inline-block;
+  margin-top: 10px;
+  vertical-align: middle;
+  white-space: nowrap;
+}
 
-  .measure-section input[type="number"] {
-    width: 80px;
-    box-sizing: border-box;
-  }
+.measure-section input[type="number"] {
+  width: 72px;
+  box-sizing: border-box;
+}
 
   .measure-section select {
     width: 150px;
@@ -518,7 +519,8 @@ button {
   </section>
 
   <button onclick="saveMeasurement()">採寸表を保存して戻る</button>
-  <button onclick="closeMeasurement()">戻る</button>
+  <button onclick="cancelMeasurement()">保存せず戻る</button>
+
 
 </div>
 
@@ -849,6 +851,17 @@ function closeMeasurement() {
   document.getElementById("measurementArea").classList.add("hidden");
   document.querySelector(".table-wrap").classList.remove("hidden");
   document.getElementById("categoryStatus").classList.remove("hidden");
+
+function cancelMeasurement() {
+
+  const ok = confirm("入力した内容は保存されません。\n戻ってもよろしいですか？");
+
+  if (!ok) {
+    return;
+  }
+
+  closeMeasurement();
+}
 
   window.scrollTo({
     top: 0,
