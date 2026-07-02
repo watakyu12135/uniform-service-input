@@ -1046,8 +1046,71 @@ function hasBespokeWithoutMeasurement() {
 
 
 
+
   return missing;
 }
+
+function buildMeasurementPayload(common) {
+
+  const upperDone = measurementData.upper.completed;
+  const lowerDone = measurementData.lower.completed;
+
+  if (!upperDone && !lowerDone) {
+    return null;
+  }
+
+  let measurementType = "";
+
+  if (upperDone && lowerDone) {
+    measurementType = "全身";
+  } else if (upperDone) {
+    measurementType = "上衣";
+  } else if (lowerDone) {
+    measurementType = "下衣";
+  }
+
+  return {
+    "登録ID": common.id,
+    "顧客コード": common.customerCode,
+    "顧客名": common.customerName,
+    "氏": common.sei,
+    "名": common.mei,
+    "性別": common.gender,
+    "職種": common.job,
+    "採寸区分": measurementType,
+    "登録日時": common.createdAt,
+    "更新日時": common.updatedAt,
+
+    "身長": measurementData.common.height,
+    "体重": measurementData.common.weight,
+    "採寸方法": measurementData.common.method,
+
+    "上衣入力済": upperDone ? "TRUE" : "FALSE",
+    "A_衿回り": measurementData.upper.A,
+    "B_肩巾": measurementData.upper.B,
+    "C1_袖丈_半袖": measurementData.upper.C1,
+    "C2_袖丈_七分袖": measurementData.upper.C2,
+    "C3_袖丈_長袖": measurementData.upper.C3,
+    "D_胸回り": measurementData.upper.D,
+    "E_胴回り": measurementData.upper.E,
+    "F_腰回り": measurementData.upper.F,
+    "G_背丈": measurementData.upper.G,
+    "H_着丈": measurementData.upper.H,
+    "I_袖付回り": measurementData.upper.I,
+
+    "下衣入力済": lowerDone ? "TRUE" : "FALSE",
+    "a_胴回り": measurementData.lower.a,
+    "b_腰回り": measurementData.lower.b,
+    "c_股上": measurementData.lower.c,
+    "d_股下": measurementData.lower.d,
+    "e_総丈": measurementData.lower.e,
+    "f_太股回り": measurementData.lower.f,
+
+    "特記事項": measurementData.specialNote,
+    "備考": measurementData.memo
+  };
+}
+
 
 function updateAllMeasurementButtons() {
 
@@ -1386,18 +1449,26 @@ if (hasBespokeWithoutMeasurement()) {
   }
 }
 
-  console.log(data);
+ const measurementPayload = buildMeasurementPayload(common);
 
-  fetch("https://script.google.com/macros/s/AKfycbycFkYteNOah_vtLt0lTbugo7W5o-oSPHkRWpwKC-p-5G3JW_DkIAF5pxUjw6piJYeRRw/exec", {
-    method: "POST",
-    mode: "no-cors",
-    headers: {
-      "Content-Type": "text/plain;charset=utf-8"
-    },
-    body: JSON.stringify(data)
-  });
+const payload = {
+  orders: data,
+  measurement: measurementPayload
+};
 
-  alert("登録送信しました（シート確認）");
+console.log(payload);
+
+fetch("https://script.google.com/macros/s/AKfycbycFkYteNOah_vtLt0lTbugo7W5o-oSPHkRWpwKC-p-5G3JW_DkIAF5pxUjw6piJYeRRw/exec", {
+  method: "POST",
+  mode: "no-cors",
+  headers: {
+    "Content-Type": "text/plain;charset=utf-8"
+  },
+  body: JSON.stringify(payload)
+});
+
+alert("登録送信しました（シート確認）");
+
 }
 
 </script>
