@@ -332,6 +332,26 @@
           "toConsumptionCategory": "ブラウス",
           "qty": 1
         }
+      ],
+      "categoryDisplay": [
+        {
+          "productCategory": "ベスト",
+          "displayOrder": 1,
+          "heading": "ベストを選んで下さい",
+          "note": ""
+        },
+        {
+          "productCategory": "ブラウス",
+          "displayOrder": 2,
+          "heading": "ブラウスを選んで下さい",
+          "note": ""
+        },
+        {
+          "productCategory": "スカート",
+          "displayOrder": 3,
+          "heading": "スカートを選んで下さい",
+          "note": ""
+        }
       ]
     },
     {
@@ -480,6 +500,20 @@
           "toConsumptionCategory": "スカート",
           "qty": 1
         }
+      ],
+      "categoryDisplay": [
+        {
+          "productCategory": "ブラウス",
+          "displayOrder": 1,
+          "heading": "ブラウスを選んで下さい",
+          "note": ""
+        },
+        {
+          "productCategory": "スカート",
+          "displayOrder": 2,
+          "heading": "スカートを選んで下さい",
+          "note": ""
+        }
       ]
     },
     {
@@ -627,6 +661,20 @@
           "fromProductCategory": "スカート",
           "toConsumptionCategory": "スカート",
           "qty": 1
+        }
+      ],
+      "categoryDisplay": [
+        {
+          "productCategory": "ブラウス",
+          "displayOrder": 1,
+          "heading": "ブラウスを選んで下さい",
+          "note": ""
+        },
+        {
+          "productCategory": "スカート",
+          "displayOrder": 2,
+          "heading": "スカートを選んで下さい",
+          "note": ""
         }
       ]
     },
@@ -1506,6 +1554,26 @@
           "toConsumptionCategory": "下衣",
           "qty": 1
         }
+      ],
+      "categoryDisplay": [
+        {
+          "productCategory": "上衣",
+          "displayOrder": 1,
+          "heading": "上衣を選んで下さい",
+          "note": ""
+        },
+        {
+          "productCategory": "ワンピース",
+          "displayOrder": 2,
+          "heading": "ワンピースを選んで下さい",
+          "note": "※ワンピースは1枚で上下各1枚分となります。"
+        },
+        {
+          "productCategory": "下衣",
+          "displayOrder": 3,
+          "heading": "下衣を選んで下さい",
+          "note": ""
+        }
       ]
     },
     {
@@ -2313,6 +2381,20 @@
           "fromProductCategory": "下衣",
           "toConsumptionCategory": "下衣",
           "qty": 1
+        }
+      ],
+      "categoryDisplay": [
+        {
+          "productCategory": "上衣",
+          "displayOrder": 1,
+          "heading": "上衣を選んで下さい",
+          "note": ""
+        },
+        {
+          "productCategory": "下衣",
+          "displayOrder": 1,
+          "heading": "下衣を選んで下さい",
+          "note": ""
         }
       ]
     }
