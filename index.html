@@ -847,7 +847,14 @@ function cancelMeasurement() {
 function setSectionEnabled(sectionId, enabled) {
 
   const section = document.getElementById(sectionId);
-  const inputs = section.if (enabled) {
+
+  if (!section) {
+    return;
+  }
+
+  const inputs = section.querySelectorAll("input, select, textarea");
+
+  if (enabled) {
     section.classList.remove("disabled-section");
   } else {
     section.classList.add("disabled-section");
