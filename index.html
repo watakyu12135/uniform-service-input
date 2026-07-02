@@ -101,6 +101,89 @@ button {
   color: red;
 }
 
+@media (max-width: 600px) {
+
+  table {
+    min-width: 0;
+    width: 100%;
+  }
+
+  /* 商品ヘッダー行はスマホでは非表示 */
+  tr:not(.category-header):has(th) {
+    display: none;
+  }
+
+  /* 商品行をグリッド化 */
+  tr.product-row {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1.2fr;
+    grid-template-areas:
+      "product code size"
+      "product color qty"
+      "measure measure measure";
+    border: 1px solid #ccc;
+    margin-bottom: 8px;
+    padding: 6px;
+    background: #fff;
+  }
+
+  tr.product-row td {
+    border: none;
+    padding: 4px;
+    text-align: left;
+  }
+
+  .cell-product {
+    grid-area: product;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    border-right: 1px solid #ddd !important;
+    padding-right: 8px;
+  }
+
+  .cell-code {
+    grid-area: code;
+    font-size: 12px;
+  }
+
+  .cell-color {
+    grid-area: color;
+    font-size: 12px;
+  }
+
+  .cell-size {
+    grid-area: size;
+  }
+
+  .cell-qty {
+    grid-area: qty;
+  }
+
+  .cell-measure {
+    grid-area: measure;
+    text-align: right;
+  }
+
+  .cell-size select,
+  .cell-qty input {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .category-header {
+    display: block;
+  }
+
+  .category-header td {
+    display: block;
+    width: 100%;
+  }
+
+  .category-heading {
+    margin-top: 14px;
+  }
+}
   
 </style>
 </head>
@@ -269,10 +352,11 @@ function createTable(data, selectedJob, selectedGender) {
        let row = `<tr
   data-product-code="${p.productCode}"
   data-product-category="${p.productCategory}"
+  class="product-row"
 >
-  <td>${p.name}</td>
-  <td>${p.productCode}</td>
-  <td>${p.color}</td>`;
+  <td class="cell-product">${p.name}</td>
+  <td class="cell-code">${p.productCode}</td>
+  <td class="cell-color">${p.color}</td>`;
 
         const standardSizes = p.sizes.filter(size => size.type === "standard");
         const specialSizes = p.sizes.filter(size => size.type !== "standard");
@@ -310,15 +394,16 @@ function createTable(data, selectedJob, selectedGender) {
           </div>
         </div>`;
 
-        row += `</td>`;
+        row += `<td class="cell-size">
+
+        row += `<td class="cell-qty">
+  <input type="number" min="0" oninput="updateCategorySummary()">
+</td>`;
+
 
         row += `<td>
-          <input type="number" min="0" oninput="updateCategorySummary()">
-        </td>`;
-
-        row += `<td>
-          <button class="measure hidden">採寸</button>
-        </td>`;
+  <button class="measure hidden">採寸</button>
+</td>`;
 
         row += `</tr>`;
 
