@@ -174,6 +174,10 @@ button {
   font-weight: bold;
 }
 
+.measure-inline {
+  display: none;
+}
+
 /* スマホ表示 */
 @media (max-width: 600px) {
 
@@ -308,8 +312,45 @@ button {
     box-sizing: border-box;
   }
 
+.cell-measure {
+    display: none;
+  }
 
+  .measure-inline:not(.hidden) {
+    display: inline-block;
+    margin-top: 6px;
+  }
 
+.measure-section {
+    font-size: 14px;
+  }
+
+  .measure-section label {
+    min-width: 105px;
+    width: 105px;
+    display: inline-block;
+    margin-top: 10px;
+    vertical-align: middle;
+  }
+
+  .measure-section input[type="number"] {
+    width: 80px;
+    box-sizing: border-box;
+  }
+
+  .measure-section select {
+    width: 150px;
+    box-sizing: border-box;
+  }
+
+  .measure-help {
+    display: block;
+    margin: 4px 0 10px 0;
+    width: 100%;
+    font-size: 12px;
+    line-height: 1.4;
+    color: #555;
+  }
 
 }
 </style>
@@ -682,8 +723,9 @@ function createTable(data, selectedJob, selectedGender) {
         row += `</select>
 
           <div class="bespokeInputArea hidden measure-required-message">
-  採寸表への入力が必要です
-</div>
+            採寸表への入力が必要です<br>
+            <button type="button" class="measure measure-inline hidden" onclick="openMeasurement(this)">採寸</button>
+          </div>
         </div>`;
 
         row += `</td>`;
@@ -692,8 +734,8 @@ function createTable(data, selectedJob, selectedGender) {
           <input type="number" min="0" oninput="updateCategorySummary()">
         </td>`;
 
-        row += `<td class="cell-measure">
-  <button class="measure hidden" onclick="openMeasurement(this)">採寸</button>
+       row += `<td class="cell-measure">
+  <button class="measure measure-table hidden" onclick="openMeasurement(this)">採寸</button>
 </td>`;
 
         row += `</tr>`;
@@ -716,7 +758,7 @@ function checkMainSize(select) {
   const specialSelect = row.querySelector(".specialSize");
   const bespokeArea = row.querySelector(".bespokeInputArea");
   const bespokeInput = row.querySelector(".bespokeInput");
-  const btn = row.querySelector(".measure");
+  
 
   if (select.value === "__OTHER__") {
     specialArea.classList.remove("hidden");
@@ -726,7 +768,11 @@ function checkMainSize(select) {
     if (specialSelect) specialSelect.value = "";
     if (bespokeArea) bespokeArea.classList.add("hidden");
     if (bespokeInput) bespokeInput.value = "";
-    if (btn) btn.classList.add("hidden");
+    
+row.querySelectorAll(".measure").forEach(btn => {
+  btn.classList.add("hidden");
+  btn.innerText = "採寸";
+});
   }
 }
 
@@ -736,24 +782,26 @@ function checkSpecialSize(select) {
 
   const row = select.closest("tr");
   const bespokeArea = row.querySelector(".bespokeInputArea");
-  const btn = row.querySelector(".measure");
+  const buttons = row.querySelectorAll(".measure");
 
   if (select.value === "別寸") {
     bespokeArea.classList.remove("hidden");
-    btn.classList.remove("hidden");
 
     const type = getMeasurementTypeByCategory(row.dataset.productCategory);
+    const buttonText = isMeasurementCompleteForType(type) ? "採寸済" : "採寸";
 
-    if (isMeasurementCompleteForType(type)) {
-      btn.innerText = "採寸済";
-    } else {
-      btn.innerText = "採寸";
-    }
+    buttons.forEach(btn => {
+      btn.classList.remove("hidden");
+      btn.innerText = buttonText;
+    });
 
   } else {
     bespokeArea.classList.add("hidden");
-    btn.classList.add("hidden");
-    btn.innerText = "採寸";
+
+    buttons.forEach(btn => {
+      btn.classList.add("hidden");
+      btn.innerText = "採寸";
+    });
   }
 }
 
@@ -796,9 +844,17 @@ function openMeasurement(button) {
 
 function closeMeasurement() {
 
+  function closeMeasurement() {
+
   document.getElementById("measurementArea").classList.add("hidden");
   document.querySelector(".table-wrap").classList.remove("hidden");
   document.getElementById("categoryStatus").classList.remove("hidden");
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+}
 }
 
 function setSectionEnabled(sectionId, enabled) {
@@ -983,26 +1039,32 @@ function updateAllMeasurementButtons() {
 
     if (!row.dataset.productCategory) return;
 
-    const btn = row.querySelector(".measure");
-    if (!btn) return;
+    const buttons = row.querySelectorAll(".measure");
+    if (buttons.length === 0) return;
 
     const sizeInfo = getRowSizeInfo(row);
 
-    if (sizeInfo.size !== "別寸") {
-      btn.innerText = "採寸";
-      return;
-    }
+    buttons.forEach(btn => {
 
-    const type = getMeasurementTypeByCategory(row.dataset.productCategory);
+      if (sizeInfo.size !== "別寸") {
+        btn.innerText = "採寸";
+        btn.classList.add("hidden");
+        return;
+      }
 
-    if (isMeasurementCompleteForType(type)) {
-      btn.innerText = "採寸済";
-    } else {
-      btn.innerText = "採寸";
-    }
+      const type = getMeasurementTypeByCategory(row.dataset.productCategory);
+
+      btn.classList.remove("hidden");
+
+      if (isMeasurementCompleteForType(type)) {
+        btn.innerText = "採寸済";
+      } else {
+        btn.innerText = "採寸";
+      }
+
+    });
   });
 }
-
 
 
 // 現在選択中の職種・性別データを取得
