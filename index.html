@@ -78,6 +78,29 @@ button {
   border-left: 4px solid #f5a623;
   font-size: 14px;
 }
+
+.category-title {
+  font-weight: bold;
+}
+
+.category-count {
+  margin-left: 8px;
+  font-size: 14px;
+  color: #333;
+}
+
+.category-count-ok {
+  color: green;
+}
+
+.category-count-warning {
+  color: orange;
+}
+
+.category-count-over {
+  color: red;
+}
+
   
 </style>
 </head>
@@ -218,11 +241,12 @@ function createTable(data, selectedJob, selectedGender) {
 
       // カテゴリ見出し
       html += `<tr class="category-header">
-        <td colspan="6">
-          <div class="category-heading">
-            ${category}を選んで下さい
-          </div>
-      `;
+  <td colspan="6">
+    <div class="category-heading" data-category-heading="${category}">
+      <span class="category-title">${category}を選択</span>
+      <span class="category-count"></span>
+    </div>
+`;
 
       if (categoryInfo.note) {
         html += `<div class="category-note">${categoryInfo.note}</div>`;
@@ -429,6 +453,7 @@ function getRowSizeInfo(row) {
 
 
 // 枚数計算
+// 枚数計算
 function updateCategorySummary() {
 
   const jobData = getSelectedJobData();
@@ -441,6 +466,7 @@ function updateCategorySummary() {
 
   const counts = {};
   const limits = {};
+  const selectedByProductCategory = {};
 
   // 貸与数の上限をセット
   jobData.categoryLimits.forEach(rule => {
@@ -452,19 +478,28 @@ function updateCategorySummary() {
 
   rows.forEach((row, i) => {
 
-  const productCategory = row.dataset.productCategory;
+    const productCategory = row.dataset.productCategory;
 
-  // カテゴリ見出し行は計算対象外
-  if (!productCategory) return;
+    // カテゴリ見出し行・商品ヘッダー行は計算対象外
+    if (!productCategory) return;
+
     const qtyInput = row.querySelector("input[type='number']");
     const qty = Number(qtyInput.value) || 0;
 
-    if (!row.dataset.productCategory) return;
+    if (qty <= 0) return;
 
     // サイズ未選択の場合は枚数計算しない
     const sizeInfo = getRowSizeInfo(row);
     if (!sizeInfo.valid) return;
 
+    // その商品カテゴリ内で何枚選ばれているか
+    if (selectedByProductCategory[productCategory] === undefined) {
+      selectedByProductCategory[productCategory] = 0;
+    }
+
+    selectedByProductCategory[productCategory] += qty;
+
+    // 消費カテゴリへの換算
     const rules = jobData.conversionRules.filter(r =>
       r.fromProductCategory === productCategory
     );
@@ -479,6 +514,7 @@ function updateCategorySummary() {
     });
   });
 
+  // 上部の現在貸与枚数エリア
   let html = "<h3>現在の貸与枚数</h3>";
 
   Object.keys(limits).forEach(category => {
@@ -502,8 +538,51 @@ function updateCategorySummary() {
   });
 
   area.innerHTML = html;
-}
 
+  // 各カテゴリ見出しにも枚数を反映
+  const headingElements = document.querySelectorAll("[data-category-heading]");
+
+  headingElements.forEach(el => {
+
+    const category = el.dataset.categoryHeading;
+    const countSpan = el.querySelector(".category-count");
+
+    if (!countSpan) return;
+
+    const limit = limits[category];
+    const current = counts[category] || 0;
+    const selected = selectedByProductCategory[category] || 0;
+
+    countSpan.classList.remove(
+      "category-count-ok",
+      "category-count-warning",
+      "category-count-over"
+    );
+
+    // 貸与数があるカテゴリ
+    if (limit !== undefined) {
+
+      countSpan.innerText = `（合計${limit}枚） 選択中 ${current}/${limit}`;
+
+      if (current > limit) {
+        countSpan.classList.add("category-count-over");
+      } else if (current === limit) {
+        countSpan.classList.add("category-count-ok");
+      } else if (limit - current === 1) {
+        countSpan.classList.add("category-count-warning");
+      }
+
+    } else {
+
+      // ワンピースなど、直接の貸与数を持たないカテゴリ
+      if (selected > 0) {
+        countSpan.innerText = `選択中 ${selected}枚`;
+      } else {
+        countSpan.innerText = "";
+      }
+    }
+  });
+}
 
 // 登録
 function submitData() {
