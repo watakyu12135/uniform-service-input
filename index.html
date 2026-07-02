@@ -36,6 +36,26 @@ button {
   margin-top: 10px;
 }
 
+.name-area {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.name-field {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.name-field label {
+  font-weight: bold;
+}
+
+.name-field input {
+  width: 140px;
+}
+
 #categoryStatus {
   margin-top: 15px;
   padding: 10px;
@@ -213,6 +233,28 @@ button {
   .specialSize {
     min-height: 36px;
   }
+
+.name-area {
+    display: block;
+  }
+
+  .name-field {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  .name-field label {
+    width: 32px;
+  }
+
+  .name-field input {
+    flex: 1;
+    width: auto;
+    font-size: 16px;
+    box-sizing: border-box;
+  }
+
 }
 </style>
 </head>
@@ -224,8 +266,17 @@ button {
 <div id="customerInfo">顧客：読み込み中...</div>
 <br>
 
-氏：<input id="sei">
-名：<input id="mei"><br><br>
+<div class="name-area">
+  <div class="name-field">
+    <label for="sei">氏</label>
+    <input id="sei">
+  </div>
+
+  <div class="name-field">
+    <label for="mei">名</label>
+    <input id="mei">
+  </div>
+</div>
 
 性別：
 <select id="gender" onchange="changeJob()">
