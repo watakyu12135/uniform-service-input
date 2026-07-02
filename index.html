@@ -36,6 +36,7 @@ button {
   margin-top: 10px;
 }
 
+/* 氏名 */
 .name-area {
   display: flex;
   gap: 12px;
@@ -56,6 +57,7 @@ button {
   width: 140px;
 }
 
+/* 貸与枚数 */
 #categoryStatus {
   margin-top: 15px;
   padding: 10px;
@@ -121,6 +123,7 @@ button {
   color: red;
 }
 
+/* 採寸画面 */
 .measurement-area {
   margin-top: 20px;
   padding: 15px;
@@ -167,6 +170,14 @@ button {
   color: #666;
 }
 
+.measurement-image {
+  max-width: 100%;
+  height: auto;
+  margin-top: 8px;
+  border: 1px solid #ccc;
+  background: #fff;
+}
+
 .measure-required-message {
   margin-top: 6px;
   font-size: 13px;
@@ -176,14 +187,6 @@ button {
 
 .measure-inline {
   display: none;
-}
-
-.measurement-image {
-  max-width: 100%;
-  height: auto;
-  margin-top: 8px;
-  border: 1px solid #ccc;
-  background: #fff;
 }
 
 /* スマホ表示 */
@@ -229,15 +232,19 @@ button {
   .cell-code {
     grid-area: code;
     font-size: 12px;
+    border-right: 1px solid #ddd !important;
+    border-bottom: 1px solid #ddd !important;
   }
 
   .cell-color {
     grid-area: color;
     font-size: 12px;
+    border-right: 1px solid #ddd !important;
   }
 
   .cell-size {
     grid-area: size;
+    border-bottom: 1px solid #ddd !important;
   }
 
   .cell-qty {
@@ -247,6 +254,7 @@ button {
   .cell-measure {
     grid-area: measure;
     text-align: right;
+    display: none;
   }
 
   .cell-size select,
@@ -268,25 +276,6 @@ button {
     margin-top: 14px;
   }
 
-/* スマホ用：セル内罫線 */
-  .cell-product {
-    border-right: 1px solid #ddd !important;
-  }
-
-  .cell-code {
-    border-right: 1px solid #ddd !important;
-    border-bottom: 1px solid #ddd !important;
-  }
-
-  .cell-color {
-    border-right: 1px solid #ddd !important;
-  }
-
-  .cell-size {
-    border-bottom: 1px solid #ddd !important;
-  }
-
-/* スマホ入力時の自動ズーム対策 */
   input,
   select,
   textarea {
@@ -299,7 +288,7 @@ button {
     min-height: 36px;
   }
 
-.name-area {
+  .name-area {
     display: block;
   }
 
@@ -320,32 +309,28 @@ button {
     box-sizing: border-box;
   }
 
-.cell-measure {
-    display: none;
-  }
-
   .measure-inline:not(.hidden) {
     display: inline-block;
     margin-top: 6px;
   }
 
-.measure-section {
+  .measure-section {
     font-size: 14px;
   }
 
   .measure-section label {
-  min-width: 140px;
-  width: 140px;
-  display: inline-block;
-  margin-top: 10px;
-  vertical-align: middle;
-  white-space: nowrap;
-}
+    min-width: 140px;
+    width: 140px;
+    display: inline-block;
+    margin-top: 10px;
+    vertical-align: middle;
+    white-space: nowrap;
+  }
 
-.measure-section input[type="number"] {
-  width: 72px;
-  box-sizing: border-box;
-}
+  .measure-section input[type="number"] {
+    width: 72px;
+    box-sizing: border-box;
+  }
 
   .measure-section select {
     width: 150px;
@@ -360,7 +345,6 @@ button {
     line-height: 1.4;
     color: #555;
   }
-
 }
 </style>
 </head>
@@ -406,7 +390,7 @@ button {
 
 <div id="categoryStatus"></div>
 
-<button onclick="submitData()">登録</button>
+<button id="submitButton" onclick="submitData()">登録</button>
 
 <div id="measurementArea" class="hidden measurement-area">
 
@@ -415,10 +399,9 @@ button {
   <div id="measurementMessage"></div>
 
   <div class="measurement-guide">
-  <strong>採寸図：</strong><br>
-  <img src="images/measurement-guide.png" alt="採寸図" class="measurement-image">
-</div>
-
+    <strong>採寸図：</strong><br>
+    <img src="images/measurement-guide.png" alt="採寸図" class="measurement-image">
+  </div>
 
   <section class="measure-section" id="measureCommon">
     <h3>共通項目</h3>
@@ -449,10 +432,10 @@ button {
     <div class="measure-help">左、右の肩先まで測る。</div>
 
     <label>C1_袖丈_半袖</label>
-    <input type="number" id="m_C1"> cm
+    <input type="number" id="m_C1"> cm<br>
 
     <label>C2_袖丈_七分袖</label>
-    <input type="number" id="m_C2"> cm
+    <input type="number" id="m_C2"> cm<br>
 
     <label>C3_袖丈_長袖</label>
     <input type="number" id="m_C3"> cm
@@ -528,7 +511,6 @@ button {
   <button onclick="saveMeasurement()">採寸表を保存して戻る</button>
   <button onclick="cancelMeasurement()">保存せず戻る</button>
 
-
 </div>
 
 <script>
@@ -575,7 +557,6 @@ let measurementData = {
   memo: ""
 };
 
-// JSON読み込み
 fetch(`config/${getCustomer()}.json`)
   .then(res => {
     if (!res.ok) {
@@ -599,8 +580,6 @@ fetch(`config/${getCustomer()}.json`)
       "<tr><td colspan='6'>読み込みに失敗しました：" + error.message + "</td></tr>";
   });
 
-
-// 性別・職種変更で表生成
 function changeJob() {
 
   const job = document.getElementById("job").value;
@@ -622,8 +601,6 @@ function changeJob() {
   createTable(currentData, job, gender);
 }
 
-
-// 表生成
 function createTable(data, selectedJob, selectedGender) {
 
   const table = document.getElementById("table");
@@ -665,7 +642,6 @@ function createTable(data, selectedJob, selectedGender) {
 
       if (products.length === 0) return;
 
-      // カテゴリ見出し
       html += `<tr class="category-header">
         <td colspan="6">
           <div class="category-heading" data-category-heading="${category}">
@@ -679,7 +655,6 @@ function createTable(data, selectedJob, selectedGender) {
 
       html += `</td></tr>`;
 
-      // 商品テーブルの見出し
       html += `<tr class="product-header">
         <th>商品</th>
         <th>品番</th>
@@ -743,9 +718,9 @@ function createTable(data, selectedJob, selectedGender) {
           <input type="number" min="0" oninput="updateCategorySummary()">
         </td>`;
 
-       row += `<td class="cell-measure">
-  <button class="measure measure-table hidden" onclick="openMeasurement(this)">採寸</button>
-</td>`;
+        row += `<td class="cell-measure">
+          <button class="measure measure-table hidden" onclick="openMeasurement(this)">採寸</button>
+        </td>`;
 
         row += `</tr>`;
 
@@ -758,16 +733,12 @@ function createTable(data, selectedJob, selectedGender) {
   updateCategorySummary();
 }
 
-
-// 通常サイズ／その他の切替
 function checkMainSize(select) {
 
   const row = select.closest("tr");
   const specialArea = row.querySelector(".specialSizeArea");
   const specialSelect = row.querySelector(".specialSize");
   const bespokeArea = row.querySelector(".bespokeInputArea");
-  const bespokeInput = row.querySelector(".bespokeInput");
-  
 
   if (select.value === "__OTHER__") {
     specialArea.classList.remove("hidden");
@@ -776,17 +747,14 @@ function checkMainSize(select) {
 
     if (specialSelect) specialSelect.value = "";
     if (bespokeArea) bespokeArea.classList.add("hidden");
-    if (bespokeInput) bespokeInput.value = "";
-    
-row.querySelectorAll(".measure").forEach(btn => {
-  btn.classList.add("hidden");
-  btn.innerText = "採寸";
-});
+
+    row.querySelectorAll(".measure").forEach(btn => {
+      btn.classList.add("hidden");
+      btn.innerText = "採寸";
+    });
   }
 }
 
-
-// 特注サイズ／別寸の切替
 function checkSpecialSize(select) {
 
   const row = select.closest("tr");
@@ -845,6 +813,7 @@ function openMeasurement(button) {
 
   document.querySelector(".table-wrap").classList.add("hidden");
   document.getElementById("categoryStatus").classList.add("hidden");
+  document.getElementById("submitButton").classList.add("hidden");
   document.getElementById("measurementArea").classList.remove("hidden");
 
   document.getElementById("measurementMessage").innerText =
@@ -856,6 +825,7 @@ function closeMeasurement() {
   document.getElementById("measurementArea").classList.add("hidden");
   document.querySelector(".table-wrap").classList.remove("hidden");
   document.getElementById("categoryStatus").classList.remove("hidden");
+  document.getElementById("submitButton").classList.remove("hidden");
 
   window.scrollTo({
     top: 0,
@@ -874,13 +844,10 @@ function cancelMeasurement() {
   closeMeasurement();
 }
 
-
 function setSectionEnabled(sectionId, enabled) {
 
   const section = document.getElementById(sectionId);
-  const inputs = section.querySelectorAll("input, select, textarea");
-
-  if (enabled) {
+  const inputs = section.if (enabled) {
     section.classList.remove("disabled-section");
   } else {
     section.classList.add("disabled-section");
@@ -999,7 +966,7 @@ function saveMeasurement() {
 
   updateAllMeasurementButtons();
 
-closeMeasurement();
+  closeMeasurement();
 }
 
 function isMeasurementCompleteForType(type) {
@@ -1044,10 +1011,41 @@ function hasBespokeWithoutMeasurement() {
     }
   });
 
-
-
-
   return missing;
+}
+
+function updateAllMeasurementButtons() {
+
+  const rows = document.querySelectorAll("#table tr");
+
+  rows.forEach(row => {
+
+    if (!row.dataset.productCategory) return;
+
+    const buttons = row.querySelectorAll(".measure");
+    if (buttons.length === 0) return;
+
+    const sizeInfo = getRowSizeInfo(row);
+
+    buttons.forEach(btn => {
+
+      if (sizeInfo.size !== "別寸") {
+        btn.innerText = "採寸";
+        btn.classList.add("hidden");
+        return;
+      }
+
+      const type = getMeasurementTypeByCategory(row.dataset.productCategory);
+
+      btn.classList.remove("hidden");
+
+      if (isMeasurementCompleteForType(type)) {
+        btn.innerText = "採寸済";
+      } else {
+        btn.innerText = "採寸";
+      }
+    });
+  });
 }
 
 function buildMeasurementPayload(common) {
@@ -1111,44 +1109,6 @@ function buildMeasurementPayload(common) {
   };
 }
 
-
-function updateAllMeasurementButtons() {
-
-  const rows = document.querySelectorAll("#table tr");
-
-  rows.forEach(row => {
-
-    if (!row.dataset.productCategory) return;
-
-    const buttons = row.querySelectorAll(".measure");
-    if (buttons.length === 0) return;
-
-    const sizeInfo = getRowSizeInfo(row);
-
-    buttons.forEach(btn => {
-
-      if (sizeInfo.size !== "別寸") {
-        btn.innerText = "採寸";
-        btn.classList.add("hidden");
-        return;
-      }
-
-      const type = getMeasurementTypeByCategory(row.dataset.productCategory);
-
-      btn.classList.remove("hidden");
-
-      if (isMeasurementCompleteForType(type)) {
-        btn.innerText = "採寸済";
-      } else {
-        btn.innerText = "採寸";
-      }
-
-    });
-  });
-}
-
-
-// 現在選択中の職種・性別データを取得
 function getSelectedJobData() {
 
   const job = document.getElementById("job").value;
@@ -1163,13 +1123,10 @@ function getSelectedJobData() {
   );
 }
 
-
-// 行のサイズ情報を取得
 function getRowSizeInfo(row) {
 
   const mainSizeSelect = row.querySelector(".mainSize");
   const specialSizeSelect = row.querySelector(".specialSize");
-  const bespokeInput = row.querySelector(".bespokeInput");
 
   let size = "";
   let sizeType = "";
@@ -1197,12 +1154,12 @@ function getRowSizeInfo(row) {
 
     size = specialSizeSelect.value;
 
- if (size === "別寸") {
-  sizeType = "bespoke";
-  bespokeText = "";
-} else {
-  sizeType = "custom";
-}
+    if (size === "別寸") {
+      sizeType = "bespoke";
+      bespokeText = "";
+    } else {
+      sizeType = "custom";
+    }
 
   } else {
 
@@ -1228,8 +1185,6 @@ function getRowSizeInfo(row) {
   };
 }
 
-
-// 枚数計算
 function updateCategorySummary() {
 
   const jobData = getSelectedJobData();
@@ -1244,7 +1199,6 @@ function updateCategorySummary() {
   const limits = {};
   const selectedByProductCategory = {};
 
-  // 貸与数の上限をセット
   jobData.categoryLimits.forEach(rule => {
     limits[rule.productCategory] = rule.limit;
     counts[rule.productCategory] = 0;
@@ -1256,7 +1210,6 @@ function updateCategorySummary() {
 
     const productCategory = row.dataset.productCategory;
 
-    // カテゴリ見出し行・商品ヘッダー行は計算対象外
     if (!productCategory) return;
 
     const qtyInput = row.querySelector("input[type='number']");
@@ -1353,8 +1306,6 @@ function updateCategorySummary() {
   });
 }
 
-
-// 登録
 function submitData() {
 
   if (!document.getElementById("sei").value) {
@@ -1416,8 +1367,6 @@ function submitData() {
       return;
     }
 
-
-
     data.push({
       ...common,
       product,
@@ -1441,36 +1390,34 @@ function submitData() {
     return;
   }
 
-if (hasBespokeWithoutMeasurement()) {
-  const ok = confirm("採寸表の登録がありません。このまま登録しますか？");
+  if (hasBespokeWithoutMeasurement()) {
+    const ok = confirm("採寸表の登録がありません。このまま登録しますか？");
 
-  if (!ok) {
-    return;
+    if (!ok) {
+      return;
+    }
   }
+
+  const measurementPayload = buildMeasurementPayload(common);
+
+  const payload = {
+    orders: data,
+    measurement: measurementPayload
+  };
+
+  console.log(payload);
+
+  fetch("https://script.google.com/macros/s/AKfycbzifpGEKoydnvI9RAU6evgnHoWQh2YTx7WfXtqsi8O7tMoGbnyXzCC5bIVUY9QmUGZdlA/exec", {
+    method: "POST",
+    mode: "no-cors",
+    headers: {
+      "Content-Type": "text/plain;charset=utf-8"
+    },
+    body: JSON.stringify(payload)
+  });
+
+  alert("登録送信しました（シート確認）");
 }
-
- const measurementPayload = buildMeasurementPayload(common);
-
-const payload = {
-  orders: data,
-  measurement: measurementPayload
-};
-
-console.log(payload);
-
-fetch("https://script.google.com/macros/s/AKfycbycFkYteNOah_vtLt0lTbugo7W5o-oSPHkRWpwKC-p-5G3JW_DkIAF5pxUjw6piJYeRRw/exec", {
-  method: "POST",
-  mode: "no-cors",
-  headers: {
-    "Content-Type": "text/plain;charset=utf-8"
-  },
-  body: JSON.stringify(payload)
-});
-
-alert("登録送信しました（シート確認）");
-
-}
-
 </script>
 
 </body>
