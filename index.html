@@ -457,7 +457,7 @@ function updateCategorySummary() {
     const qtyInput = row.querySelector("input[type='number']");
     const qty = Number(qtyInput.value) || 0;
 
-    if (qty <= 0) return;
+    if (!row.dataset.productCategory) return;
 
     // サイズ未選択の場合は枚数計算しない
     const sizeInfo = getRowSizeInfo(row);
@@ -546,7 +546,8 @@ function submitData() {
 
   rows.forEach((row, i) => {
 
-    if (i === 0) return;
+    // カテゴリ見出し行・商品ヘッダー行は登録対象外
+    if (!row.dataset.productCategory) return;
 
     const cells = row.querySelectorAll("td");
 
