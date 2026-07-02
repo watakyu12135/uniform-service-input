@@ -121,6 +121,59 @@ button {
   color: red;
 }
 
+.measurement-area {
+  margin-top: 20px;
+  padding: 15px;
+  border: 2px solid #4a90e2;
+  background: #f7fbff;
+}
+
+.measure-section {
+  margin-top: 15px;
+  padding: 12px;
+  border: 1px solid #ccc;
+  background: #fff;
+}
+
+.measure-section label {
+  display: inline-block;
+  min-width: 130px;
+  margin-top: 8px;
+  font-weight: bold;
+}
+
+.measure-section input,
+.measure-section select {
+  width: 120px;
+}
+
+.measure-help {
+  margin: 2px 0 8px 135px;
+  font-size: 13px;
+  color: #555;
+}
+
+.disabled-section {
+  opacity: 0.45;
+  background: #eee;
+}
+
+.guide-placeholder {
+  margin-top: 8px;
+  padding: 20px;
+  border: 1px dashed #999;
+  background: #fff;
+  text-align: center;
+  color: #666;
+}
+
+.measure-required-message {
+  margin-top: 6px;
+  font-size: 13px;
+  color: #c00;
+  font-weight: bold;
+}
+
 /* スマホ表示 */
 @media (max-width: 600px) {
 
@@ -255,6 +308,9 @@ button {
     box-sizing: border-box;
   }
 
+
+
+
 }
 </style>
 </head>
@@ -302,6 +358,129 @@ button {
 
 <button onclick="submitData()">登録</button>
 
+<div id="measurementArea" class="hidden measurement-area">
+
+  <h2>別寸採寸表入力</h2>
+
+  <div id="measurementMessage"></div>
+
+  <div class="measurement-guide">
+    <strong>採寸図：</strong>
+    <div class="guide-placeholder">
+      採寸図をここに表示予定
+    </div>
+  </div>
+
+  <section class="measure-section" id="measureCommon">
+    <h3>共通項目</h3>
+
+    <label>身長</label>
+    <input type="number" id="m_height"> cm<br>
+
+    <label>体重</label>
+    <input type="number" id="m_weight"> kg<br>
+
+    <label>採寸方法</label>
+    <select id="m_method">
+      <option value="">選択</option>
+      <option value="ヌード寸法">ヌード寸法</option>
+      <option value="出来上がり寸法">出来上がり寸法</option>
+    </select>
+  </section>
+
+  <section class="measure-section" id="measureUpper">
+    <h3>上衣採寸</h3>
+
+    <label>A_衿回り</label>
+    <input type="number" id="m_A"> cm
+    <div class="measure-help">のどぼとけのすぐ下で測る。</div>
+
+    <label>B_肩巾</label>
+    <input type="number" id="m_B"> cm
+    <div class="measure-help">左、右の肩先まで測る。</div>
+
+    <label>C1_袖丈_半袖</label>
+    <input type="number" id="m_C1"> cm
+
+    <label>C2_袖丈_七分袖</label>
+    <input type="number" id="m_C2"> cm
+
+    <label>C3_袖丈_長袖</label>
+    <input type="number" id="m_C3"> cm
+
+    <div class="measure-help">
+      肩先から本人希望の長さ。該当する袖丈のみ入力してください。<br>
+      ※半袖の商品を長袖で製作することはできません。
+    </div>
+
+    <label>D_胸回り</label>
+    <input type="number" id="m_D"> cm
+    <div class="measure-help">脇のすぐ下で水平にメジャーを回して測る。</div>
+
+    <label>E_胴回り</label>
+    <input type="number" id="m_E"> cm
+    <div class="measure-help">ベルトの上、へそのあたりを測る。</div>
+
+    <label>F_腰回り</label>
+    <input type="number" id="m_F"> cm
+    <div class="measure-help">腰の一番張ったところを測る。</div>
+
+    <label>G_背丈</label>
+    <input type="number" id="m_G"> cm
+    <div class="measure-help">首の付け根の中心から胴回りの測定位置まで。</div>
+
+    <label>H_着丈</label>
+    <input type="number" id="m_H"> cm
+    <div class="measure-help">首の付け根の中心から本人希望の長さまで。</div>
+
+    <label>I_袖付回り</label>
+    <input type="number" id="m_I"> cm
+    <div class="measure-help">肩先から腕の付け根部分回りを測る。</div>
+  </section>
+
+  <section class="measure-section" id="measureLower">
+    <h3>下衣採寸</h3>
+
+    <label>a_胴回り</label>
+    <input type="number" id="m_a"> cm
+    <div class="measure-help">ベルトの上、へそのあたりを測る。</div>
+
+    <label>b_腰回り</label>
+    <input type="number" id="m_b"> cm
+    <div class="measure-help">腰の一番張ったところを測る。</div>
+
+    <label>c_股上</label>
+    <input type="number" id="m_c"> cm
+    <div class="measure-help">胴回り位置から股下までを測る。</div>
+
+    <label>d_股下</label>
+    <input type="number" id="m_d"> cm
+    <div class="measure-help">股下より本人希望の長さ。</div>
+
+    <label>e_総丈</label>
+    <input type="number" id="m_e"> cm
+    <div class="measure-help">胴回り位置からズボン裾まで。</div>
+
+    <label>f_太股回り</label>
+    <input type="number" id="m_f"> cm
+    <div class="measure-help">股下より10cm下がった位置を測る。</div>
+  </section>
+
+  <section class="measure-section">
+    <h3>特記事項・備考</h3>
+
+    <label>特記事項</label><br>
+    <textarea id="m_specialNote" rows="3"></textarea><br>
+
+    <label>備考</label><br>
+    <textarea id="m_memo" rows="3"></textarea>
+  </section>
+
+  <button onclick="saveMeasurement()">採寸表を保存して戻る</button>
+  <button onclick="closeMeasurement()">戻る</button>
+
+</div>
+
 <script>
 function getCustomer() {
   const url = new URL(window.location.href);
@@ -309,6 +488,42 @@ function getCustomer() {
 }
 
 let currentData;
+
+let currentMeasurementType = "";
+let currentMeasurementButton = null;
+
+let measurementData = {
+  common: {
+    height: "",
+    weight: "",
+    method: ""
+  },
+  upper: {
+    completed: false,
+    A: "",
+    B: "",
+    C1: "",
+    C2: "",
+    C3: "",
+    D: "",
+    E: "",
+    F: "",
+    G: "",
+    H: "",
+    I: ""
+  },
+  lower: {
+    completed: false,
+    a: "",
+    b: "",
+    c: "",
+    d: "",
+    e: "",
+    f: ""
+  },
+  specialNote: "",
+  memo: ""
+};
 
 // JSON読み込み
 fetch(`config/${getCustomer()}.json`)
@@ -466,9 +681,9 @@ function createTable(data, selectedJob, selectedGender) {
 
         row += `</select>
 
-          <div class="bespokeInputArea hidden" style="margin-top:6px;">
-            <input type="text" class="bespokeInput" placeholder="別寸サイズを入力">
-          </div>
+          <div class="bespokeInputArea hidden measure-required-message">
+  採寸表への入力が必要です
+</div>
         </div>`;
 
         row += `</td>`;
@@ -478,8 +693,8 @@ function createTable(data, selectedJob, selectedGender) {
         </td>`;
 
         row += `<td class="cell-measure">
-          <button class="measure hidden">採寸</button>
-        </td>`;
+  <button class="measure hidden" onclick="openMeasurement(this)">採寸</button>
+</td>`;
 
         row += `</tr>`;
 
@@ -526,11 +741,268 @@ function checkSpecialSize(select) {
   if (select.value === "別寸") {
     bespokeArea.classList.remove("hidden");
     btn.classList.remove("hidden");
+
+    const type = getMeasurementTypeByCategory(row.dataset.productCategory);
+
+    if (isMeasurementCompleteForType(type)) {
+      btn.innerText = "採寸済";
+    } else {
+      btn.innerText = "採寸";
+    }
+
   } else {
     bespokeArea.classList.add("hidden");
     btn.classList.add("hidden");
+    btn.innerText = "採寸";
   }
 }
+
+function getMeasurementTypeByCategory(category) {
+
+  const upperCategories = ["上衣", "ベスト", "ブラウス"];
+  const lowerCategories = ["下衣", "パンツ", "スカート"];
+  const fullCategories = ["ワンピース"];
+
+  if (fullCategories.includes(category)) return "全身";
+  if (upperCategories.includes(category)) return "上衣";
+  if (lowerCategories.includes(category)) return "下衣";
+
+  return "";
+}
+
+function openMeasurement(button) {
+
+  const row = button.closest("tr");
+  const category = row.dataset.productCategory;
+
+  currentMeasurementType = getMeasurementTypeByCategory(category);
+  currentMeasurementButton = button;
+
+  if (!currentMeasurementType) {
+    alert("この商品カテゴリの採寸区分が設定されていません。");
+    return;
+  }
+
+  loadMeasurementToForm();
+  applyMeasurementMode(currentMeasurementType);
+
+  document.querySelector(".table-wrap").classList.add("hidden");
+  document.getElementById("categoryStatus").classList.add("hidden");
+  document.getElementById("measurementArea").classList.remove("hidden");
+
+  document.getElementById("measurementMessage").innerText =
+    "採寸区分：" + currentMeasurementType;
+}
+
+function closeMeasurement() {
+
+  document.getElementById("measurementArea").classList.add("hidden");
+  document.querySelector(".table-wrap").classList.remove("hidden");
+  document.getElementById("categoryStatus").classList.remove("hidden");
+}
+
+function setSectionEnabled(sectionId, enabled) {
+
+  const section = document.getElementById(sectionId);
+  const inputs = section.querySelectorAll("input, select, textarea");
+
+  if (enabled) {
+    section.classList.remove("disabled-section");
+  } else {
+    section.classList.add("disabled-section");
+  }
+
+  inputs.forEach(input => {
+    input.disabled = !enabled;
+  });
+}
+
+function applyMeasurementMode(type) {
+
+  const upperEditable =
+    type === "上衣" ||
+    type === "全身" ||
+    measurementData.upper.completed;
+
+  const lowerEditable =
+    type === "下衣" ||
+    type === "全身" ||
+    measurementData.lower.completed;
+
+  setSectionEnabled("measureCommon", true);
+  setSectionEnabled("measureUpper", upperEditable);
+  setSectionEnabled("measureLower", lowerEditable);
+}
+
+function loadMeasurementToForm() {
+
+  document.getElementById("m_height").value = measurementData.common.height;
+  document.getElementById("m_weight").value = measurementData.common.weight;
+  document.getElementById("m_method").value = measurementData.common.method;
+
+  document.getElementById("m_A").value = measurementData.upper.A;
+  document.getElementById("m_B").value = measurementData.upper.B;
+  document.getElementById("m_C1").value = measurementData.upper.C1;
+  document.getElementById("m_C2").value = measurementData.upper.C2;
+  document.getElementById("m_C3").value = measurementData.upper.C3;
+  document.getElementById("m_D").value = measurementData.upper.D;
+  document.getElementById("m_E").value = measurementData.upper.E;
+  document.getElementById("m_F").value = measurementData.upper.F;
+  document.getElementById("m_G").value = measurementData.upper.G;
+  document.getElementById("m_H").value = measurementData.upper.H;
+  document.getElementById("m_I").value = measurementData.upper.I;
+
+  document.getElementById("m_a").value = measurementData.lower.a;
+  document.getElementById("m_b").value = measurementData.lower.b;
+  document.getElementById("m_c").value = measurementData.lower.c;
+  document.getElementById("m_d").value = measurementData.lower.d;
+  document.getElementById("m_e").value = measurementData.lower.e;
+  document.getElementById("m_f").value = measurementData.lower.f;
+
+  document.getElementById("m_specialNote").value = measurementData.specialNote;
+  document.getElementById("m_memo").value = measurementData.memo;
+}
+
+function saveMeasurement() {
+
+  const height = document.getElementById("m_height").value;
+  const weight = document.getElementById("m_weight").value;
+  const method = document.getElementById("m_method").value;
+
+  if (!height) {
+    alert("身長を入力してください");
+    return;
+  }
+
+  if (!weight) {
+    alert("体重を入力してください");
+    return;
+  }
+
+  if (!method) {
+    alert("採寸方法を選択してください");
+    return;
+  }
+
+  measurementData.common.height = height;
+  measurementData.common.weight = weight;
+  measurementData.common.method = method;
+
+  measurementData.upper.A = document.getElementById("m_A").value;
+  measurementData.upper.B = document.getElementById("m_B").value;
+  measurementData.upper.C1 = document.getElementById("m_C1").value;
+  measurementData.upper.C2 = document.getElementById("m_C2").value;
+  measurementData.upper.C3 = document.getElementById("m_C3").value;
+  measurementData.upper.D = document.getElementById("m_D").value;
+  measurementData.upper.E = document.getElementById("m_E").value;
+  measurementData.upper.F = document.getElementById("m_F").value;
+  measurementData.upper.G = document.getElementById("m_G").value;
+  measurementData.upper.H = document.getElementById("m_H").value;
+  measurementData.upper.I = document.getElementById("m_I").value;
+
+  measurementData.lower.a = document.getElementById("m_a").value;
+  measurementData.lower.b = document.getElementById("m_b").value;
+  measurementData.lower.c = document.getElementById("m_c").value;
+  measurementData.lower.d = document.getElementById("m_d").value;
+  measurementData.lower.e = document.getElementById("m_e").value;
+  measurementData.lower.f = document.getElementById("m_f").value;
+
+  measurementData.specialNote = document.getElementById("m_specialNote").value;
+  measurementData.memo = document.getElementById("m_memo").value;
+
+  if (currentMeasurementType === "上衣") {
+    measurementData.upper.completed = true;
+  }
+
+  if (currentMeasurementType === "下衣") {
+    measurementData.lower.completed = true;
+  }
+
+  if (currentMeasurementType === "全身") {
+    measurementData.upper.completed = true;
+    measurementData.lower.completed = true;
+  }
+
+  updateAllMeasurementButtons();
+
+closeMeasurement();
+}
+
+function isMeasurementCompleteForType(type) {
+
+  if (type === "上衣") {
+    return measurementData.upper.completed;
+  }
+
+  if (type === "下衣") {
+    return measurementData.lower.completed;
+  }
+
+  if (type === "全身") {
+    return measurementData.upper.completed && measurementData.lower.completed;
+  }
+
+  return false;
+}
+
+function hasBespokeWithoutMeasurement() {
+
+  const rows = document.querySelectorAll("#table tr");
+  let missing = false;
+
+  rows.forEach(row => {
+
+    if (!row.dataset.productCategory) return;
+
+    const sizeInfo = getRowSizeInfo(row);
+    const qtyInput = row.querySelector("input[type='number']");
+    const qty = Number(qtyInput.value) || 0;
+
+    if (qty <= 0) return;
+
+    if (sizeInfo.size === "別寸") {
+
+      const type = getMeasurementTypeByCategory(row.dataset.productCategory);
+
+      if (!isMeasurementCompleteForType(type)) {
+        missing = true;
+      }
+    }
+  });
+
+
+
+  return missing;
+}
+
+function updateAllMeasurementButtons() {
+
+  const rows = document.querySelectorAll("#table tr");
+
+  rows.forEach(row => {
+
+    if (!row.dataset.productCategory) return;
+
+    const btn = row.querySelector(".measure");
+    if (!btn) return;
+
+    const sizeInfo = getRowSizeInfo(row);
+
+    if (sizeInfo.size !== "別寸") {
+      btn.innerText = "採寸";
+      return;
+    }
+
+    const type = getMeasurementTypeByCategory(row.dataset.productCategory);
+
+    if (isMeasurementCompleteForType(type)) {
+      btn.innerText = "採寸済";
+    } else {
+      btn.innerText = "採寸";
+    }
+  });
+}
+
 
 
 // 現在選択中の職種・性別データを取得
@@ -582,12 +1054,12 @@ function getRowSizeInfo(row) {
 
     size = specialSizeSelect.value;
 
-    if (size === "別寸") {
-      sizeType = "bespoke";
-      bespokeText = bespokeInput ? bespokeInput.value : "";
-    } else {
-      sizeType = "custom";
-    }
+ if (size === "別寸") {
+  sizeType = "bespoke";
+  bespokeText = "";
+} else {
+  sizeType = "custom";
+}
 
   } else {
 
@@ -801,10 +1273,7 @@ function submitData() {
       return;
     }
 
-    if (sizeInfo.size === "別寸" && !sizeInfo.bespokeText) {
-      errorMessage = product + " の別寸サイズを入力してください";
-      return;
-    }
+
 
     data.push({
       ...common,
@@ -828,6 +1297,14 @@ function submitData() {
     alert("商品が入力されていません（サイズ・数量）");
     return;
   }
+
+if (hasBespokeWithoutMeasurement()) {
+  const ok = confirm("採寸表の登録がありません。このまま登録しますか？");
+
+  if (!ok) {
+    return;
+  }
+}
 
   console.log(data);
 
