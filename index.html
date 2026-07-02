@@ -850,6 +850,12 @@ function closeMeasurement() {
   document.querySelector(".table-wrap").classList.remove("hidden");
   document.getElementById("categoryStatus").classList.remove("hidden");
 
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+}
+
 function cancelMeasurement() {
 
   const ok = confirm("入力した内容は保存されません。\n戻ってもよろしいですか？");
@@ -859,12 +865,6 @@ function cancelMeasurement() {
   }
 
   closeMeasurement();
-}
-
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
 }
 
 
