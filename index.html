@@ -183,7 +183,7 @@ function createTable(data, selectedJob, selectedGender) {
   );
 
   if (!jobData) {
-    table.innerHTML = "<tr><td colspan='5'>該当データなし</td></tr>";
+    table.innerHTML = "<tr><td colspan='6'>該当データなし</td></tr>";
     document.getElementById("categoryStatus").innerHTML = "";
     return;
   }
@@ -218,7 +218,7 @@ function createTable(data, selectedJob, selectedGender) {
 
       // カテゴリ見出し
       html += `<tr class="category-header">
-        <td colspan="5">
+        <td colspan="6">
           <div class="category-heading">
             ${category}を選んで下さい
           </div>
@@ -233,6 +233,7 @@ function createTable(data, selectedJob, selectedGender) {
       // 商品テーブルの見出し
       html += `<tr>
         <th>商品</th>
+	<th>品番</th>
         <th>色</th>
         <th>サイズ</th>
         <th>数量</th>
@@ -241,12 +242,13 @@ function createTable(data, selectedJob, selectedGender) {
 
       products.forEach(p => {
 
-        let row = `<tr
-          data-product-code="${p.productCode}"
-          data-product-category="${p.productCategory}"
-        >
-          <td>${p.name}</td>
-          <td>${p.color}</td>`;
+       let row = `<tr
+  data-product-code="${p.productCode}"
+  data-product-category="${p.productCategory}"
+>
+  <td>${p.name}</td>
+  <td>${p.productCode}</td>
+  <td>${p.color}</td>`;
 
         const standardSizes = p.sizes.filter(size => size.type === "standard");
         const specialSizes = p.sizes.filter(size => size.type !== "standard");
@@ -552,9 +554,10 @@ function submitData() {
     const cells = row.querySelectorAll("td");
 
     const product = cells[0].innerText;
-    const color = cells[1].innerText;
+const productCode = cells[1].innerText;
+const color = cells[2].innerText;
 
-    const qty = Number(cells[3].querySelector("input").value) || 0;
+const qty = Number(cells[4].querySelector("input").value) || 0;
 
     if (qty <= 0) return;
 
@@ -571,16 +574,16 @@ function submitData() {
     }
 
     data.push({
-      ...common,
-      product,
-      color,
-      size: sizeInfo.size,
-      sizeType: sizeInfo.sizeType,
-      bespokeText: sizeInfo.bespokeText,
-      qty,
-      productCode: row.dataset.productCode,
-      productCategory: row.dataset.productCategory
-    });
+  ...common,
+  product,
+  productCode,
+  color,
+  size: sizeInfo.size,
+  sizeType: sizeInfo.sizeType,
+  bespokeText: sizeInfo.bespokeText,
+  qty,
+  productCategory: row.dataset.productCategory
+});
   });
 
   if (errorMessage) {
