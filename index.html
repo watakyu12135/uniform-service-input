@@ -1132,15 +1132,16 @@ function buildMeasurementPayload(common) {
     measurementType = "下衣";
   }
 
-  return {
-    "登録ID": common.id,
-    "顧客コード": common.customerCode,
-    "顧客名": common.customerName,
-    "氏": common.sei,
-    "名": common.mei,
-    "性別": common.gender,
-    "職種": common.job,
-    "採寸区分": measurementType,
+ return {
+  "登録ID": common.id,
+  "顧客コード": common.customerCode,
+  "顧客名": common.customerName,
+  "氏": common.sei,
+  "名": common.mei,
+  "性別": common.gender,
+  "職種": common.job,
+  "部署": common.department,
+  "採寸区分": measurementType,
     "登録日時": common.createdAt,
     "更新日時": common.updatedAt,
 
@@ -1393,28 +1394,20 @@ function submitData() {
     return;
   }
 
-const departmentArea = document.getElementById("departmentArea");
-const departmentSelect = document.getElementById("department");
+  const departmentArea = document.getElementById("departmentArea");
+  const departmentSelect = document.getElementById("department");
 
-if (!document.getElementById("job").value) {
-  alert("職種を選択してください");
-  return;
-}
+  if (
+    departmentArea &&
+    departmentSelect &&
+    !departmentArea.classList.contains("hidden") &&
+    !departmentSelect.value
+  ) {
+    alert("部署を選択してください");
+    return;
+  }
 
-const departmentArea = document.getElementById("departmentArea");
-const departmentSelect = document.getElementById("department");
-
-if (
-  departmentArea &&
-  departmentSelect &&
-  !departmentArea.classList.contains("hidden") &&
-  !departmentSelect.value
-) {
-  alert("部署を選択してください");
-  return;
-}
-
-const now = new Date();
+  const now = new Date();
 
   const common = {
   id: Date.now(),
