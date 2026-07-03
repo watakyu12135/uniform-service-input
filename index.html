@@ -569,20 +569,23 @@ fetch(`config/${getCustomer()}.json`)
     }
     return res.json();
   })
-
   .then(data => {
-  currentData = data;
+    currentData = data;
 
-  document.getElementById("customerInfo").innerText =
-    "顧客：" + currentData.customerName;
+    document.getElementById("customerInfo").innerText =
+      "顧客：" + currentData.customerName;
 
-  document.getElementById("table").innerHTML =
-    "<tr><td colspan='6'>性別と職種を選択してください</td></tr>";
+    document.getElementById("table").innerHTML =
+      "<tr><td colspan='6'>性別と職種を選択してください</td></tr>";
 
-  document.getElementById("categoryStatus").innerHTML = "";
+    document.getElementById("categoryStatus").innerHTML = "";
 
-  updateJobOptions();
-})
+    updateJobOptions();
+  })
+  .catch(error => {
+    document.getElementById("table").innerHTML =
+      "<tr><td colspan='6'>読み込みに失敗しました：" + error.message + "</td></tr>";
+  });
 
 function changeGender() {
   updateJobOptions();
@@ -613,41 +616,6 @@ function updateJobOptions() {
     jobSelect.appendChild(option);
     return;
   }
-
-  uniqueJobs.forEach(job => {
-    const option = document.createElement("option");
-    option.value = job;
-    option.textContent = job;
-    jobSelect.appendChild(option);
-  });
-}
-
-  .catch(error => {
-    document.getElementById("table").innerHTML =
-      "<tr><td colspan='6'>読み込みに失敗しました：" + error.message + "</td></tr>";
-  });
-
-function changeGender() {
-  updateJobOptions();
-  changeJob();
-}
-
-function updateJobOptions() {
-
-  const gender = document.getElementById("gender").value;
-  const jobSelect = document.getElementById("job");
-
-  jobSelect.innerHTML = '<option value="">選択</option>';
-
-  if (!currentData || !gender) {
-    return;
-  }
-
-  const jobs = currentData.jobs
-    .filter(j => j.gender === gender)
-    .map(j => j.job);
-
-  const uniqueJobs = [...new Set(jobs)];
 
   uniqueJobs.forEach(job => {
     const option = document.createElement("option");
@@ -727,12 +695,6 @@ function updateDepartmentOptions() {
   });
 
   departmentArea.classList.remove("hidden");
-}
-
-
-  createTable(currentData, job, gender);
-updateDepartmentOptions();
-
 }
 
 function createTable(data, selectedJob, selectedGender) {
