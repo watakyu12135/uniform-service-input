@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>登録完了</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body { font-family: sans-serif; padding: 20px; }
+.box { margin-top: 20px; padding: 18px; border: 1px solid #ccc; background: #f9f9f9; }
+.pin { font-size: 28px; font-weight: bold; color: #c00; letter-spacing: 2px; }
+.notice { margin-top: 16px; padding: 12px; background: #fff7e6; border-left: 4px solid #f5a623; }
+button { margin-top: 16px; padding: 8px 14px; }
+</style>
+</head>
+<body>
+<h2>登録完了</h2>
+<div class="box">
+  <p>登録を受け付けました。</p>
+  <p>採寸番号は <span id="pin" class="pin"></span> です。</p>
+  <div class="notice">
+    登録内容の修正には、採寸番号または氏名・職種・登録した4桁の番号が必要です。<br>
+    メモを忘れずお取りください。
+  </div>
+</div>
+<button type="button" onclick="window.close()">画面を閉じる</button>
+<script>
+const raw = sessionStorage.getItem("uniformComplete");
+let info = {};
+try { info = raw ? JSON.parse(raw) : {}; } catch(e) { info = {}; }
+document.getElementById("pin").innerText = info.pin || "----";
+</script>
+</body>
+</html>
