@@ -775,7 +775,7 @@ function createTable(data, selectedJob, selectedGender) {
         const specialSizes = p.sizes.filter(size => size.type !== "standard");
 
         row += `<td class="cell-size">
-          <select class="mainSize" onchange="checkMainSize(this); updateCategorySummary();">
+          <select class="mainSize" onchange="checkMainSize(this); toggleAddSizeButton(this.closest('tr').querySelector('input[type=number]')); updateCategorySummary();">
             <option value="">選択</option>`;
 
         standardSizes.forEach(size => {
@@ -791,7 +791,7 @@ function createTable(data, selectedJob, selectedGender) {
         row += `</select>`;
 
         row += `<div class="specialSizeArea hidden" style="margin-top:6px;">
-          <select class="specialSize" onchange="checkSpecialSize(this); updateCategorySummary();">
+          <select class="specialSize" onchange="checkSpecialSize(this); toggleAddSizeButton(this.closest('tr').querySelector('input[type=number]')); updateCategorySummary();">
             <option value="">特注サイズを選択</option>`;
 
         specialSizes.forEach(size => {
@@ -811,7 +811,12 @@ function createTable(data, selectedJob, selectedGender) {
         row += `</td>`;
 
         row += `<td class="cell-qty">
-          <input type="number" min="0" oninput="updateCategorySummary()">
+          <input type="number" min="0" oninput="toggleAddSizeButton(this); updateCategorySummary()">
+          <div>
+            <button type="button" class="addSizeBtn hidden" onclick="addSameProductRow(this)">
+              他のサイズも選択する
+            </button>
+          </div>
         </td>`;
 
         row += `<td class="cell-measure">
@@ -826,6 +831,68 @@ function createTable(data, selectedJob, selectedGender) {
 
   table.innerHTML = html;
 
+  updateCategorySummary();
+}
+
+
+function toggleAddSizeButton(input) {
+  if (!input) return;
+
+  const row = input.closest("tr");
+  const qty = Number(input.value) || 0;
+  const sizeInfo = getRowSizeInfo(row);
+  const button = row.querySelector(".addSizeBtn");
+
+  if (!button) return;
+
+  if (qty > 0 && sizeInfo.valid) {
+    button.classList.remove("hidden");
+  } else {
+    button.classList.add("hidden");
+  }
+}
+
+function addSameProductRow(button) {
+  const row = button.closest("tr");
+  const productCode = row.dataset.productCode;
+
+  const productRows = Array.from(
+    document.querySelectorAll(`tr[data-product-code="${productCode}"]`)
+  );
+
+  if (productRows.length >= 3) {
+    alert("同じ商品のサイズ選択は最大3行までです。");
+    return;
+  }
+
+  const clone = row.cloneNode(true);
+
+  clone.querySelectorAll("input").forEach(input => {
+    input.value = "";
+  });
+
+  clone.querySelectorAll("select").forEach(select => {
+    select.selectedIndex = 0;
+  });
+
+  clone.querySelectorAll(".addSizeBtn").forEach(addButton => {
+    addButton.classList.add("hidden");
+  });
+
+  clone.querySelectorAll(".specialSizeArea").forEach(area => {
+    area.classList.add("hidden");
+  });
+
+  clone.querySelectorAll(".bespokeInputArea").forEach(area => {
+    area.classList.add("hidden");
+  });
+
+  clone.querySelectorAll(".measure").forEach(measureButton => {
+    measureButton.classList.add("hidden");
+    measureButton.innerText = "採寸";
+  });
+
+  productRows[productRows.length - 1].after(clone);
   updateCategorySummary();
 }
 
@@ -1463,6 +1530,7 @@ function submitData() {
 
   const rows = document.querySelectorAll("#table tr");
   let data = [];
+  const duplicateCheck = {};
   let errorMessage = "";
 
   rows.forEach(row => {
@@ -1485,6 +1553,15 @@ function submitData() {
       errorMessage = product + " のサイズを選択してください";
       return;
     }
+
+    const duplicateKey = productCode + "|" + sizeInfo.size;
+
+    if (duplicateCheck[duplicateKey]) {
+      errorMessage = product + " は同じサイズを複数登録できません。";
+      return;
+    }
+
+    duplicateCheck[duplicateKey] = true;
 
     data.push({
       ...common,
