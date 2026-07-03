@@ -8,22 +8,24 @@
 body { font-family: sans-serif; padding: 20px; }
 .section { margin-top: 18px; padding: 14px; border: 1px solid #ccc; background: #fff; }
 .info-row { margin: 6px 0; }
-table { border-collapse: collapse; width: 100%; min-width: 700px; }
-.table-wrap { overflow-x: auto; width: 100%; }
-th, td { border: 1px solid #ccc; padding: 6px; text-align: left; }
-th { background: #f2f6fb; }
 .notice { padding: 10px; background: #fff7e6; border-left: 4px solid #f5a623; }
 .error { color: #c00; font-weight: bold; }
-button { margin-top: 12px; margin-right: 8px; padding: 8px 14px; }
-input { font-size: 16px; padding: 6px; max-width: 320px; width: 100%; box-sizing: border-box; }
+button { margin-top: 12px; margin-right: 8px; padding: 10px 16px; width: 100%; }
+input { font-size: 16px; padding: 6px; width: 100%; box-sizing: border-box; }
 label { font-weight: bold; display: block; margin-top: 10px; }
 .small { font-size: 13px; color: #555; }
+.category { font-weight: bold; margin-top: 14px; border-bottom: 1px solid #ccc; }
+.item { padding: 8px; background: #f9f9f9; margin-top: 6px; }
+.check-area { margin-top: 20px; }
 </style>
 </head>
+
 <body>
+
 <h2>登録内容確認</h2>
 <div id="message" class="error"></div>
 
+<!-- 基本情報 -->
 <div class="section">
   <h3>基本情報</h3>
   <div class="info-row">顧客：<span id="customerName"></span></div>
@@ -33,61 +35,46 @@ label { font-weight: bold; display: block; margin-top: 10px; }
   <div class="info-row">部署：<span id="department"></span></div>
 </div>
 
+<!-- 商品内容（縦並び） -->
 <div class="section">
   <h3>商品選択内容</h3>
-  <div class="table-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th>商品名</th>
-          <th>商品コード</th>
-          <th>色</th>
-          <th>サイズ</th>
-          <th>数量</th>
-          <th>商品カテゴリ</th>
-        </tr>
-      </thead>
-      <tbody id="orderRows"></tbody>
-    </table>
-  </div>
+  <div id="orderArea"></div>
 </div>
 
-<div class="section" id="measurementSection">
+<!-- 採寸内容 -->
+<div class="section">
   <h3>採寸入力内容</h3>
   <div id="measurementContent"></div>
 </div>
 
+<!-- 任意4桁 -->
 <div class="section">
-  <h3>控えメール</h3>
+  <h3>4桁の数字</h3>
   <div class="notice">
-    登録内容を自分にメールする場合は入力してください<br>
-    メールアドレスは弊社には保存されません
+    任意の4桁の数字を入力してください。<br>
+    登録内容修正時に必要になります。
   </div>
-  <label for="email">メールアドレス</label>
-  <input id="email" type="email" autocomplete="email">
-  <label for="emailConfirm">メールアドレス再入力</label>
-  <input id="emailConfirm" type="email" autocomplete="email">
-</div>
-
-<div class="section">
-  <h3>修正用番号</h3>
-  <div class="notice">
-    任意の4桁の番号を入力してください。お問い合わせの際に必要になります。<br>
-    ※半角数字4桁。同じ数字4つ（0000、1111など）は使用できません.
-    
-  </div>
-  <label for="pin">4桁の番号</label>
+  <label for="pin">4桁の数字</label>
   <input id="pin" inputmode="numeric" maxlength="4" autocomplete="off">
   <div class="small">例：2486</div>
 </div>
 
-<button type="button" onclick="submitConfirmedData()">登録</button>
-<button type="button" onclick="goBack()">戻る</button>
+<!-- 確認チェック -->
+<div class="check-area">
+  <label>
+    <input type="checkbox" id="confirmCheck">
+    入力内容を確認しました
+  </label>
+</div>
+
+<button id="submitBtn" disabled>登録する</button>
+<button type="button" onclick="history.back()">戻る</button>
 
 <script>
 const GAS_URL = "https://script.google.com/macros/s/AKfycbzifpGEKoydnvI9RAU6evgnHoWQh2YTx7WfXtqsi8O7tMoGbnyXzCC5bIVUY9QmUGZdlA/exec";
 let draft = null;
 
+/* HTMLエスケープ */
 function escapeHtml(value) {
   return String(value ?? "")
     .replaceAll("&", "&amp;")
@@ -97,17 +84,20 @@ function escapeHtml(value) {
     .replaceAll("'", "&#039;");
 }
 
+/* 読み込み */
 function loadDraft() {
   const raw = sessionStorage.getItem("uniformDraft");
   if (!raw) {
-    document.getElementById("message").innerText = "確認する登録内容がありません。入力画面からやり直してください。";
+    document.getElementById("message").innerText =
+      "確認する登録内容がありません。入力画面からやり直してください。";
     return;
   }
 
   try {
     draft = JSON.parse(raw);
-  } catch (e) {
-    document.getElementById("message").innerText = "登録内容の読み込みに失敗しました。入力画面からやり直してください。";
+  } catch {
+    document.getElementById("message").innerText =
+      "登録内容の読み込みに失敗しました。入力画面からやり直してください。";
     return;
   }
 
@@ -115,152 +105,106 @@ function loadDraft() {
   const first = orders[0] || {};
 
   document.getElementById("customerName").innerText = first.customerName || "";
-  document.getElementById("fullName").innerText = `${first.sei || ""} ${first.mei || ""}`.trim();
+  document.getElementById("fullName").innerText =
+    `${first.sei || ""} ${first.mei || ""}`.trim();
   document.getElementById("gender").innerText = first.gender || "";
   document.getElementById("job").innerText = first.job || "";
   document.getElementById("department").innerText = first.department || "なし";
 
-  const tbody = document.getElementById("orderRows");
-  tbody.innerHTML = orders.map(item => `
-    <tr>
-      <td>${escapeHtml(item.product)}</td>
-      <td>${escapeHtml(item.productCode)}</td>
-      <td>${escapeHtml(item.color)}</td>
-      <td>${escapeHtml(item.size)}</td>
-      <td>${escapeHtml(item.qty)}</td>
-      <td>${escapeHtml(item.productCategory)}</td>
-    </tr>
-  `).join("");
-
+  renderOrders(orders);
   renderMeasurement(draft.measurement);
 }
 
-function renderMeasurement(measurement) {
-  const section = document.getElementById("measurementSection");
-  const area = document.getElementById("measurementContent");
+function renderOrders(orders) {
+  const area = document.getElementById("orderArea");
+  if (orders.length === 0) {
+    area.innerText = "商品選択なし";
+    return;
+  }
 
+  let html = "";
+  let currentCategory = "";
+
+  orders.forEach(o => {
+    if (o.productCategory !== currentCategory) {
+      currentCategory = o.productCategory;
+      html += `<div class="category">${escapeHtml(currentCategory)}</div>`;
+    }
+    html += `
+      <div class="item">
+        <div><strong>${escapeHtml(o.product)}</strong> ${escapeHtml(o.productCode)}</div>
+        <div>色：${escapeHtml(o.color)} ／ サイズ：${escapeHtml(o.size)} ／ 数量：${escapeHtml(o.qty)}</div>
+      </div>
+    `;
+  });
+
+  area.innerHTML = html;
+}
+
+function renderMeasurement(measurement) {
+  const area = document.getElementById("measurementContent");
   if (!measurement) {
     area.innerText = "採寸入力なし";
     return;
   }
 
-  const keys = Object.keys(measurement).filter(key => {
-    const value = measurement[key];
-    return value !== "" && value !== null && value !== undefined;
-  });
-
-  if (keys.length === 0) {
+  const entries = Object.entries(measurement).filter(([k,v]) => v);
+  if (entries.length === 0) {
     area.innerText = "採寸入力なし";
     return;
   }
 
-  area.innerHTML = `
-    <div class="table-wrap">
-      <table>
-        <tbody>
-          ${keys.map(key => `
-            <tr>
-              <th>${escapeHtml(key)}</th>
-              <td>${escapeHtml(measurement[key])}</td>
-            </tr>
-          `).join("")}
-        </tbody>
-      </table>
-    </div>
-  `;
+  area.innerHTML = entries.map(([k,v]) =>
+    `<div>${escapeHtml(k)}：${escapeHtml(v)}</div>`
+  ).join("");
 }
 
-function validateEmail() {
-  const email = document.getElementById("email").value.trim();
-  const emailConfirm = document.getElementById("emailConfirm").value.trim();
+/* チェックが入るまで登録不可 */
+document.getElementById("confirmCheck").addEventListener("change", e => {
+  document.getElementById("submitBtn").disabled = !e.target.checked;
+});
 
-  if (!email && !emailConfirm) return true;
-
-  if (!email || !emailConfirm) {
-    alert("メールアドレスを入力する場合は、再入力欄も入力してください。");
-    return false;
-  }
-
-  if (email !== emailConfirm) {
-    alert("メールアドレスが一致しません。");
-    return false;
-  }
-
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    alert("メールアドレスの形式が正しくありません。");
-    return false;
-  }
-
-  return true;
-}
-
+/* 4桁チェック */
 function validatePin() {
   const pin = document.getElementById("pin").value.trim();
-
   if (!/^\d{4}$/.test(pin)) {
-    alert("4桁の番号は半角数字4桁で入力してください。");
+    alert("4桁の数字を入力してください。");
     return false;
   }
-
   if (/^(\d)\1{3}$/.test(pin)) {
-    alert("同じ数字4つの番号は使用できません。");
+    alert("同じ数字4つは使用できません。");
     return false;
   }
-
   return true;
 }
 
-function submitConfirmedData() {
-  if (!draft) {
-    alert("登録内容がありません。入力画面からやり直してください。");
-    return;
-  }
-
-  if (!validateEmail()) return;
+document.getElementById("submitBtn").addEventListener("click", () => {
   if (!validatePin()) return;
 
-  const email = document.getElementById("email").value.trim();
   const pin = document.getElementById("pin").value.trim();
-
   const payload = JSON.parse(JSON.stringify(draft));
 
-  payload.contactEmail = email;
   payload.contactPin = pin;
-
-  if (payload.orders) {
-    payload.orders.forEach(item => {
-      item.contactPin = pin;
-    });
-  }
-
+  payload.orders?.forEach(o => o.contactPin = pin);
   if (payload.measurement) {
     payload.measurement["修正用番号"] = pin;
   }
 
   fetch(GAS_URL, {
-    method: "POST",
-    mode: "no-cors",
-    headers: {
-      "Content-Type": "text/plain;charset=utf-8"
-    },
+    method:"POST",
+    mode:"no-cors",
+    headers:{ "Content-Type":"text/plain;charset=utf-8" },
     body: JSON.stringify(payload)
   });
 
   sessionStorage.setItem("uniformComplete", JSON.stringify({
     pin,
-    customerName: (payload.orders && payload.orders[0] && payload.orders[0].customerName) || "",
-    sei: (payload.orders && payload.orders[0] && payload.orders[0].sei) || "",
-    mei: (payload.orders && payload.orders[0] && payload.orders[0].mei) || "",
-    job: (payload.orders && payload.orders[0] && payload.orders[0].job) || ""
+    measureNo: payload.receptionNo || ""
   }));
 
   sessionStorage.removeItem("uniformDraft");
   location.href = "complete.html";
-}
-
-function goBack() {
-  history.back();
-}
+});
 
 loadDraft();
 </script>
