@@ -313,66 +313,6 @@
               "type": "bespoke"
             }
           ]
-        },
-        {
-          "productCode": "MPA3903-135",
-          "name": "MPメンズパンツ",
-          "color": "ボトルグリーン",
-          "gender": "兼用",
-          "productCategory": "パンツ",
-          "sizeSuffix": "サイズ",
-          "sizes": [
-            {
-              "value": "S",
-              "label": "Sサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "M",
-              "label": "Mサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "L",
-              "label": "Lサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "LL",
-              "label": "LLサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "BL",
-              "label": "BLサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "S1",
-              "label": "S1サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "B1",
-              "label": "B1サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "B3",
-              "label": "B3サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "B5",
-              "label": "B5サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "別寸",
-              "label": "別寸",
-              "type": "bespoke"
-            }
-          ]
         }
       ],
       "categoryLimits": [
@@ -485,7 +425,7 @@
           "productCode": "MPA3903-135",
           "name": "MPメンズパンツ",
           "color": "ボトルグリーン",
-          "gender": "兼用",
+          "gender": "男性",
           "productCategory": "パンツ",
           "sizeSuffix": "サイズ",
           "sizes": [
