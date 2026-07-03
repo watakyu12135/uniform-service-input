@@ -1,6 +1,78 @@
 {
   "customerCode": "31019999",
   "customerName": "サンプル病院",
+  "departments": [
+    {
+      "job": "看護師",
+      "gender": "",
+      "department": "３階病棟",
+      "displayOrder": 1,
+      "active": true
+    },
+    {
+      "job": "看護師",
+      "gender": "",
+      "department": "４階病棟",
+      "displayOrder": 2,
+      "active": true
+    },
+    {
+      "job": "看護師",
+      "gender": "",
+      "department": "外来",
+      "displayOrder": 3,
+      "active": true
+    },
+    {
+      "job": "看護師",
+      "gender": "",
+      "department": "手術室",
+      "displayOrder": 4,
+      "active": true
+    },
+    {
+      "job": "看護師",
+      "gender": "女性",
+      "department": "小児科",
+      "displayOrder": 5,
+      "active": true
+    },
+    {
+      "job": "一般事務",
+      "gender": "女性",
+      "department": "事務部",
+      "displayOrder": 1,
+      "active": true
+    },
+    {
+      "job": "一般事務",
+      "gender": "女性",
+      "department": "受付",
+      "displayOrder": 2,
+      "active": true
+    },
+    {
+      "job": "医療秘書",
+      "gender": "女性",
+      "department": "医事課",
+      "displayOrder": 1,
+      "active": true
+    },
+    {
+      "job": "医療秘書",
+      "gender": "女性",
+      "department": "秘書課",
+      "displayOrder": 2,
+      "active": true
+    },
+    {
+      "job": "健診センター",
+      "gender": "女性",
+      "department": "健診センター",
+      "displayOrder": 1,
+      "active": true
+    }
+  ],
   "jobs": [
     {
       "job": "一般事務",
