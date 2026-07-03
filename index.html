@@ -369,19 +369,16 @@ button {
 </div>
 
 性別：
-<select id="gender" onchange="changeJob()">
+<select id="gender" onchange="changeGender()">
   <option value="">選択</option>
   <option value="男性">男性</option>
   <option value="女性">女性</option>
 </select><br><br>
 
+
 職種：
 <select id="job" onchange="changeJob()">
   <option value="">選択</option>
-  <option value="看護師">看護師</option>
-  <option value="一般事務">一般事務</option>
-  <option value="医療秘書">医療秘書</option>
-  <option value="健診センター">健診センター</option>
 </select><br><br>
 
 <div id="departmentArea" class="hidden">
@@ -572,21 +569,93 @@ fetch(`config/${getCustomer()}.json`)
     }
     return res.json();
   })
+
   .then(data => {
-    currentData = data;
+  currentData = data;
 
-    document.getElementById("customerInfo").innerText =
-      "顧客：" + currentData.customerName;
+  document.getElementById("customerInfo").innerText =
+    "顧客：" + currentData.customerName;
 
-    document.getElementById("table").innerHTML =
-      "<tr><td colspan='6'>性別と職種を選択してください</td></tr>";
+  document.getElementById("table").innerHTML =
+    "<tr><td colspan='6'>性別と職種を選択してください</td></tr>";
 
-    document.getElementById("categoryStatus").innerHTML = "";
-  })
+  document.getElementById("categoryStatus").innerHTML = "";
+
+  updateJobOptions();
+})
+
+function changeGender() {
+  updateJobOptions();
+  changeJob();
+}
+
+function updateJobOptions() {
+
+  const gender = document.getElementById("gender").value;
+  const jobSelect = document.getElementById("job");
+
+  jobSelect.innerHTML = '<option value="">選択</option>';
+
+  if (!currentData || !gender) {
+    return;
+  }
+
+  const jobs = currentData.jobs
+    .filter(j => j.gender === gender)
+    .map(j => j.job);
+
+  const uniqueJobs = [...new Set(jobs)];
+
+  if (uniqueJobs.length === 0) {
+    const option = document.createElement("option");
+    option.value = "";
+    option.textContent = "該当する職種なし";
+    jobSelect.appendChild(option);
+    return;
+  }
+
+  uniqueJobs.forEach(job => {
+    const option = document.createElement("option");
+    option.value = job;
+    option.textContent = job;
+    jobSelect.appendChild(option);
+  });
+}
+
   .catch(error => {
     document.getElementById("table").innerHTML =
       "<tr><td colspan='6'>読み込みに失敗しました：" + error.message + "</td></tr>";
   });
+
+function changeGender() {
+  updateJobOptions();
+  changeJob();
+}
+
+function updateJobOptions() {
+
+  const gender = document.getElementById("gender").value;
+  const jobSelect = document.getElementById("job");
+
+  jobSelect.innerHTML = '<option value="">選択</option>';
+
+  if (!currentData || !gender) {
+    return;
+  }
+
+  const jobs = currentData.jobs
+    .filter(j => j.gender === gender)
+    .map(j => j.job);
+
+  const uniqueJobs = [...new Set(jobs)];
+
+  uniqueJobs.forEach(job => {
+    const option = document.createElement("option");
+    option.value = job;
+    option.textContent = job;
+    jobSelect.appendChild(option);
+  });
+}
 
 function changeJob() {
 
@@ -594,24 +663,31 @@ function changeJob() {
   const gender = document.getElementById("gender").value;
 
   if (!job || !gender) {
-  document.getElementById("table").innerHTML =
-    "<tr><td colspan='6'>性別と職種を選択してください</td></tr>";
-  document.getElementById("categoryStatus").innerHTML = "";
+    document.getElementById("table").innerHTML =
+      "<tr><td colspan='6'>性別と職種を選択してください</td></tr>";
 
-  const departmentArea = document.getElementById("departmentArea");
-  const departmentSelect = document.getElementById("department");
+    document.getElementById("categoryStatus").innerHTML = "";
 
-  if (departmentArea) departmentArea.classList.add("hidden");
-  if (departmentSelect) departmentSelect.innerHTML = '<option value="">選択</option>';
+    const departmentArea = document.getElementById("departmentArea");
+    const departmentSelect = document.getElementById("department");
 
-  return;
-}
+    if (departmentArea) departmentArea.classList.add("hidden");
+    if (departmentSelect) {
+      departmentSelect.innerHTML = '<option value="">選択</option>';
+    }
+
+    return;
+  }
 
   if (!currentData) {
     document.getElementById("table").innerHTML =
       "<tr><td colspan='6'>データ読み込み中です</td></tr>";
     return;
   }
+
+  createTable(currentData, job, gender);
+  updateDepartmentOptions();
+}
 
 function updateDepartmentOptions() {
 
