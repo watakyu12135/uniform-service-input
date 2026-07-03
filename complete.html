@@ -7,27 +7,109 @@
 <style>
 body { font-family: sans-serif; padding: 20px; }
 .box { margin-top: 20px; padding: 18px; border: 1px solid #ccc; background: #f9f9f9; }
-.pin { font-size: 28px; font-weight: bold; color: #c00; letter-spacing: 2px; }
+.no { font-size: 28px; font-weight: bold; color: #c00; letter-spacing: 2px; }
 .notice { margin-top: 16px; padding: 12px; background: #fff7e6; border-left: 4px solid #f5a623; }
-button { margin-top: 16px; padding: 8px 14px; }
+.section { margin-top: 22px; }
+label { display: block; margin-top: 10px; font-weight: bold; }
+input { font-size: 16px; padding: 8px; width: 100%; max-width: 360px; box-sizing: border-box; }
+button { margin-top: 16px; padding: 10px 18px; }
+.hidden { display: none; }
+.small { font-size: 13px; color: #555; margin-top: 6px; }
 </style>
 </head>
+
 <body>
+
 <h2>登録完了</h2>
+
 <div class="box">
   <p>登録を受け付けました。</p>
-  <p>採寸番号は <span id="pin" class="pin"></span> です。</p>
+  <p>採寸番号は</p>
+  <div class="no" id="measureNo">----</div>
+
   <div class="notice">
-    登録内容の修正には、採寸番号または氏名・職種・登録した4桁の番号が必要です。<br>
-    メモを忘れずお取りください
+    登録内容の修正には、<br>
+    採寸番号 または<br>
+    氏名・職種・入力した4桁の数字が必要です。<br>
+    必ずメモをお取りください。
   </div>
 </div>
-<button type="button" onclick="window.close()">画面を閉じる</button>
+
+<!-- メール送信（任意） -->
+<div class="section">
+  <h3>控えをメールで受け取る（任意）</h3>
+  <div class="notice">
+    採寸番号と入力内容を記録用として<br>
+    ご自身のメールアドレスに送信できます。<br>
+    <br>
+    ※ メールアドレスは弊社には登録されません。
+  </div>
+
+  <label for="email">メールアドレス</label>
+  <input id="email" type="email" inputmode="email" autocomplete="email">
+
+  <label for="emailConfirm">メールアドレス再入力</label>
+  <input id="emailConfirm" type="email" inputmode="email" autocomplete="email">
+
+  <button id="mailBtn" class="hidden">メールを送信する</button>
+</div>
+
+<button onclick="finish()">OK</button>
+
 <script>
+/* 完了済み画面なので戻れないようにする */
+history.pushState(null, null, location.href);
+window.onpopstate = () => {
+  history.go(1);
+};
+
+/* 読み込み */
 const raw = sessionStorage.getItem("uniformComplete");
 let info = {};
-try { info = raw ? JSON.parse(raw) : {}; } catch(e) { info = {}; }
-document.getElementById("pin").innerText = info.pin || "----";
+try { info = raw ? JSON.parse(raw) : {}; } catch(e) {}
+
+document.getElementById("measureNo").innerText =
+  info.measureNo || "----";
+
+/* メール入力一致チェック */
+function checkEmail() {
+  const e1 = document.getElementById("email").value.trim();
+  const e2 = document.getElementById("emailConfirm").value.trim();
+  const btn = document.getElementById("mailBtn");
+
+  if (!e1 || !e2) {
+    btn.classList.add("hidden");
+    return;
+  }
+
+  if (e1 !== e2) {
+    btn.classList.add("hidden");
+    return;
+  }
+
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e1)) {
+    btn.classList.add("hidden");
+    return;
+  }
+
+  btn.classList.remove("hidden");
+}
+
+document.getElementById("email").addEventListener("input", checkEmail);
+document.getElementById("emailConfirm").addEventListener("input", checkEmail);
+
+/* メール送信（実際の送信処理はGAS想定） */
+document.getElementById("mailBtn").addEventListener("click", () => {
+  alert("控えメールを送信しました。");
+  document.getElementById("mailBtn").disabled = true;
+});
+
+/* 完了後 */
+function finish() {
+  sessionStorage.removeItem("uniformComplete");
+  location.href = "https://www.yahoo.co.jp/";
+}
 </script>
+
 </body>
 </html>
