@@ -384,6 +384,14 @@ button {
   <option value="健診センター">健診センター</option>
 </select><br><br>
 
+<div id="departmentArea" class="hidden">
+  部署：
+  <select id="department">
+    <option value="">選択</option>
+  </select>
+  <br><br>
+</div>
+
 <div class="table-wrap">
   <table id="table"></table>
 </div>
@@ -1335,19 +1343,34 @@ function submitData() {
     return;
   }
 
+const departmentArea = document.getElementById("departmentArea");
+const departmentSelect = document.getElementById("department");
+
+if (
+  departmentArea &&
+  departmentSelect &&
+  !departmentArea.classList.contains("hidden") &&
+  !departmentSelect.value
+) {
+  alert("部署を選択してください");
+  return;
+}
+
   const now = new Date();
 
   const common = {
-    id: Date.now(),
-    createdAt: now.toLocaleString("ja-JP"),
-    updatedAt: now.toLocaleString("ja-JP"),
-    customerCode: currentData.customerCode,
-    customerName: currentData.customerName,
-    sei: document.getElementById("sei").value,
-    mei: document.getElementById("mei").value,
-    gender: document.getElementById("gender").value,
-    job: document.getElementById("job").value
-  };
+  id: Date.now(),
+  createdAt: now.toLocaleString("ja-JP"),
+  updatedAt: now.toLocaleString("ja-JP"),
+  customerCode: currentData.customerCode,
+  customerName: currentData.customerName,
+  sei: document.getElementById("sei").value,
+  mei: document.getElementById("mei").value,
+  gender: document.getElementById("gender").value,
+  job: document.getElementById("job").value,
+  department: departmentSelect ? departmentSelect.value : ""
+};
+
 
   const rows = document.querySelectorAll("#table tr");
   let data = [];
