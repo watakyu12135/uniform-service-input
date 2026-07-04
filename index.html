@@ -542,115 +542,111 @@ button {
 
 </div>
 
-<script>
 function getCustomer() {
+
   const url = new URL(window.location.href);
+
   return url.searchParams.get("customer") || "gvhp8hex";
+
 }
+
+
 
 let currentData;
 
-let currentMeasurementType = "";
-let currentMeasurementButton = null;
 
-let measurementData = {
-  common: {
-    height: "",
-    weight: "",
-    method: ""
-  },
-  upper: {
-    completed: false,
-    A: "",
-    B: "",
-    C1: "",
-    C2: "",
-    C3: "",
-    D: "",
-    E: "",
-    F: "",
-    G: "",
-    H: "",
-    I: ""
-  },
-  lower: {
-    completed: false,
-    a: "",
-    b: "",
-    c: "",
-    d: "",
-    e: "",
-    f: ""
-  },
-  specialNote: "",
-  memo: ""
-};
+
+/* ===== JSON 読み込み（完成形）===== */
 
 fetch(`config/${getCustomer()}.json`)
 
-.then(data => {
-
-  currentData = data;
-
-
-
-  /* ===== 受付期限チェック ===== */
-
-  if (currentData.entryDeadline) {
-
-    const today = new Date();
-
-    const deadline = new Date(currentData.entryDeadline + "T23:59:59");
-
-
-
-    if (today > deadline) {
-
-      document.body.innerHTML = `
-
-        <h2>受付終了</h2>
-
-        <p>
-
-          本ページでの受付期間は終了しました。<br>
-
-          施設ご担当者様にお問い合わせください。
-
-        </p>
-
-      `;
-
-      return;
-
-    }
-
-  }
-
-  /* ============================ */
-
   .then(res => {
+
     if (!res.ok) {
+
       throw new Error("JSONファイルが見つかりません");
+
     }
+
     return res.json();
+
   })
+
   .then(data => {
+
+
+
     currentData = data;
 
+
+
+    /* ===== 受付期限チェック ===== */
+
+    if (currentData.entryDeadline) {
+
+
+
+      const today = new Date();
+
+      const deadline = new Date(currentData.entryDeadline + "T23:59:59");
+
+
+
+      if (today > deadline) {
+
+        document.body.innerHTML = `
+
+          <h2>受付終了</h2>
+
+          <p>
+
+            本ページでの受付期間は終了しました。<br>
+
+            施設ご担当者様にお問い合わせください。
+
+          </p>
+
+        `;
+
+        return;
+
+      }
+
+    }
+
+    /* ============================ */
+
+
+
     document.getElementById("customerInfo").innerText =
+
       "顧客：" + currentData.customerName;
 
+
+
     document.getElementById("table").innerHTML =
+
       "<tr><td colspan='6'>性別と職種を選択してください</td></tr>";
+
+
 
     document.getElementById("categoryStatus").innerHTML = "";
 
+
+
     updateJobOptions();
+
   })
+
   .catch(error => {
+
     document.getElementById("table").innerHTML =
+
       "<tr><td colspan='6'>読み込みに失敗しました：" + error.message + "</td></tr>";
+
   });
+
+</script>
 
 function changeGender() {
   updateJobOptions();
