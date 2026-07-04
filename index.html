@@ -345,13 +345,37 @@ button {
     line-height: 1.4;
     color: #555;
   }
+
+.top-links {
+  margin: 10px 0 16px 0;
+  font-size: 15px;
+}
+
+.top-links a {
+  color: #0066cc;
+}
+
 }
 </style>
 </head>
 
 <body>
+<!--プライバシーポリシーリンク-->
+<div style="position:absolute; top:12px; right:12px; font-size:13px;">
+
+  privacy.htmlプライバシーポリシー・免責事項</a>
+
+</div>
+
 
 <h2>ユニフォーム申請</h2>
+
+<div class="top-links">
+
+  revise.html入力済みの採寸情報を修正する方はこちら</a>
+
+</div>
+
 
 <div id="customerInfo">顧客：読み込み中...</div>
 <br>
@@ -563,6 +587,47 @@ let measurementData = {
 };
 
 fetch(`config/${getCustomer()}.json`)
+
+.then(data => {
+
+  currentData = data;
+
+
+
+  /* ===== 受付期限チェック ===== */
+
+  if (currentData.entryDeadline) {
+
+    const today = new Date();
+
+    const deadline = new Date(currentData.entryDeadline + "T23:59:59");
+
+
+
+    if (today > deadline) {
+
+      document.body.innerHTML = `
+
+        <h2>受付終了</h2>
+
+        <p>
+
+          本ページでの受付期間は終了しました。<br>
+
+          施設ご担当者様にお問い合わせください。
+
+        </p>
+
+      `;
+
+      return;
+
+    }
+
+  }
+
+  /* ============================ */
+
   .then(res => {
     if (!res.ok) {
       throw new Error("JSONファイルが見つかりません");
@@ -705,6 +770,37 @@ function createTable(data, selectedJob, selectedGender) {
     j.job === selectedJob && j.gender === selectedGender
   );
 
+// ===== 貸与枚数 宣言表示 =====
+
+const area = document.getElementById("categoryStatus");
+
+
+
+let declareHtml = "<h3>貸与枚数は以下のとおりです</h3>";
+
+
+
+jobData.categoryLimits.forEach(rule => {
+
+  declareHtml += `
+
+    <div class="category-normal">
+
+      ${rule.productCategory} ${rule.limit}枚
+
+    </div>
+
+  `;
+
+});
+
+
+
+area.innerHTML = declareHtml;
+
+// ============================
+
+
   if (!jobData) {
     table.innerHTML = "<tr><td colspan='6'>該当データなし</td></tr>";
     document.getElementById("categoryStatus").innerHTML = "";
@@ -811,7 +907,29 @@ function createTable(data, selectedJob, selectedGender) {
         row += `</td>`;
 
         row += `<td class="cell-qty">
-          <input type="number" min="0" oninput="toggleAddSizeButton(this); updateCategorySummary()">
+          <input
+
+  type="number"
+
+  min="0"
+
+  step="1"
+
+  inputmode="numeric"
+
+  pattern="[0-9]*"
+
+  oninput="
+
+    this.value = this.value.replace(/[^0-9]/g,'');
+
+    toggleAddSizeButton(this);
+
+    updateCategorySummary();
+
+  "
+
+>
           <div>
             <button type="button" class="addSizeBtn hidden" onclick="addSameProductRow(this)">
               他のサイズも選択する
