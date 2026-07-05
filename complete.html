@@ -17,16 +17,13 @@ button { margin-top: 16px; padding: 10px 18px; }
 .small { font-size: 13px; color: #555; margin-top: 6px; }
 </style>
 </head>
-
 <body>
-
 <h2>登録完了</h2>
 
 <div class="box">
   <p>登録を受け付けました。</p>
   <p>採寸番号は</p>
   <div class="no" id="measureNo">----</div>
-
   <div class="notice">
     登録内容の修正には、<br>
     採寸番号 または<br>
@@ -57,6 +54,8 @@ button { margin-top: 16px; padding: 10px 18px; }
 <button onclick="finish()">OK</button>
 
 <script>
+const GAS_URL = "https://script.google.com/macros/s/AKfycbzifpGEKoydnvI9RAU6evgnHoWQh2YTx7WfXtqsi8O7tMoGbnyXzCC5bIVUY9QmUGZdlA/exec";
+
 /* 完了済み画面なので戻れないようにする */
 history.pushState(null, null, location.href);
 window.onpopstate = () => {
@@ -66,10 +65,13 @@ window.onpopstate = () => {
 /* 読み込み */
 const raw = sessionStorage.getItem("uniformComplete");
 let info = {};
-try { info = raw ? JSON.parse(raw) : {}; } catch(e) {}
+try {
+  info = raw ? JSON.parse(raw) : {};
+} catch (e) {
+  info = {};
+}
 
-document.getElementById("measureNo").innerText =
-  info.measureNo || "----";
+document.getElementById("measureNo").innerText = info.measureNo || "----";
 
 /* メール入力一致チェック */
 function checkEmail() {
@@ -98,59 +100,59 @@ function checkEmail() {
 document.getElementById("email").addEventListener("input", checkEmail);
 document.getElementById("emailConfirm").addEventListener("input", checkEmail);
 
-/* メール送信（実際の送信処理はGAS想定） */
-document.g*tElementById("mailBtn").addEventLi*tener("click", () => {
-  const ema*l = document.getElementById("email*).value.trim();
-  const emailConfi*m = document.getElementById("email*onfirm").value.trim();
+/* メール送信 */
+document.getElementById("mailBtn").addEventListener("click", () => {
+  const email = document.getElementById("email").value.trim();
+  const emailConfirm = document.getElementById("emailConfirm").value.trim();
 
-  if (!ema*l || !emailConfirm || email !== em*ilConfirm) {
-    alert("メールアドレスが一致*ていません。");
+  if (!email || !emailConfirm || email !== emailConfirm) {
+    alert("メールアドレスが一致していません。");
     return;
   }
 
-  const*rawMailDraft = sessionStorage.getI*em("uniformMailDraft");
-  let mail*raft = {};
+  const rawMailDraft = sessionStorage.getItem("uniformMailDraft");
+  let mailDraft = {};
 
   try {
-    mailDraft * rawMailDraft ? JSON.parse(rawMail*raft) : {};
+    mailDraft = rawMailDraft ? JSON.parse(rawMailDraft) : {};
   } catch (e) {
-    al*rt("送信用データの読み込みに失敗しました。");
-    ret*rn;
+    alert("送信用データの読み込みに失敗しました。");
+    return;
   }
 
   const mailPayload = {
- *  mailOnly: true,
-    toEmail: ema*l,
-    measureNo: info.measureNo |* "",
-    registrationNo: info.regi*trationNo || "",
-    orders: mailD*aft.orders || [],
-    measurement:*mailDraft.measurement || null
-  };*
+    mailOnly: true,
+    toEmail: email,
+    measureNo: info.measureNo || "",
+    registrationNo: info.registrationNo || "",
+    orders: mailDraft.orders || [],
+    measurement: mailDraft.measurement || null
+  };
+
   fetch(GAS_URL, {
-    method: "P*ST",
+    method: "POST",
     mode: "no-cors",
-    head*rs: {
-      "Content-Type": "text/*lain;charset=utf-8"
+    headers: {
+      "Content-Type": "text/plain;charset=utf-8"
     },
-    bod*: JSON.stringify(mailPayload)
-  })*
+    body: JSON.stringify(mailPayload)
+  });
 
   alert("控えメールを送信しました。");
 
-  doc*ment.getElementById("mailBtn").dis*bled = true;
-  document.getElement*yId("mailBtn").innerText = "送信済み";*
+  document.getElementById("mailBtn").disabled = true;
+  document.getElementById("mailBtn").innerText = "送信済み";
+
   // メール送信後は、控えメール用データを削除する
-  ses*ionStorage.removeItem("uniformMail*raft");
+  sessionStorage.removeItem("uniformMailDraft");
 });
 
 /* 完了後 */
 function finish() {
-  session*torage.removeItem("uniformComplete*);
-  sessionStorage.removeItem("un*formMailDraft");
-  location.href =*"https://www.yahoo.co.jp/";
+  sessionStorage.removeItem("uniformComplete");
+  sessionStorage.removeItem("uniformMailDraft");
+  location.href = "https://www.yahoo.co.jp/";
 }
-
 </script>
-
 </body>
 </html>
