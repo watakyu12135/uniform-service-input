@@ -346,10 +346,41 @@ button {
     color: #555;
   }
 }
+
+
+/* 上部リンク */
+#policyLink {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 13px;
+}
+
+#policyLink a,
+.top-links a {
+  color: #0066cc;
+  text-decoration: none;
+}
+
+.top-links {
+  margin: 10px 0 16px 0;
+  font-size: 15px;
+}
+
 </style>
 </head>
 
 <body>
+
+<!-- プライバシーポリシー・免責事項リンク -->
+<div id="policyLink">
+  <a href="privacy.html">プライバシーポリシー・免責事項</a>
+</div>
+
+<!-- 修正画面リンク -->
+<div class="top-links">
+  <a href="revise.html">入力済みの採寸情報を修正する方はこちら</a>
+</div>
 
 <h2>ユニフォーム申請</h2>
 
@@ -375,6 +406,7 @@ button {
   <option value="女性">女性</option>
 </select><br><br>
 
+
 職種：
 <select id="job" onchange="changeJob()">
   <option value="">選択</option>
@@ -394,7 +426,7 @@ button {
 
 <div id="categoryStatus"></div>
 
-<button type="button" id="submitButton" onclick="submitData()">確認</button>
+<button id="submitButton" onclick="submitData()">確認</button>
 
 <div id="measurementArea" class="hidden measurement-area">
 
@@ -512,8 +544,8 @@ button {
     <textarea id="m_memo" rows="3"></textarea>
   </section>
 
-  <button type="button" onclick="saveMeasurement()">採寸表を保存して戻る</button>
-  <button type="button" onclick="cancelMeasurement()">保存せず戻る</button>
+  <button onclick="saveMeasurement()">採寸表を保存して戻る</button>
+  <button onclick="cancelMeasurement()">保存せず戻る</button>
 
 </div>
 
@@ -524,31 +556,84 @@ function getCustomer() {
 }
 
 let currentData;
+
 let currentMeasurementType = "";
 let currentMeasurementButton = null;
 
 let measurementData = {
-  common: { height: "", weight: "", method: "" },
-  upper: { completed: false, A: "", B: "", C1: "", C2: "", C3: "", D: "", E: "", F: "", G: "", H: "", I: "" },
-  lower: { completed: false, a: "", b: "", c: "", d: "", e: "", f: "" },
+  common: {
+    height: "",
+    weight: "",
+    method: ""
+  },
+  upper: {
+    completed: false,
+    A: "",
+    B: "",
+    C1: "",
+    C2: "",
+    C3: "",
+    D: "",
+    E: "",
+    F: "",
+    G: "",
+    H: "",
+    I: ""
+  },
+  lower: {
+    completed: false,
+    a: "",
+    b: "",
+    c: "",
+    d: "",
+    e: "",
+    f: ""
+  },
   specialNote: "",
   memo: ""
 };
 
 fetch(`config/${getCustomer()}.json`)
   .then(res => {
-    if (!res.ok) throw new Error("JSONファイルが見つかりません");
+    if (!res.ok) {
+      throw new Error("JSONファイルが見つかりません");
+    }
     return res.json();
   })
   .then(data => {
     currentData = data;
-    document.getElementById("customerInfo").innerText = "顧客：" + currentData.customerName;
-    document.getElementById("table").innerHTML = "<tr><td colspan='6'>性別と職種を選択してください</td></tr>";
+
+    /* ===== 受付期限チェック ===== */
+    if (currentData.entryDeadline) {
+      const today = new Date();
+      const deadline = new Date(currentData.entryDeadline + "T23:59:59");
+
+      if (today > deadline) {
+        document.body.innerHTML = `
+          <h2>受付終了</h2>
+          <p>
+            本ページでの受付期間は終了しました。<br>
+            施設ご担当者様にお問い合わせください。
+          </p>
+        `;
+        return;
+      }
+    }
+    /* ============================ */
+
+    document.getElementById("customerInfo").innerText =
+      "顧客：" + currentData.customerName;
+
+    document.getElementById("table").innerHTML =
+      "<tr><td colspan='6'>性別と職種を選択してください</td></tr>";
+
     document.getElementById("categoryStatus").innerHTML = "";
+
     updateJobOptions();
   })
   .catch(error => {
-    document.getElementById("table").innerHTML = "<tr><td colspan='6'>読み込みに失敗しました：" + error.message + "</td></tr>";
+    document.getElementById("table").innerHTML =
+      "<tr><td colspan='6'>読み込みに失敗しました：" + error.message + "</td></tr>";
   });
 
 function changeGender() {
@@ -557,14 +642,20 @@ function changeGender() {
 }
 
 function updateJobOptions() {
+
   const gender = document.getElementById("gender").value;
   const jobSelect = document.getElementById("job");
 
   jobSelect.innerHTML = '<option value="">選択</option>';
 
-  if (!currentData || !gender) return;
+  if (!currentData || !gender) {
+    return;
+  }
 
-  const jobs = currentData.jobs.filter(j => j.gender === gender).map(j => j.job);
+  const jobs = currentData.jobs
+    .filter(j => j.gender === gender)
+    .map(j => j.job);
+
   const uniqueJobs = [...new Set(jobs)];
 
   if (uniqueJobs.length === 0) {
@@ -584,23 +675,30 @@ function updateJobOptions() {
 }
 
 function changeJob() {
+
   const job = document.getElementById("job").value;
   const gender = document.getElementById("gender").value;
 
   if (!job || !gender) {
-    document.getElementById("table").innerHTML = "<tr><td colspan='6'>性別と職種を選択してください</td></tr>";
+    document.getElementById("table").innerHTML =
+      "<tr><td colspan='6'>性別と職種を選択してください</td></tr>";
+
     document.getElementById("categoryStatus").innerHTML = "";
 
     const departmentArea = document.getElementById("departmentArea");
     const departmentSelect = document.getElementById("department");
 
     if (departmentArea) departmentArea.classList.add("hidden");
-    if (departmentSelect) departmentSelect.innerHTML = '<option value="">選択</option>';
+    if (departmentSelect) {
+      departmentSelect.innerHTML = '<option value="">選択</option>';
+    }
+
     return;
   }
 
   if (!currentData) {
-    document.getElementById("table").innerHTML = "<tr><td colspan='6'>データ読み込み中です</td></tr>";
+    document.getElementById("table").innerHTML =
+      "<tr><td colspan='6'>データ読み込み中です</td></tr>";
     return;
   }
 
@@ -609,6 +707,7 @@ function changeJob() {
 }
 
 function updateDepartmentOptions() {
+
   const departmentArea = document.getElementById("departmentArea");
   const departmentSelect = document.getElementById("department");
 
@@ -625,7 +724,11 @@ function updateDepartmentOptions() {
   }
 
   const departments = currentData.departments
-    .filter(d => d.active !== false && d.job === job && (!d.gender || d.gender === gender))
+    .filter(d =>
+      d.active !== false &&
+      d.job === job &&
+      (!d.gender || d.gender === gender)
+    )
     .sort((a, b) => (a.displayOrder || 9999) - (b.displayOrder || 9999));
 
   if (departments.length === 0) {
@@ -644,8 +747,12 @@ function updateDepartmentOptions() {
 }
 
 function createTable(data, selectedJob, selectedGender) {
+
   const table = document.getElementById("table");
-  const jobData = data.jobs.find(j => j.job === selectedJob && j.gender === selectedGender);
+
+  const jobData = data.jobs.find(j =>
+    j.job === selectedJob && j.gender === selectedGender
+  );
 
   if (!jobData) {
     table.innerHTML = "<tr><td colspan='6'>該当データなし</td></tr>";
@@ -654,10 +761,12 @@ function createTable(data, selectedJob, selectedGender) {
   }
 
   let html = "";
+
   let categoryDisplay = jobData.categoryDisplay || [];
 
   if (categoryDisplay.length === 0) {
     const categoryNames = [...new Set(jobData.products.map(p => p.productCategory))];
+
     categoryDisplay = categoryNames.map((cat, index) => ({
       productCategory: cat,
       displayOrder: index + 1,
@@ -666,25 +775,32 @@ function createTable(data, selectedJob, selectedGender) {
     }));
   }
 
-  categoryDisplay.sort((a, b) => a.displayOrder - b.displayOrder).forEach(categoryInfo => {
-    const category = categoryInfo.productCategory;
-    const products = jobData.products.filter(p => p.productCategory === category);
+  categoryDisplay
+    .sort((a, b) => a.displayOrder - b.displayOrder)
+    .forEach(categoryInfo => {
 
-    if (products.length === 0) return;
+      const category = categoryInfo.productCategory;
 
-    html += `<tr class="category-header">
-      <td colspan="6">
-        <div class="category-heading" data-category-heading="${category}">
-          <span class="category-title">${category}を選択</span>
-          <span class="category-count"></span>
-        </div>`;
+      const products = jobData.products.filter(p =>
+        p.productCategory === category
+      );
 
-    if (categoryInfo.note) {
-      html += `<div class="category-note">${categoryInfo.note}</div>`;
-    }
+      if (products.length === 0) return;
 
-    html += `</td></tr>
-      <tr class="product-header">
+      html += `<tr class="category-header">
+        <td colspan="6">
+          <div class="category-heading" data-category-heading="${category}">
+            <span class="category-title">${category}を選択</span>
+            <span class="category-count"></span>
+          </div>`;
+
+      if (categoryInfo.note) {
+        html += `<div class="category-note">${categoryInfo.note}</div>`;
+      }
+
+      html += `</td></tr>`;
+
+      html += `<tr class="product-header">
         <th>商品</th>
         <th>品番</th>
         <th>色</th>
@@ -693,62 +809,91 @@ function createTable(data, selectedJob, selectedGender) {
         <th>採寸</th>
       </tr>`;
 
-    products.forEach(p => {
-      let row = `<tr data-product-code="${p.productCode}" data-product-category="${p.productCategory}" class="product-row">
-        <td class="cell-product">${p.name}</td>
-        <td class="cell-code">${p.productCode}</td>
-        <td class="cell-color">${p.color}</td>`;
+      products.forEach(p => {
 
-      const standardSizes = p.sizes.filter(size => size.type === "standard");
-      const specialSizes = p.sizes.filter(size => size.type !== "standard");
+        let row = `<tr
+          data-product-code="${p.productCode}"
+          data-product-category="${p.productCategory}"
+          class="product-row"
+        >
+          <td class="cell-product">${p.name}</td>
+          <td class="cell-code">${p.productCode}</td>
+          <td class="cell-color">${p.color}</td>`;
 
-      row += `<td class="cell-size">
-        <select class="mainSize" onchange="checkMainSize(this); toggleAddSizeButton(this.closest('tr').querySelector('input[type=number]')); updateCategorySummary();">
-          <option value="">選択</option>`;
+        const standardSizes = p.sizes.filter(size => size.type === "standard");
+        const specialSizes = p.sizes.filter(size => size.type !== "standard");
 
-      standardSizes.forEach(size => {
-        row += `<option value="${size.value}" data-size-type="${size.type}">${size.label}</option>`;
-      });
+        row += `<td class="cell-size">
+          <select class="mainSize" onchange="checkMainSize(this); toggleAddSizeButton(this.closest('tr').querySelector('input[type=number]')); updateCategorySummary();">
+            <option value="">選択</option>`;
 
-      if (specialSizes.length > 0) {
-        row += `<option value="__OTHER__">その他</option>`;
-      }
+        standardSizes.forEach(size => {
+          row += `<option value="${size.value}" data-size-type="${size.type}">
+            ${size.label}
+          </option>`;
+        });
 
-      row += `</select>
-        <div class="specialSizeArea hidden" style="margin-top:6px;">
+        if (specialSizes.length > 0) {
+          row += `<option value="__OTHER__">その他</option>`;
+        }
+
+        row += `</select>`;
+
+        row += `<div class="specialSizeArea hidden" style="margin-top:6px;">
           <select class="specialSize" onchange="checkSpecialSize(this); toggleAddSizeButton(this.closest('tr').querySelector('input[type=number]')); updateCategorySummary();">
             <option value="">特注サイズを選択</option>`;
 
-      specialSizes.forEach(size => {
-        row += `<option value="${size.value}" data-size-type="${size.type}">${size.label}</option>`;
-      });
+        specialSizes.forEach(size => {
+          row += `<option value="${size.value}" data-size-type="${size.type}">
+            ${size.label}
+          </option>`;
+        });
 
-      row += `</select>
+        row += `</select>
+
           <div class="bespokeInputArea hidden measure-required-message">
             採寸表への入力が必要です<br>
             <button type="button" class="measure measure-inline hidden" onclick="openMeasurement(this)">採寸</button>
           </div>
-        </div></td>
-        <td class="cell-qty">
-          <input type="number" min="0" oninput="toggleAddSizeButton(this); updateCategorySummary()">
+        </div>`;
+
+        row += `</td>`;
+
+        row += `<td class="cell-qty">
+          <input
+            type="number"
+            min="0"
+            step="1"
+            inputmode="numeric"
+            pattern="[0-9]*"
+            oninput="this.value=this.value.replace(/[^0-9]/g,''); toggleAddSizeButton(this); updateCategorySummary()"
+          >
           <div>
-            <button type="button" class="addSizeBtn hidden" onclick="addSameProductRow(this)">他のサイズも選択する</button>
+            <button type="button" class="addSizeBtn hidden" onclick="addSameProductRow(this)">
+              他のサイズも選択する
+            </button>
           </div>
-        </td>
-        <td class="cell-measure">
-          <button type="button" class="measure measure-table hidden" onclick="openMeasurement(this)">採寸</button>
-        </td>
-      </tr>`;
-      html += row;
+        </td>`;
+
+        row += `<td class="cell-measure">
+          <button class="measure measure-table hidden" onclick="openMeasurement(this)">採寸</button>
+        </td>`;
+
+        row += `</tr>`;
+
+        html += row;
+      });
     });
-  });
 
   table.innerHTML = html;
+
   updateCategorySummary();
 }
 
+
 function toggleAddSizeButton(input) {
   if (!input) return;
+
   const row = input.closest("tr");
   const qty = Number(input.value) || 0;
   const sizeInfo = getRowSizeInfo(row);
@@ -766,11 +911,9 @@ function toggleAddSizeButton(input) {
 function addSameProductRow(button) {
   const row = button.closest("tr");
   const productCode = row.dataset.productCode;
-  const productCategory = row.dataset.productCategory;
 
-  // 同じカテゴリ内かつ同じ商品コードの行のみを取得
   const productRows = Array.from(
-    document.querySelectorAll(`tr[data-product-code="${productCode}"][data-product-category="${productCategory}"]`)
+    document.querySelectorAll(`tr[data-product-code="${productCode}"]`)
   );
 
   if (productRows.length >= 3) {
@@ -780,11 +923,26 @@ function addSameProductRow(button) {
 
   const clone = row.cloneNode(true);
 
-  clone.querySelectorAll("input").forEach(input => input.value = "");
-  clone.querySelectorAll("select").forEach(select => select.selectedIndex = 0);
-  clone.querySelectorAll(".addSizeBtn").forEach(addButton => addButton.classList.add("hidden"));
-  clone.querySelectorAll(".specialSizeArea").forEach(area => area.classList.add("hidden"));
-  clone.querySelectorAll(".bespokeInputArea").forEach(area => area.classList.add("hidden"));
+  clone.querySelectorAll("input").forEach(input => {
+    input.value = "";
+  });
+
+  clone.querySelectorAll("select").forEach(select => {
+    select.selectedIndex = 0;
+  });
+
+  clone.querySelectorAll(".addSizeBtn").forEach(addButton => {
+    addButton.classList.add("hidden");
+  });
+
+  clone.querySelectorAll(".specialSizeArea").forEach(area => {
+    area.classList.add("hidden");
+  });
+
+  clone.querySelectorAll(".bespokeInputArea").forEach(area => {
+    area.classList.add("hidden");
+  });
+
   clone.querySelectorAll(".measure").forEach(measureButton => {
     measureButton.classList.add("hidden");
     measureButton.innerText = "採寸";
@@ -795,6 +953,7 @@ function addSameProductRow(button) {
 }
 
 function checkMainSize(select) {
+
   const row = select.closest("tr");
   const specialArea = row.querySelector(".specialSizeArea");
   const specialSelect = row.querySelector(".specialSize");
@@ -804,6 +963,7 @@ function checkMainSize(select) {
     specialArea.classList.remove("hidden");
   } else {
     specialArea.classList.add("hidden");
+
     if (specialSelect) specialSelect.value = "";
     if (bespokeArea) bespokeArea.classList.add("hidden");
 
@@ -815,12 +975,14 @@ function checkMainSize(select) {
 }
 
 function checkSpecialSize(select) {
+
   const row = select.closest("tr");
   const bespokeArea = row.querySelector(".bespokeInputArea");
   const buttons = row.querySelectorAll(".measure");
 
   if (select.value === "別寸") {
     bespokeArea.classList.remove("hidden");
+
     const type = getMeasurementTypeByCategory(row.dataset.productCategory);
     const buttonText = isMeasurementCompleteForType(type) ? "採寸済" : "採寸";
 
@@ -828,8 +990,10 @@ function checkSpecialSize(select) {
       btn.classList.remove("hidden");
       btn.innerText = buttonText;
     });
+
   } else {
     bespokeArea.classList.add("hidden");
+
     buttons.forEach(btn => {
       btn.classList.add("hidden");
       btn.innerText = "採寸";
@@ -838,6 +1002,7 @@ function checkSpecialSize(select) {
 }
 
 function getMeasurementTypeByCategory(category) {
+
   const upperCategories = ["上衣", "ベスト", "ブラウス"];
   const lowerCategories = ["下衣", "パンツ", "スカート"];
   const fullCategories = ["ワンピース"];
@@ -850,6 +1015,7 @@ function getMeasurementTypeByCategory(category) {
 }
 
 function openMeasurement(button) {
+
   const row = button.closest("tr");
   const category = row.dataset.productCategory;
 
@@ -868,26 +1034,42 @@ function openMeasurement(button) {
   document.getElementById("categoryStatus").classList.add("hidden");
   document.getElementById("submitButton").classList.add("hidden");
   document.getElementById("measurementArea").classList.remove("hidden");
-  document.getElementById("measurementMessage").innerText = "採寸区分：" + currentMeasurementType;
+
+  document.getElementById("measurementMessage").innerText =
+    "採寸区分：" + currentMeasurementType;
 }
 
 function closeMeasurement() {
+
   document.getElementById("measurementArea").classList.add("hidden");
   document.querySelector(".table-wrap").classList.remove("hidden");
   document.getElementById("categoryStatus").classList.remove("hidden");
   document.getElementById("submitButton").classList.remove("hidden");
 
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
 }
 
 function cancelMeasurement() {
+
   const ok = confirm("入力した内容は保存されません。\n戻ってもよろしいですか？");
-  if (ok) closeMeasurement();
+
+  if (!ok) {
+    return;
+  }
+
+  closeMeasurement();
 }
 
 function setSectionEnabled(sectionId, enabled) {
+
   const section = document.getElementById(sectionId);
-  if (!section) return;
+
+  if (!section) {
+    return;
+  }
 
   const inputs = section.querySelectorAll("input, select, textarea");
 
@@ -897,12 +1079,22 @@ function setSectionEnabled(sectionId, enabled) {
     section.classList.add("disabled-section");
   }
 
-  inputs.forEach(input => input.disabled = !enabled);
+  inputs.forEach(input => {
+    input.disabled = !enabled;
+  });
 }
 
 function applyMeasurementMode(type) {
-  const upperEditable = type === "上衣" || type === "全身" || measurementData.upper.completed;
-  const lowerEditable = type === "下衣" || type === "全身" || measurementData.lower.completed;
+
+  const upperEditable =
+    type === "上衣" ||
+    type === "全身" ||
+    measurementData.upper.completed;
+
+  const lowerEditable =
+    type === "下衣" ||
+    type === "全身" ||
+    measurementData.lower.completed;
 
   setSectionEnabled("measureCommon", true);
   setSectionEnabled("measureUpper", upperEditable);
@@ -910,6 +1102,7 @@ function applyMeasurementMode(type) {
 }
 
 function loadMeasurementToForm() {
+
   document.getElementById("m_height").value = measurementData.common.height;
   document.getElementById("m_weight").value = measurementData.common.weight;
   document.getElementById("m_method").value = measurementData.common.method;
@@ -938,13 +1131,25 @@ function loadMeasurementToForm() {
 }
 
 function saveMeasurement() {
+
   const height = document.getElementById("m_height").value;
   const weight = document.getElementById("m_weight").value;
   const method = document.getElementById("m_method").value;
 
-  if (!height) { alert("身長を入力してください"); return; }
-  if (!weight) { alert("体重を入力してください"); return; }
-  if (!method) { alert("採寸方法を選択してください"); return; }
+  if (!height) {
+    alert("身長を入力してください");
+    return;
+  }
+
+  if (!weight) {
+    alert("体重を入力してください");
+    return;
+  }
+
+  if (!method) {
+    alert("採寸方法を選択してください");
+    return;
+  }
 
   measurementData.common.height = height;
   measurementData.common.weight = weight;
@@ -972,30 +1177,50 @@ function saveMeasurement() {
   measurementData.specialNote = document.getElementById("m_specialNote").value;
   measurementData.memo = document.getElementById("m_memo").value;
 
-  if (currentMeasurementType === "上衣") measurementData.upper.completed = true;
-  if (currentMeasurementType === "下衣") measurementData.lower.completed = true;
+  if (currentMeasurementType === "上衣") {
+    measurementData.upper.completed = true;
+  }
+
+  if (currentMeasurementType === "下衣") {
+    measurementData.lower.completed = true;
+  }
+
   if (currentMeasurementType === "全身") {
     measurementData.upper.completed = true;
     measurementData.lower.completed = true;
   }
 
   updateAllMeasurementButtons();
+
   closeMeasurement();
 }
 
 function isMeasurementCompleteForType(type) {
-  if (type === "上衣") return measurementData.upper.completed;
-  if (type === "下衣") return measurementData.lower.completed;
-  if (type === "全身") return measurementData.upper.completed && measurementData.lower.completed;
+
+  if (type === "上衣") {
+    return measurementData.upper.completed;
+  }
+
+  if (type === "下衣") {
+    return measurementData.lower.completed;
+  }
+
+  if (type === "全身") {
+    return measurementData.upper.completed && measurementData.lower.completed;
+  }
+
   return false;
 }
 
 function hasBespokeWithoutMeasurement() {
+
   const rows = document.querySelectorAll("#table tr");
   let missing = false;
 
   rows.forEach(row => {
+
     if (!row.dataset.productCategory) return;
+
     const sizeInfo = getRowSizeInfo(row);
     const qtyInput = row.querySelector("input[type='number']");
     const qty = Number(qtyInput.value) || 0;
@@ -1003,8 +1228,12 @@ function hasBespokeWithoutMeasurement() {
     if (qty <= 0) return;
 
     if (sizeInfo.size === "別寸") {
+
       const type = getMeasurementTypeByCategory(row.dataset.productCategory);
-      if (!isMeasurementCompleteForType(type)) missing = true;
+
+      if (!isMeasurementCompleteForType(type)) {
+        missing = true;
+      }
     }
   });
 
@@ -1012,53 +1241,75 @@ function hasBespokeWithoutMeasurement() {
 }
 
 function updateAllMeasurementButtons() {
+
   const rows = document.querySelectorAll("#table tr");
 
   rows.forEach(row => {
+
     if (!row.dataset.productCategory) return;
+
     const buttons = row.querySelectorAll(".measure");
     if (buttons.length === 0) return;
+
     const sizeInfo = getRowSizeInfo(row);
 
     buttons.forEach(btn => {
+
       if (sizeInfo.size !== "別寸") {
         btn.innerText = "採寸";
         btn.classList.add("hidden");
         return;
       }
+
       const type = getMeasurementTypeByCategory(row.dataset.productCategory);
+
       btn.classList.remove("hidden");
-      btn.innerText = isMeasurementCompleteForType(type) ? "採寸済" : "採寸";
+
+      if (isMeasurementCompleteForType(type)) {
+        btn.innerText = "採寸済";
+      } else {
+        btn.innerText = "採寸";
+      }
     });
   });
 }
 
 function buildMeasurementPayload(common) {
+
   const upperDone = measurementData.upper.completed;
   const lowerDone = measurementData.lower.completed;
 
-  if (!upperDone && !lowerDone) return null;
+  if (!upperDone && !lowerDone) {
+    return null;
+  }
 
   let measurementType = "";
-  if (upperDone && lowerDone) measurementType = "全身";
-  else if (upperDone) measurementType = "上衣";
-  else if (lowerDone) measurementType = "下衣";
 
-  return {
-    "登録ID": common.id,
-    "顧客コード": common.customerCode,
-    "顧客名": common.customerName,
-    "氏": common.sei,
-    "名": common.mei,
-    "性別": common.gender,
-    "職種": common.job,
-    "部署": common.department,
-    "採寸区分": measurementType,
+  if (upperDone && lowerDone) {
+    measurementType = "全身";
+  } else if (upperDone) {
+    measurementType = "上衣";
+  } else if (lowerDone) {
+    measurementType = "下衣";
+  }
+
+ return {
+  "登録ID": common.id,
+  "顧客コード": common.customerCode,
+  "顧客名": common.customerName,
+  "氏": common.sei,
+  "名": common.mei,
+  "性別": common.gender,
+  "職種": common.job,
+  "部署": common.department,
+  "採寸区分": measurementType,
     "登録日時": common.createdAt,
     "更新日時": common.updatedAt,
+
     "身長": measurementData.common.height,
     "体重": measurementData.common.weight,
     "採寸方法": measurementData.common.method,
+
     "上衣入力済": upperDone ? "TRUE" : "FALSE",
     "A_衿回り": measurementData.upper.A,
     "B_肩巾": measurementData.upper.B,
@@ -1071,6 +1322,7 @@ function buildMeasurementPayload(common) {
     "G_背丈": measurementData.upper.G,
     "H_着丈": measurementData.upper.H,
     "I_袖付回り": measurementData.upper.I,
+
     "下衣入力済": lowerDone ? "TRUE" : "FALSE",
     "a_胴回り": measurementData.lower.a,
     "b_腰回り": measurementData.lower.b,
@@ -1078,19 +1330,28 @@ function buildMeasurementPayload(common) {
     "d_股下": measurementData.lower.d,
     "e_総丈": measurementData.lower.e,
     "f_太股回り": measurementData.lower.f,
+
     "特記事項": measurementData.specialNote,
     "備考": measurementData.memo
   };
 }
 
 function getSelectedJobData() {
+
   const job = document.getElementById("job").value;
   const gender = document.getElementById("gender").value;
-  if (!currentData || !job || !gender) return null;
-  return currentData.jobs.find(j => j.job === job && j.gender === gender);
+
+  if (!currentData || !job || !gender) {
+    return null;
+  }
+
+  return currentData.jobs.find(j =>
+    j.job === job && j.gender === gender
+  );
 }
 
 function getRowSizeInfo(row) {
+
   const mainSizeSelect = row.querySelector(".mainSize");
   const specialSizeSelect = row.querySelector(".specialSize");
 
@@ -1098,29 +1359,80 @@ function getRowSizeInfo(row) {
   let sizeType = "";
   let bespokeText = "";
 
-  if (!mainSizeSelect) return { size: "", sizeType: "", bespokeText: "", valid: false };
+  if (!mainSizeSelect) {
+    return {
+      size: "",
+      sizeType: "",
+      bespokeText: "",
+      valid: false
+    };
+  }
 
   if (mainSizeSelect.value === "__OTHER__") {
+
     if (!specialSizeSelect || !specialSizeSelect.value) {
-      return { size: "", sizeType: "", bespokeText: "", valid: false };
+      return {
+        size: "",
+        sizeType: "",
+        bespokeText: "",
+        valid: false
+      };
     }
+
     size = specialSizeSelect.value;
+
     if (size === "別寸") {
       sizeType = "bespoke";
       bespokeText = "";
     } else {
       sizeType = "custom";
     }
+
   } else {
+
     size = mainSizeSelect.value;
-    if (!size) return { size: "", sizeType: "", bespokeText: "", valid: false };
+
+    if (!size) {
+      return {
+        size: "",
+        sizeType: "",
+        bespokeText: "",
+        valid: false
+      };
+    }
+
     sizeType = "standard";
   }
 
-  return { size, sizeType, bespokeText, valid: true };
+  return {
+    size,
+    sizeType,
+    bespokeText,
+    valid: true
+  };
+}
+
+
+function buildLimitDeclarationHtml(jobData) {
+  if (!jobData || !jobData.categoryLimits || jobData.categoryLimits.length === 0) {
+    return "";
+  }
+
+  let html = `
+    <div class="category-normal" style="margin-bottom:10px;">
+      <strong>貸与枚数は以下のとおりです</strong><br>
+  `;
+
+  jobData.categoryLimits.forEach(rule => {
+    html += `${rule.productCategory} ${rule.limit}枚<br>`;
+  });
+
+  html += `</div>`;
+  return html;
 }
 
 function updateCategorySummary() {
+
   const jobData = getSelectedJobData();
   const area = document.getElementById("categoryStatus");
 
@@ -1133,8 +1445,7 @@ function updateCategorySummary() {
   const limits = {};
   const selectedByProductCategory = {};
 
-  // categoryLimitsがない場合のフェイルセーフを追加
-  (jobData.categoryLimits || []).forEach(rule => {
+  jobData.categoryLimits.forEach(rule => {
     limits[rule.productCategory] = rule.limit;
     counts[rule.productCategory] = 0;
   });
@@ -1142,11 +1453,14 @@ function updateCategorySummary() {
   const rows = document.querySelectorAll("#table tr");
 
   rows.forEach(row => {
+
     const productCategory = row.dataset.productCategory;
+
     if (!productCategory) return;
 
     const qtyInput = row.querySelector("input[type='number']");
     const qty = Number(qtyInput.value) || 0;
+
     if (qty <= 0) return;
 
     const sizeInfo = getRowSizeInfo(row);
@@ -1155,93 +1469,140 @@ function updateCategorySummary() {
     if (selectedByProductCategory[productCategory] === undefined) {
       selectedByProductCategory[productCategory] = 0;
     }
+
     selectedByProductCategory[productCategory] += qty;
 
-    // conversionRulesがない場合のフェイルセーフを追加
-    const rules = (jobData.conversionRules || []).filter(r => r.fromProductCategory === productCategory);
+    const rules = jobData.conversionRules.filter(r =>
+      r.fromProductCategory === productCategory
+    );
 
-    if (rules.length > 0) {
-      rules.forEach(rule => {
-        if (counts[rule.toConsumptionCategory] === undefined) {
-          counts[rule.toConsumptionCategory] = 0;
-        }
-        counts[rule.toConsumptionCategory] += qty * rule.qty;
-      });
-    } else {
-      // 変換ルールがない場合は自身のカテゴリにそのままカウント
-      if (counts[productCategory] === undefined) {
-        counts[productCategory] = 0;
+    rules.forEach(rule => {
+
+      if (counts[rule.toConsumptionCategory] === undefined) {
+        counts[rule.toConsumptionCategory] = 0;
       }
-      counts[productCategory] += qty;
-    }
+
+      counts[rule.toConsumptionCategory] += qty * rule.qty;
+    });
   });
 
-  let html = "<h3>現在の貸与枚数</h3>";
+  let html = buildLimitDeclarationHtml(jobData);
+  html += "<h3>現在の貸与枚数</h3>";
 
   Object.keys(limits).forEach(category => {
+
     const current = counts[category] || 0;
     const limit = limits[category];
+
     let className = "category-normal";
 
-    if (current > limit) className = "category-over";
-    else if (current === limit) className = "category-ok";
-    else if (limit - current === 1) className = "category-warning";
+    if (current > limit) {
+      className = "category-over";
+    } else if (current === limit) {
+      className = "category-ok";
+    } else if (limit - current === 1) {
+      className = "category-warning";
+    }
 
-    html += `<div class="${className}">${category}：${current} / ${limit}</div>`;
+    html += `<div class="${className}">
+      ${category}：${current} / ${limit}
+    </div>`;
   });
 
   area.innerHTML = html;
 
   const headingElements = document.querySelectorAll("[data-category-heading]");
+
   headingElements.forEach(el => {
+
     const category = el.dataset.categoryHeading;
     const countSpan = el.querySelector(".category-count");
+
     if (!countSpan) return;
 
     const limit = limits[category];
     const current = counts[category] || 0;
     const selected = selectedByProductCategory[category] || 0;
 
-    countSpan.classList.remove("category-count-ok", "category-count-warning", "category-count-over");
+    countSpan.classList.remove(
+      "category-count-ok",
+      "category-count-warning",
+      "category-count-over"
+    );
 
     if (limit !== undefined) {
+
       countSpan.innerText = `（合計${limit}枚） 選択中 ${current}/${limit}`;
-      if (current > limit) countSpan.classList.add("category-count-over");
-      else if (current === limit) countSpan.classList.add("category-count-ok");
-      else if (limit - current === 1) countSpan.classList.add("category-count-warning");
+
+      if (current > limit) {
+        countSpan.classList.add("category-count-over");
+      } else if (current === limit) {
+        countSpan.classList.add("category-count-ok");
+      } else if (limit - current === 1) {
+        countSpan.classList.add("category-count-warning");
+      }
+
     } else {
-      countSpan.innerText = selected > 0 ? `選択中 ${selected}枚` : "";
+
+      if (selected > 0) {
+        countSpan.innerText = `選択中 ${selected}枚`;
+      } else {
+        countSpan.innerText = "";
+      }
     }
   });
 }
 
 function submitData() {
-  if (!document.getElementById("sei").value) { alert("氏を入力してください"); return; }
-  if (!document.getElementById("mei").value) { alert("名を入力してください"); return; }
-  if (!document.getElementById("gender").value) { alert("性別を選択してください"); return; }
-  if (!document.getElementById("job").value) { alert("職種を選択してください"); return; }
+
+  if (!document.getElementById("sei").value) {
+    alert("氏を入力してください");
+    return;
+  }
+
+  if (!document.getElementById("mei").value) {
+    alert("名を入力してください");
+    return;
+  }
+
+  if (!document.getElementById("gender").value) {
+    alert("性別を選択してください");
+    return;
+  }
+
+  if (!document.getElementById("job").value) {
+    alert("職種を選択してください");
+    return;
+  }
 
   const departmentArea = document.getElementById("departmentArea");
   const departmentSelect = document.getElementById("department");
 
-  if (departmentArea && departmentSelect && !departmentArea.classList.contains("hidden") && !departmentSelect.value) {
+  if (
+    departmentArea &&
+    departmentSelect &&
+    !departmentArea.classList.contains("hidden") &&
+    !departmentSelect.value
+  ) {
     alert("部署を選択してください");
     return;
   }
 
   const now = new Date();
+
   const common = {
-    id: Date.now(),
-    createdAt: now.toLocaleString("ja-JP"),
-    updatedAt: now.toLocaleString("ja-JP"),
-    customerCode: currentData.customerCode,
-    customerName: currentData.customerName,
-    sei: document.getElementById("sei").value,
-    mei: document.getElementById("mei").value,
-    gender: document.getElementById("gender").value,
-    job: document.getElementById("job").value,
-    department: departmentSelect ? departmentSelect.value : ""
-  };
+  id: Date.now(),
+  createdAt: now.toLocaleString("ja-JP"),
+  updatedAt: now.toLocaleString("ja-JP"),
+  customerCode: currentData.customerCode,
+  customerName: currentData.customerName,
+  sei: document.getElementById("sei").value,
+  mei: document.getElementById("mei").value,
+  gender: document.getElementById("gender").value,
+  job: document.getElementById("job").value,
+  department: departmentSelect ? departmentSelect.value : ""
+};
+
 
   const rows = document.querySelectorAll("#table tr");
   let data = [];
@@ -1249,26 +1610,33 @@ function submitData() {
   let errorMessage = "";
 
   rows.forEach(row => {
+
     if (!row.dataset.productCategory) return;
+
     const cells = row.querySelectorAll("td");
+
     const product = cells[0].innerText;
     const productCode = cells[1].innerText;
     const color = cells[2].innerText;
+
     const qty = Number(cells[4].querySelector("input").value) || 0;
 
     if (qty <= 0) return;
 
     const sizeInfo = getRowSizeInfo(row);
+
     if (!sizeInfo.valid) {
       errorMessage = product + " のサイズを選択してください";
       return;
     }
 
     const duplicateKey = productCode + "|" + sizeInfo.size;
+
     if (duplicateCheck[duplicateKey]) {
       errorMessage = product + " は同じサイズを複数登録できません。";
       return;
     }
+
     duplicateCheck[duplicateKey] = true;
 
     data.push({
@@ -1284,20 +1652,35 @@ function submitData() {
     });
   });
 
-  if (errorMessage) { alert(errorMessage); return; }
-  if (data.length === 0) { alert("商品が入力されていません（サイズ・数量）"); return; }
+  if (errorMessage) {
+    alert(errorMessage);
+    return;
+  }
+
+  if (data.length === 0) {
+    alert("商品が入力されていません（サイズ・数量）");
+    return;
+  }
 
   if (hasBespokeWithoutMeasurement()) {
     const ok = confirm("採寸表の登録がありません。このまま登録しますか？");
-    if (!ok) return;
+
+    if (!ok) {
+      return;
+    }
   }
 
   const measurementPayload = buildMeasurementPayload(common);
-  const payload = { orders: data, measurement: measurementPayload };
+
+  const payload = {
+    orders: data,
+    measurement: measurementPayload
+  };
 
   console.log(payload);
+
   sessionStorage.setItem("uniformDraft", JSON.stringify(payload));
-  location.href = "confirm.html";
+location.href = "confirm.html";
 }
 </script>
 
