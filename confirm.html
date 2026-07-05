@@ -237,13 +237,17 @@ document.getElementById("submitBtn").addEventListener("click", () => {
     body: JSON.stringify(payload)
   });
 
-  sessionStorage.setItem("uniformComplete", JSON.stringify({
-    measureNo: measurementNo,
-    registrationNo: registrationNo
-  }));
+sessionStorage.setItem("uniformComplete", JSON.stringify({
+  measureNo: measurementNo,
+  registrationNo: registrationNo
+}));
 
-  sessionStorage.removeItem("uniformDraft");
-  location.href = "complete.html";
+// 完了画面で控えメールを送るため、メール本文用の登録内容を保持する
+// ※メールアドレスはここには保存しない
+sessionStorage.setItem("uniformMailDraft", JSON.stringify(payload));
+
+sessionStorage.removeItem("uniformDraft");
+location.href = "complete.html";
 });
 
 loadDraft();
