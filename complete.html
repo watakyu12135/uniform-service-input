@@ -99,16 +99,57 @@ document.getElementById("email").addEventListener("input", checkEmail);
 document.getElementById("emailConfirm").addEventListener("input", checkEmail);
 
 /* メール送信（実際の送信処理はGAS想定） */
-document.getElementById("mailBtn").addEventListener("click", () => {
+document.g*tElementById("mailBtn").addEventLi*tener("click", () => {
+  const ema*l = document.getElementById("email*).value.trim();
+  const emailConfi*m = document.getElementById("email*onfirm").value.trim();
+
+  if (!ema*l || !emailConfirm || email !== em*ilConfirm) {
+    alert("メールアドレスが一致*ていません。");
+    return;
+  }
+
+  const*rawMailDraft = sessionStorage.getI*em("uniformMailDraft");
+  let mail*raft = {};
+
+  try {
+    mailDraft * rawMailDraft ? JSON.parse(rawMail*raft) : {};
+  } catch (e) {
+    al*rt("送信用データの読み込みに失敗しました。");
+    ret*rn;
+  }
+
+  const mailPayload = {
+ *  mailOnly: true,
+    toEmail: ema*l,
+    measureNo: info.measureNo |* "",
+    registrationNo: info.regi*trationNo || "",
+    orders: mailD*aft.orders || [],
+    measurement:*mailDraft.measurement || null
+  };*
+  fetch(GAS_URL, {
+    method: "P*ST",
+    mode: "no-cors",
+    head*rs: {
+      "Content-Type": "text/*lain;charset=utf-8"
+    },
+    bod*: JSON.stringify(mailPayload)
+  })*
+
   alert("控えメールを送信しました。");
-  document.getElementById("mailBtn").disabled = true;
+
+  doc*ment.getElementById("mailBtn").dis*bled = true;
+  document.getElement*yId("mailBtn").innerText = "送信済み";*
+  // メール送信後は、控えメール用データを削除する
+  ses*ionStorage.removeItem("uniformMail*raft");
 });
 
 /* 完了後 */
 function finish() {
-  sessionStorage.removeItem("uniformComplete");
-  location.href = "https://www.yahoo.co.jp/";
+  session*torage.removeItem("uniformComplete*);
+  sessionStorage.removeItem("un*formMailDraft");
+  location.href =*"https://www.yahoo.co.jp/";
 }
+
 </script>
 
 </body>
