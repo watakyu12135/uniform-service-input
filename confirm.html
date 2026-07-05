@@ -164,6 +164,14 @@ document.getElementById("confirmCheck").addEventListener("change", e => {
   document.getElementById("submitBtn").disabled = !e.target.checked;
 });
 
+
+function generateMeasurementNo() {
+  const letters = "ABCDEFGHJKMNPQRSTUVWXYZ";
+  const letter = letters[Math.floor(Math.random() * letters.length)];
+  const number = String(Math.floor(Math.random() * 900000) + 100000);
+  return letter + number;
+}
+
 /* 4桁チェック */
 function validatePin() {
   const pin = document.getElementById("pin").value.trim();
@@ -181,25 +189,57 @@ function validatePin() {
 document.getElementById("submitBtn").addEventListener("click", () => {
   if (!validatePin()) return;
 
-  const pin = document.getElementById("pin").value.trim();
+  const registrationNo = document.getElementById("pin").value.trim();
+  const measurementNo = generateMeasurementNo();
+
   const payload = JSON.parse(JSON.stringify(draft));
 
-  payload.contactPin = pin;
-  payload.orders?.forEach(o => o.contactPin = pin);
+  payload["採寸番号"] = measurementNo;
+  payload["登録番号"] = registrationNo;
+  payload["登録区分"] = "新規";
+  payload["有効フラグ"] = 1;
+
+  // 既存GAS互換用
+  payload.measurementNo = measurementNo;
+  payload.registrationNo = registrationNo;
+  payload.entryType = "新規";
+  payload.activeFlag = 1;
+  payload.contactPin = registrationNo;
+
+  payload.orders?.forEach(o => {
+    o["採寸番号"] = measurementNo;
+    o["登録番号"] = registrationNo;
+    o["登録区分"] = "新規";
+    o["有効フラグ"] = 1;
+
+    // 既存GAS互換用
+    o.measurementNo = measurementNo;
+    o.registrationNo = registrationNo;
+    o.entryType = "新規";
+    o.activeFlag = 1;
+    o.contactPin = registrationNo;
+  });
+
   if (payload.measurement) {
-    payload.measurement["修正用番号"] = pin;
+    payload.measurement["採寸番号"] = measurementNo;
+    payload.measurement["登録番号"] = registrationNo;
+    payload.measurement["登録区分"] = "新規";
+    payload.measurement["有効フラグ"] = 1;
+
+    // 既存互換用。あとで不要になったら削除可
+    payload.measurement["修正用番号"] = registrationNo;
   }
 
   fetch(GAS_URL, {
-    method:"POST",
-    mode:"no-cors",
-    headers:{ "Content-Type":"text/plain;charset=utf-8" },
+    method: "POST",
+    mode: "no-cors",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
     body: JSON.stringify(payload)
   });
 
   sessionStorage.setItem("uniformComplete", JSON.stringify({
-    pin,
-    measureNo: payload.receptionNo || ""
+    measureNo: measurementNo,
+    registrationNo: registrationNo
   }));
 
   sessionStorage.removeItem("uniformDraft");
