@@ -189,6 +189,33 @@ button {
   display: none;
 }
 
+.cell-inseam {
+  font-size: 13px;
+  color: #333;
+}
+
+.inseam-box {
+  margin-top: 6px;
+  padding: 6px;
+  background: #fff7e6;
+  border-left: 4px solid #f5a623;
+}
+
+.inseam-box label {
+  font-weight: bold;
+}
+
+.inseam-box input {
+  width: 80px;
+  margin-top: 4px;
+}
+
+.inseam-message {
+  margin-top: 6px;
+  color: #c00;
+  font-weight: bold;
+}
+
 /* スマホ表示 */
 @media (max-width: 600px) {
 
@@ -206,8 +233,9 @@ button {
     grid-template-columns: 1.4fr 1fr 1.2fr;
     grid-template-areas:
       "product code size"
-      "product color qty"
-      "measure measure measure";
+  "product color qty"
+  "inseam inseam inseam"
+  "measure measure measure";
     border: 1px solid #ccc;
     margin-bottom: 8px;
     padding: 6px;
@@ -250,6 +278,10 @@ button {
   .cell-qty {
     grid-area: qty;
   }
+
+.cell-inseam {
+  grid-area: inseam;
+}
 
   .cell-measure {
     grid-area: measure;
@@ -669,7 +701,7 @@ checkPageDeadline()
     }
 
     document.getElementById("table").innerHTML =
-      "<tr><td colspan='6'>性別と職種を選択してください</td></tr>";
+      "<tr><td colspan='7'>性別と職種を選択してください</td></tr>";
 
     document.getElementById("categoryStatus").innerHTML = "";
 
@@ -681,7 +713,7 @@ checkPageDeadline()
   })
   .catch(error => {
     document.getElementById("table").innerHTML =
-      "<tr><td colspan='6'>読み込みに失敗しました：" + error.message + "</td></tr>";
+      "<tr><td colspan='7'>読み込みに失敗しました：" + error.message + "</td></tr>";
   });
 
 function applyEditModeData() {
@@ -742,6 +774,7 @@ function applyEditModeData() {
 
   updateCategorySummary();
   updateAllMeasurementButtons();
+  
 }
 
 function addMissingOption(select, value) {
@@ -827,8 +860,10 @@ function restoreOrdersFromEditData(orders) {
     });
   });
 
-  updateCategorySummary();
+updateCategorySummary();
   updateAllMeasurementButtons();
+  updateAllInseamAreas();
+  restoreInseamFromEditData(orders);
 }
 
 function setProductRowValue(row, order) {
@@ -965,7 +1000,7 @@ function changeJob() {
 
   if (!job || !gender) {
     document.getElementById("table").innerHTML =
-      "<tr><td colspan='6'>性別と職種を選択してください</td></tr>";
+      "<tr><td colspan='7'>性別と職種を選択してください</td></tr>";
 
     document.getElementById("categoryStatus").innerHTML = "";
 
@@ -982,7 +1017,7 @@ function changeJob() {
 
   if (!currentData) {
     document.getElementById("table").innerHTML =
-      "<tr><td colspan='6'>データ読み込み中です</td></tr>";
+      "<tr><td colspan='7'>データ読み込み中です</td></tr>";
     return;
   }
 
@@ -1039,7 +1074,7 @@ function createTable(data, selectedJob, selectedGender) {
   );
 
   if (!jobData) {
-    table.innerHTML = "<tr><td colspan='6'>該当データなし</td></tr>";
+    table.innerHTML = "<tr><td colspan='7'>該当データなし</td></tr>";
     document.getElementById("categoryStatus").innerHTML = "";
     return;
   }
@@ -1072,7 +1107,7 @@ function createTable(data, selectedJob, selectedGender) {
       if (products.length === 0) return;
 
       html += `<tr class="category-header">
-        <td colspan="6">
+        <td colspan="7">
           <div class="category-heading" data-category-heading="${category}">
             <span class="category-title">${category}を選択</span>
             <span class="category-count"></span>
@@ -1085,21 +1120,23 @@ function createTable(data, selectedJob, selectedGender) {
       html += `</td></tr>`;
 
       html += `<tr class="product-header">
-        <th>商品</th>
-        <th>品番</th>
-        <th>色</th>
-        <th>サイズ</th>
-        <th>数量</th>
-        <th>採寸</th>
-      </tr>`;
+  <th>商品</th>
+  <th>品番</th>
+  <th>色</th>
+  <th>サイズ</th>
+  <th>数量</th>
+  <th>股下加工</th>
+  <th>採寸</th>
+</tr>`;
 
       products.forEach(p => {
 
         let row = `<tr
-          data-product-code="${p.productCode}"
-          data-product-category="${p.productCategory}"
-          class="product-row"
-        >
+  data-product-code="${p.productCode}"
+  data-product-category="${p.productCategory}"
+  data-inseam-alterable="${p.inseamAlterable || 0}"
+  class="product-row"
+>
           <td class="cell-product">${p.name}</td>
           <td class="cell-code">${p.productCode}</td>
           <td class="cell-color">${p.color}</td>`;
@@ -1159,7 +1196,8 @@ function createTable(data, selectedJob, selectedGender) {
           </div>
         </td>`;
 
-        row += `<td class="cell-measure">
+	row += `<td class="cell-inseam"></td>`;       
+ 	row += `<td class="cell-measure">
           <button class="measure measure-table hidden" onclick="openMeasurement(this)">採寸</button>
         </td>`;
 
@@ -1233,7 +1271,8 @@ function addSameProductRow(button) {
   });
 
   productRows[productRows.length - 1].after(clone);
-  updateCategorySummary();
+updateCategorySummary();
+updateInseamAreaForProduct(row);
 }
 
 function checkMainSize(select) {
@@ -1256,6 +1295,7 @@ function checkMainSize(select) {
       btn.innerText = "採寸";
     });
   }
+updateInseamAreaForProduct(row);
 }
 
 function checkSpecialSize(select) {
@@ -1283,6 +1323,7 @@ function checkSpecialSize(select) {
       btn.innerText = "採寸";
     });
   }
+updateInseamAreaForProduct(row);
 }
 
 function getMeasurementTypeByCategory(category) {
@@ -1696,6 +1737,140 @@ function getRowSizeInfo(row) {
   };
 }
 
+function isInseamAlterable(row) {
+  if (!row) return false;
+
+  const value = String(row.dataset.inseamAlterable || "").trim();
+
+  return value === "1" || value.toLowerCase() === "true";
+}
+
+function getRowsByProductCode(productCode) {
+  return Array.from(
+    document.querySelectorAll(`tr[data-product-code="${productCode}"]`)
+  );
+}
+
+function getProductInseamInput(productCode) {
+  const rows = getRowsByProductCode(productCode);
+
+  for (const row of rows) {
+    const input = row.querySelector(".inseamCmInput");
+    if (input) {
+      return input;
+    }
+  }
+
+  return null;
+}
+
+function updateInseamAreaForProduct(row) {
+  if (!row || !row.dataset.productCode) return;
+
+  const productCode = row.dataset.productCode;
+  const productRows = getRowsByProductCode(productCode);
+
+  if (productRows.length === 0) return;
+
+  const currentInput = getProductInseamInput(productCode);
+  const currentInseamCm = currentInput ? currentInput.value.trim() : "";
+
+  const firstRow = productRows[0];
+  const firstInseamCell = firstRow.querySelector(".cell-inseam");
+
+  productRows.forEach(r => {
+    const cell = r.querySelector(".cell-inseam");
+    if (cell) {
+      cell.innerHTML = "";
+    }
+  });
+
+  if (!firstInseamCell) return;
+
+  const hasCustomSize = productRows.some(r => {
+    const sizeInfo = getRowSizeInfo(r);
+    return sizeInfo.valid && sizeInfo.sizeType === "custom";
+  });
+
+  if (!hasCustomSize) {
+    return;
+  }
+
+  if (isInseamAlterable(firstRow)) {
+    firstInseamCell.innerHTML = `
+      <div class="inseam-box">
+        <label>股下加工寸法</label><br>
+        <input
+          type="number"
+          class="inseamCmInput"
+          min="1"
+          max="120"
+          step="1"
+          inputmode="numeric"
+          placeholder="cm"
+          oninput="this.value=this.value.replace(/[^0-9]/g,'')"
+        > cm
+        <div class="small">必要な場合のみ入力してください。</div>
+      </div>
+    `;
+
+    const newInput = firstInseamCell.querySelector(".inseamCmInput");
+    if (newInput) {
+      newInput.value = currentInseamCm;
+    }
+
+  } else {
+    firstInseamCell.innerHTML = `
+      <div class="inseam-message">
+        股下加工のできない商品です
+      </div>
+    `;
+  }
+}
+function updateAllInseamAreas() {
+  const rows = Array.from(document.querySelectorAll("#table tr[data-product-code]"));
+  const productCodes = [...new Set(rows.map(row => row.dataset.productCode))];
+
+  productCodes.forEach(productCode => {
+    const productRows = getRowsByProductCode(productCode);
+    if (productRows.length > 0) {
+      updateInseamAreaForProduct(productRows[0]);
+    }
+  });
+}
+
+function getInseamCmForProduct(productCode) {
+  const input = getProductInseamInput(productCode);
+
+  if (!input) {
+    return "";
+  }
+
+  return input.value.trim();
+}
+
+function restoreInseamFromEditData(orders) {
+  if (!orders || orders.length === 0) return;
+
+  updateAllInseamAreas();
+
+  const restored = {};
+
+  orders.forEach(order => {
+    const productCode = String(order["商品コード"] || order.productCode || "");
+    const inseamCm = String(order["股下cm"] || order.inseamCm || "").trim();
+
+    if (!productCode || !inseamCm) return;
+    if (restored[productCode]) return;
+
+    const input = getProductInseamInput(productCode);
+
+    if (input) {
+      input.value = inseamCm;
+      restored[productCode] = true;
+    }
+  });
+}
 
 function buildLimitDeclarationHtml(jobData) {
   if (!jobData || !jobData.categoryLimits || jobData.categoryLimits.length === 0) {
@@ -1923,17 +2098,42 @@ function submitData() {
 
     duplicateCheck[duplicateKey] = true;
 
-    data.push({
-      ...common,
-      product,
-      productCode,
-      color,
-      size: sizeInfo.size,
-      sizeType: sizeInfo.sizeType,
-      bespokeText: sizeInfo.bespokeText,
-      qty,
-      productCategory: row.dataset.productCategory
-    });
+    const inseamAlterable = isInseamAlterable(row) ? 1 : 0;
+let inseamCm = "";
+
+if (sizeInfo.sizeType === "custom" && inseamAlterable === 1) {
+  inseamCm = getInseamCmForProduct(productCode);
+
+  if (inseamCm && !/^\d{1,3}$/.test(inseamCm)) {
+    errorMessage = product + " の股下加工寸法は半角数字で入力してください。";
+    return;
+  }
+
+  if (inseamCm) {
+    const inseamNumber = Number(inseamCm);
+
+    if (inseamNumber < 1 || inseamNumber > 120) {
+      errorMessage = product + " の股下加工寸法は1〜120cmで入力してください。";
+      return;
+    }
+  }
+}
+
+data.push({
+  ...common,
+  product,
+  productCode,
+  color,
+  size: sizeInfo.size,
+  sizeType: sizeInfo.sizeType,
+  bespokeText: sizeInfo.bespokeText,
+  qty,
+  productCategory: row.dataset.productCategory,
+  inseamAlterable: inseamAlterable,
+  inseamCm: inseamCm,
+  "股下加工可能": inseamAlterable,
+  "股下cm": inseamCm
+});
   });
 
   if (errorMessage) {
