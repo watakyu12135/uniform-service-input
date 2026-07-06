@@ -117,12 +117,6 @@ function loadDraft() {
   if (draft.editMode) {
     document.querySelector("h2").innerText = "登録内容確認（修正）";
     document.getElementById("submitBtn").innerText = "修正内容を登録する";
-
-    const message = document.getElementById("message");
-    if (message) {
-      message.classList.remove("error");
-      message.innerText = "修正登録です。採寸番号は現在の番号を引き継ぎます。";
-    }
   }
 }
 
