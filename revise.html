@@ -145,17 +145,63 @@ function escapeHtml(value) {
     .replaceAll("'", "&#039;");
 }
 
+async function checkPageDeadline() {
+  const payload = {
+    deadlineOnly: true,
+    publicKey: getCustomer()
+  };
+
+  const res = await fetch(GAS_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "text/plain;charset=utf-8"
+    },
+    body: JSON.stringify(payload)
+  });
+
+  const text = await res.text();
+  const json = JSON.parse(text);
+
+  if (json.result !== "ok") {
+    location.href = "expired.html";
+    return false;
+  }
+
+  if (!json.found || !json.active || json.expired) {
+    location.href = "expired.html";
+    return false;
+  }
+
+  return true;
+}
+
 function loadCustomerConfig() {
   customerKey = getCustomer();
 
-  fetch(`config/${customerKey}.json`)
+  checkPageDeadline()
+    .then(ok => {
+      if (!ok) {
+        return null;
+      }
+
+      return fetch(`config/${customerKey}.json`);
+    })
     .then(res => {
+      if (!res) {
+        return null;
+      }
+
       if (!res.ok) {
         throw new Error("顧客設定ファイルが見つかりません。");
       }
+
       return res.json();
     })
     .then(data => {
+      if (!data) {
+        return;
+      }
+
       currentData = data;
       customerCode = String(currentData.customerCode || "").trim();
 
@@ -172,7 +218,6 @@ function loadCustomerConfig() {
         "顧客設定の読み込みに失敗しました：" + err.message;
     });
 }
-
 async function searchRevision() {
   const message = document.getElementById("message");
   const resultArea = document.getElementById("resultArea");
