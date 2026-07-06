@@ -192,9 +192,13 @@ function validatePin() {
   return true;
 }
 
-document.getElementById("submitBtn").addEventListener("click", () => {
+document.getElementById("submitBtn").addEventListener("click", async () => {
 
   if (!validatePin()) return;
+
+  const submitBtn = document.getElementById("submitBtn");
+  submitBtn.disabled = true;
+  submitBtn.innerText = "送信中...";
 
   const registrationNo = document.getElementById("pin").value.trim();
 
@@ -210,6 +214,8 @@ document.getElementById("submitBtn").addEventListener("click", () => {
 
   if (isEdit && !measurementNo) {
     alert("修正対象の採寸番号が取得できません。もう一度検索からやり直してください。");
+    submitBtn.disabled = false;
+    submitBtn.innerText = isEdit ? "修正内容を登録する" : "登録する";
     return;
   }
 
@@ -251,7 +257,7 @@ document.getElementById("submitBtn").addEventListener("click", () => {
     payload.measurement["登録区分"] = registrationType;
     payload.measurement["有効フラグ"] = 1;
 
-    // 既存互換用。あとで不要になったら削除可
+    // 既存互換用
     payload.measurement["修正用番号"] = registrationNo;
     payload.measurement.measurementNo = measurementNo;
     payload.measurement.registrationNo = registrationNo;
@@ -260,34 +266,52 @@ document.getElementById("submitBtn").addEventListener("click", () => {
     payload.measurement.contactPin = registrationNo;
   }
 
-  fetch(GAS_URL, {
-    method: "POST",
-    mode: "no-cors",
-    headers: { "Content-Type": "text/plain;charset=utf-8" },
-    body: JSON.stringify(payload)
-  });
+  try {
+    const res = await fetch(GAS_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "text/plain;charset=utf-8"
+      },
+      body: JSON.stringify(payload)
+    });
 
-  sessionStorage.setItem("uniformComplete", JSON.stringify({
-    measureNo: measurementNo,
-    registrationNo: registrationNo,
-    editMode: isEdit,
-    registrationType: registrationType
-  }));
+    const text = await res.text();
+    const json = JSON.parse(text);
 
-  // 完了画面で控えメールを送るため、メール本文用の登録内容を保持する
-  // ※メールアドレスはここには保存しない
-  sessionStorage.setItem("uniformMailDraft", JSON.stringify(payload));
+    if (json.result !== "ok") {
+      alert("登録に失敗しました。時間をおいて再度お試しください。\n" + (json.message || ""));
+      submitBtn.disabled = false;
+      submitBtn.innerText = isEdit ? "修正内容を登録する" : "登録する";
+      return;
+    }
 
-  sessionStorage.removeItem("uniformDraft");
+    sessionStorage.setItem("uniformComplete", JSON.stringify({
+      measureNo: measurementNo,
+      registrationNo: registrationNo,
+      editMode: isEdit,
+      registrationType: registrationType
+    }));
 
-  // 修正モード用データは、登録後は不要なので削除
-  if (isEdit) {
-    sessionStorage.removeItem("uniformEditData");
-    sessionStorage.removeItem("uniformEditCustomer");
+    sessionStorage.setItem("uniformMailDraft", JSON.stringify(payload));
+
+    sessionStorage.removeItem("uniformDraft");
+
+    if (isEdit) {
+      sessionStorage.removeItem("uniformEditData");
+      sessionStorage.removeItem("uniformEditCustomer");
+    }
+
+    location.href = "complete.html";
+
+  } catch (err) {
+    alert("登録送信中にエラーが発生しました。\n通信環境を確認して、再度お試しください。\n\n" + err.message);
+
+    submitBtn.disabled = false;
+    submitBtn.innerText = isEdit ? "修正内容を登録する" : "登録する";
   }
-
-  location.href = "complete.html";
 });
+
+
 loadDraft();
 </script>
 </body>
