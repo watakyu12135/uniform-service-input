@@ -673,7 +673,7 @@ checkPageDeadline()
       return null;
     }
 
-    return fetch(`config/${getCustomer()}.json`);
+    return fetch(`config/${getCustomer()}.json?ts=${Date.now()}`);
   })
   .then(res => {
     if (!res) {
