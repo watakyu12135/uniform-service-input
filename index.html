@@ -906,7 +906,7 @@ function setProductRowValue(row, order) {
 
   const mainSizeSelect = row.querySelector(".mainSize");
   const specialSizeSelect = row.querySelector(".specialSize");
-  const qtyInput = row.querySelector("input[type='number']");
+  const qtyInput = row.querySelector(".cell-qty input");
 
   if (!mainSizeSelect || !qtyInput) return;
 
@@ -1590,7 +1590,7 @@ function hasBespokeWithoutMeasurement() {
     if (!row.dataset.productCategory) return;
 
     const sizeInfo = getRowSizeInfo(row);
-    const qtyInput = row.querySelector("input[type='number']");
+    const qtyInput = row.querySelector(".cell-qty input");
     const qty = Number(qtyInput.value) || 0;
 
     if (qty <= 0) return;
@@ -2016,7 +2016,7 @@ function updateCategorySummary() {
 
     if (!productCategory) return;
 
-    const qtyInput = row.querySelector("input[type='number']");
+    const qtyInput = row.querySelector(".cell-qty input");
     const qty = Number(qtyInput.value) || 0;
 
     if (qty <= 0) return;
@@ -2111,6 +2111,66 @@ function updateCategorySummary() {
   });
 }
 
+function validateCategoryLimitsBeforeSubmit() {
+  const jobData = getSelectedJobData();
+
+  if (!jobData || !jobData.categoryLimits || jobData.categoryLimits.length === 0) {
+    return "";
+  }
+
+  const counts = {};
+  const limits = {};
+
+  jobData.categoryLimits.forEach(rule => {
+    limits[rule.productCategory] = Number(rule.limit) || 0;
+    counts[rule.productCategory] = 0;
+  });
+
+  const rows = document.querySelectorAll("#table tr");
+
+  rows.forEach(row => {
+    const productCategory = row.dataset.productCategory;
+    if (!productCategory) return;
+
+    const qtyInput = row.querySelector(".cell-qty input");
+    const qty = Number(qtyInput ? qtyInput.value : 0) || 0;
+    if (qty <= 0) return;
+
+    const sizeInfo = getRowSizeInfo(row);
+    if (!sizeInfo.valid) return;
+
+    const rules = jobData.conversionRules.filter(r =>
+      r.fromProductCategory === productCategory
+    );
+
+    rules.forEach(rule => {
+      if (counts[rule.toConsumptionCategory] === undefined) {
+        counts[rule.toConsumptionCategory] = 0;
+      }
+
+      counts[rule.toConsumptionCategory] += qty * rule.qty;
+    });
+  });
+
+  const messages = [];
+
+  Object.keys(limits).forEach(category => {
+    const current = counts[category] || 0;
+    const limit = limits[category];
+
+    if (current !== limit) {
+      messages.push(category + "：現在 " + current + " / 必要 " + limit);
+    }
+  });
+
+  if (messages.length > 0) {
+    return "貸与枚数が合っていません。\n\n" + messages.join("\n");
+  }
+
+  return "";
+}
+
+
 function submitData() {
 
   if (!document.getElementById("sei").value) {
@@ -2177,7 +2237,8 @@ function submitData() {
     const productCode = cells[1].innerText;
     const color = cells[2].innerText;
 
-    const qty = Number(cells[4].querySelector("input").value) || 0;
+    const qtyInput = row.querySelector(".cell-qty input");
+const qty = Number(qtyInput ? qtyInput.value : 0) || 0;
 
     if (qty <= 0) return;
 
@@ -2237,12 +2298,19 @@ data.push({
     return;
   }
 
-  if (data.length === 0) {
-    alert("商品が入力されていません（サイズ・数量）");
-    return;
-  }
+ if (data.length === 0) {
+  alert("商品が入力されていません（サイズ・数量）");
+  return;
+}
 
-  if (hasBespokeWithoutMeasurement()) {
+const categoryLimitError = validateCategoryLimitsBeforeSubmit();
+
+if (categoryLimitError) {
+  alert(categoryLimitError);
+  return;
+}
+
+if (hasBespokeWithoutMeasurement()) {
     const ok = confirm("採寸表の登録がありません。このまま登録しますか？");
 
     if (!ok) {
