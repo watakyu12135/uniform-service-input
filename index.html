@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>ユニフォーム申込フォーム</title>
+<title>ユニフォーム申請</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -550,9 +550,43 @@ button {
 </div>
 
 <script>
+
+const GAS_URL = "https://script.google.com/macros/s/AKfycbzifpGEKoydnvI9RAU6evgnHoWQh2YTx7WfXtqsi8O7tMoGbnyXzCC5bIVUY9QmUGZdlA/exec";
+
 function getCustomer() {
   const url = new URL(window.location.href);
   return url.searchParams.get("customer") || "gvhp8hex";
+}
+
+
+async function checkPageDeadline() {
+  const payload = {
+    deadlineOnly: true,
+    publicKey: getCustomer()
+  };
+
+  const res = await fetch(GAS_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "text/plain;charset=utf-8"
+    },
+    body: JSON.stringify(payload)
+  });
+
+  const text = await res.text();
+  const json = JSON.parse(text);
+
+  if (json.result !== "ok") {
+    location.href = "expired.html";
+    return false;
+  }
+
+  if (!json.found || !json.active || json.expired) {
+    location.href = "expired.html";
+    return false;
+  }
+
+  return true;
 }
 
 let currentData;
@@ -601,34 +635,31 @@ let measurementData = {
   memo: ""
 };
 
-fetch(`config/${getCustomer()}.json`)
+checkPageDeadline()
+  .then(ok => {
+    if (!ok) {
+      return null;
+    }
+
+    return fetch(`config/${getCustomer()}.json`);
+  })
   .then(res => {
+    if (!res) {
+      return null;
+    }
     if (!res.ok) {
       throw new Error("JSONファイルが見つかりません");
     }
     return res.json();
   })
   .then(data => {
+    if (!data) {
+      return;
+    }
+
     currentData = data;
 
-    /* ===== 受付期限チェック ===== */
-    if (currentData.entryDeadline) {
-      const today = new Date();
-      const deadline = new Date(currentData.entryDeadline + "T23:59:59");
-
-      if (today > deadline) {
-        document.body.innerHTML = `
-          <h2>受付終了</h2>
-          <p>
-            本ページでの受付期間は終了しました。<br>
-            施設ご担当者様にお問い合わせください。
-          </p>
-        `;
-        return;
-      }
-    }
-    /* ============================ */
-
+  
     document.getElementById("customerInfo").innerText =
       "顧客：" + currentData.customerName;
 
