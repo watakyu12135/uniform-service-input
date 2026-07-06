@@ -30,6 +30,7 @@ label { font-weight: bold; display: block; margin-top: 10px; }
   <h3>基本情報</h3>
   <div class="info-row">顧客：<span id="customerName"></span></div>
   <div class="info-row">氏名：<span id="fullName"></span></div>
+<div class="info-row">フリガナ：<span id="fullNameKana"></span></div>
   <div class="info-row">性別：<span id="gender"></span></div>
   <div class="info-row">職種：<span id="job"></span></div>
   <div class="info-row">部署：<span id="department"></span></div>
@@ -107,6 +108,8 @@ function loadDraft() {
   document.getElementById("customerName").innerText = first.customerName || "";
   document.getElementById("fullName").innerText =
     `${first.sei || ""} ${first.mei || ""}`.trim();
+document.getElementById("fullNameKana").innerText =
+  `${first.seiKana || first["シ"] || ""} ${first.meiKana || first["メイ"] || ""}`.trim();
   document.getElementById("gender").innerText = first.gender || "";
   document.getElementById("job").innerText = first.job || "";
   document.getElementById("department").innerText = first.department || "なし";
