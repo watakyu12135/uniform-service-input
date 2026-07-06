@@ -6,20 +6,76 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
 body { font-family: sans-serif; padding: 20px; }
-input { font-size: 16px; padding: 8px; width: 100%; box-sizing: border-box; margin-bottom: 10px; }
-button { padding: 10px 16px; width: 100%; }
-pre { margin-top: 20px; padding: 12px; background: #f5f5f5; white-space: pre-wrap; }
+.section {
+  margin-top: 18px;
+  padding: 14px;
+  border: 1px solid #ccc;
+  background: #fff;
+}
+input {
+  font-size: 16px;
+  padding: 8px;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+}
+button {
+  padding: 10px 16px;
+  width: 100%;
+  margin-top: 12px;
+}
+pre {
+  margin-top: 20px;
+  padding: 12px;
+  background: #f5f5f5;
+  white-space: pre-wrap;
+}
+.notice {
+  padding: 10px;
+  background: #fff7e6;
+  border-left: 4px solid #f5a623;
+}
 </style>
 </head>
 <body>
 
 <h2>修正検索テスト</h2>
 
-<label>顧客コード</label>
-<input id="customerCode" value="31019999">
+<div class="section">
+  <h3>顧客情報</h3>
+  <label>顧客コード</label>
+  <input id="customerCode" value="31019999">
+</div>
 
-<label>採寸番号</label>
-<input id="measureNo" placeholder="例：E683218">
+<div class="section">
+  <h3>採寸番号で検索</h3>
+  <div class="notice">
+    採寸番号が分かる場合はこちらに入力してください。<br>
+    採寸番号が入力されている場合は、氏名等より採寸番号を優先して検索します。
+  </div>
+  <label>採寸番号</label>
+  <input id="measureNo" placeholder="例：W693709">
+</div>
+
+<div class="section">
+  <h3>採寸番号が分からない場合</h3>
+  <div class="notice">
+    採寸番号が分からない場合は、以下を入力してください。<br>
+    採寸番号欄は空欄にしてください。
+  </div>
+
+  <label>氏</label>
+  <input id="sei" placeholder="例：minami">
+
+  <label>名</label>
+  <input id="mei" placeholder="例：てすこ">
+
+  <label>職種</label>
+  <input id="job" placeholder="例：看護師">
+
+  <label>登録した4桁の数字</label>
+  <input id="registrationNo" inputmode="numeric" maxlength="4" placeholder="例：2486">
+</div>
 
 <button onclick="searchTest()">検索テスト</button>
 
@@ -31,6 +87,12 @@ const GAS_URL = "https://script.google.com/macros/s/AKfycbzifpGEKoydnvI9RAU6evgn
 async function searchTest() {
   const customerCode = document.getElementById("customerCode").value.trim();
   const measureNo = document.getElementById("measureNo").value.trim();
+
+  const sei = document.getElementById("sei").value.trim();
+  const mei = document.getElementById("mei").value.trim();
+  const job = document.getElementById("job").value.trim();
+  const registrationNo = document.getElementById("registrationNo").value.trim();
+
   const resultArea = document.getElementById("result");
 
   if (!customerCode) {
@@ -38,19 +100,24 @@ async function searchTest() {
     return;
   }
 
-  if (!measureNo) {
-    alert("採寸番号を入力してください。");
-    return;
-  }
+  let payload = {
+    searchOnly: true,
+    customerCode: customerCode
+  };
 
-  const payload = {
-  searchOnly: true,
-  customerCode: customerCode,
-  sei: "minami",
-  mei: "てすこ",
-  job: "看護師",
-  registrationNo: "2486"
-};
+  if (measureNo) {
+    payload.measureNo = measureNo;
+  } else {
+    if (!sei || !mei || !job || !registrationNo) {
+      alert("採寸番号を入力するか、氏・名・職種・登録した4桁の数字を入力してください。");
+      return;
+    }
+
+    payload.sei = sei;
+    payload.mei = mei;
+    payload.job = job;
+    payload.registrationNo = registrationNo;
+  }
 
   resultArea.innerText = "検索中...";
 
