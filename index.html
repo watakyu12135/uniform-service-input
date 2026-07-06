@@ -1222,7 +1222,10 @@ toggleAddSizeButton(this.closest('tr').querySelector('.cell-qty input'));
           </div>
         </td>`;
 
-	row += `<td class="cell-inseam"></td>`;       
+	row += `<td class="cell-inseam">
+  ${buildInseamAreaHtml(p.productCategory, p.inseamAlterable || 0)}
+</td>`;
+
  	row += `<td class="cell-measure">
           <button class="measure measure-table hidden" onclick="openMeasurement(this)">採寸</button>
         </td>`;
@@ -1295,6 +1298,9 @@ function addSameProductRow(button) {
     measureButton.classList.add("hidden");
     measureButton.innerText = "採寸";
   });
+clone.querySelectorAll(".cell-inseam").forEach(cell => {
+  cell.innerHTML = "";
+});
 
   productRows[productRows.length - 1].after(clone);
 updateCategorySummary();
@@ -1763,6 +1769,40 @@ function getRowSizeInfo(row) {
   };
 }
 
+function buildInseamAreaHtml(productCategory, inseamAlterable) {
+  const category = String(productCategory || "");
+  const canAlter = String(inseamAlterable || "").trim() === "1";
+
+  if (category !== "下衣") {
+    return "";
+  }
+
+  if (canAlter) {
+    return `
+      <div class="inseam-box">
+        <label>股下加工寸法</label><br>
+        <input
+          type="number"
+          class="inseamCmInput"
+          min="1"
+          max="120"
+          step="1"
+          inputmode="numeric"
+          placeholder="cm"
+          oninput="this.value=this.value.replace(/[^0-9]/g,'')"
+        > cm
+        <div class="small">特注サイズで股下加工が必要な場合のみ入力してください。</div>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="inseam-message">
+      股下加工のできない商品です
+    </div>
+  `;
+}
+
 function isInseamAlterable(row) {
   if (!row) return false;
 
@@ -1801,59 +1841,33 @@ function updateInseamAreaForProduct(row) {
   const currentInput = getProductInseamInput(productCode);
   const currentInseamCm = currentInput ? currentInput.value.trim() : "";
 
-  productRows.forEach(r => {
+  const firstRow = productRows[0];
+  const firstCell = firstRow.querySelector(".cell-inseam");
+
+  productRows.forEach((r, index) => {
     const cell = r.querySelector(".cell-inseam");
-    if (cell) {
-      cell.innerHTML = "";
-      cell.classList.add("hidden");
+    if (!cell) return;
+
+    if (index === 0) {
+      return;
     }
+
+    cell.innerHTML = "";
   });
 
-  const customRows = productRows.filter(r => {
-    const sizeInfo = getRowSizeInfo(r);
-    return sizeInfo.valid && sizeInfo.sizeType === "custom";
-  });
+  if (!firstCell) return;
 
-  if (customRows.length === 0) {
-    return;
+  if (firstCell.innerHTML.trim() === "") {
+    firstCell.innerHTML = buildInseamAreaHtml(
+      firstRow.dataset.productCategory,
+      firstRow.dataset.inseamAlterable || 0
+    );
   }
 
-  const displayRow = customRows[0];
-  const targetCell = displayRow.querySelector(".cell-inseam");
+  const newInput = getProductInseamInput(productCode);
 
-  if (!targetCell) return;
-
-  targetCell.classList.remove("hidden");
-
-  if (isInseamAlterable(displayRow)) {
-    targetCell.innerHTML = `
-      <div class="inseam-box">
-        <label>股下加工寸法</label><br>
-        <input
-          type="number"
-          class="inseamCmInput"
-          min="1"
-          max="120"
-          step="1"
-          inputmode="numeric"
-          placeholder="cm"
-          oninput="this.value=this.value.replace(/[^0-9]/g,'')"
-        > cm
-        <div class="small">必要な場合のみ入力してください。</div>
-      </div>
-    `;
-
-    const newInput = targetCell.querySelector(".inseamCmInput");
-    if (newInput) {
-      newInput.value = currentInseamCm;
-    }
-
-  } else {
-    targetCell.innerHTML = `
-      <div class="inseam-message">
-        股下加工のできない商品です
-      </div>
-    `;
+  if (newInput && currentInseamCm) {
+    newInput.value = currentInseamCm;
   }
 }
 
