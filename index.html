@@ -557,6 +557,14 @@ function getCustomer() {
 
 let currentData;
 
+/* ===== 修正モード用 ===== */
+const urlParams = new URLSearchParams(location.search);
+const isEditMode = urlParams.get("mode") === "edit";
+
+let editData = null;
+let editMeasureNo = "";
+/* ======================== */
+
 let currentMeasurementType = "";
 let currentMeasurementButton = null;
 
@@ -625,9 +633,9 @@ fetch(`config/${getCustomer()}.json`)
       "顧客：" + currentData.customerName;
 
     const reviseLink = document.getElementById("reviseLink");
-if (reviseLink) {
-  reviseLink.href = "revise.html?customer=" + encodeURIComponent(getCustomer());
-}
+    if (reviseLink) {
+      reviseLink.href = "revise.html?customer=" + encodeURIComponent(getCustomer());
+    }
 
     document.getElementById("table").innerHTML =
       "<tr><td colspan='6'>性別と職種を選択してください</td></tr>";
@@ -635,11 +643,251 @@ if (reviseLink) {
     document.getElementById("categoryStatus").innerHTML = "";
 
     updateJobOptions();
+
+    if (isEditMode) {
+      applyEditModeData();
+    }
   })
   .catch(error => {
     document.getElementById("table").innerHTML =
       "<tr><td colspan='6'>読み込みに失敗しました：" + error.message + "</td></tr>";
   });
+
+function applyEditModeData() {
+
+  editData = JSON.parse(sessionStorage.getItem("uniformEditData") || "null");
+
+  if (!editData || !editData.found || !editData.orders || editData.orders.length === 0) {
+    alert("修正対象データが見つかりません。もう一度検索してください。");
+    location.href = "revise.html?customer=" + encodeURIComponent(getCustomer());
+    return;
+  }
+
+  const base = editData.orders[0];
+
+  editMeasureNo =
+    editData.measureNo ||
+    base["採寸番号"] ||
+    "";
+
+  if (!editMeasureNo) {
+    alert("採寸番号が取得できませんでした。もう一度検索してください。");
+    location.href = "revise.html?customer=" + encodeURIComponent(getCustomer());
+    return;
+  }
+
+  const title = document.querySelector("h2");
+  if (title) {
+    title.innerText = "ユニフォーム申請（修正）";
+  }
+
+  const reviseLink = document.getElementById("reviseLink");
+  if (reviseLink) {
+    reviseLink.innerText = "修正対象を検索し直す";
+    reviseLink.href = "revise.html?customer=" + encodeURIComponent(getCustomer());
+  }
+
+  document.getElementById("sei").value = base["氏"] || "";
+  document.getElementById("mei").value = base["名"] || "";
+
+  document.getElementById("gender").value = base["性別"] || "";
+  updateJobOptions();
+
+  addMissingOption(document.getElementById("job"), base["職種"]);
+  document.getElementById("job").value = base["職種"] || "";
+
+  changeJob();
+
+  const departmentSelect = document.getElementById("department");
+  if (departmentSelect) {
+    addMissingOption(departmentSelect, base["部署"]);
+    departmentSelect.value = base["部署"] || "";
+  }
+
+  restoreMeasurementFromEditData(editData.measurement);
+  restoreOrdersFromEditData(editData.orders);
+
+  setBasicInfoReadOnly();
+
+  updateCategorySummary();
+  updateAllMeasurementButtons();
+}
+
+function addMissingOption(select, value) {
+
+  if (!select || !value) return;
+
+  const exists = Array.from(select.options).some(option => option.value === value);
+
+  if (!exists) {
+    const option = document.createElement("option");
+    option.value = value;
+    option.textContent = value;
+    select.appendChild(option);
+  }
+}
+
+function setBasicInfoReadOnly() {
+
+  const ids = [
+    "sei",
+    "mei",
+    "gender",
+    "job",
+    "department"
+  ];
+
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.disabled = true;
+      el.style.backgroundColor = "#eee";
+    }
+  });
+}
+
+function restoreOrdersFromEditData(orders) {
+
+  if (!orders || orders.length === 0) return;
+
+  const grouped = {};
+
+  orders.forEach(order => {
+    const productCode = String(order["商品コード"] || "");
+
+    if (!productCode) return;
+
+    if (!grouped[productCode]) {
+      grouped[productCode] = [];
+    }
+
+    grouped[productCode].push(order);
+  });
+
+  Object.keys(grouped).forEach(productCode => {
+
+    const orderList = grouped[productCode];
+
+    orderList.forEach((order, index) => {
+
+      let productRows = Array.from(
+        document.querySelectorAll(`tr[data-product-code="${productCode}"]`)
+      );
+
+      if (productRows.length === 0) return;
+
+      if (index >= productRows.length) {
+        const addButton = productRows[0].querySelector(".addSizeBtn");
+
+        if (addButton) {
+          addSameProductRow(addButton);
+        }
+
+        productRows = Array.from(
+          document.querySelectorAll(`tr[data-product-code="${productCode}"]`)
+        );
+      }
+
+      const row = productRows[index];
+
+      if (!row) return;
+
+      setProductRowValue(row, order);
+    });
+  });
+
+  updateCategorySummary();
+  updateAllMeasurementButtons();
+}
+
+function setProductRowValue(row, order) {
+
+  const size = String(order["サイズ"] || "");
+  const qty = order["数量"] || "";
+
+  const mainSizeSelect = row.querySelector(".mainSize");
+  const specialSizeSelect = row.querySelector(".specialSize");
+  const qtyInput = row.querySelector("input[type='number']");
+
+  if (!mainSizeSelect || !qtyInput) return;
+
+  const mainMatch = Array.from(mainSizeSelect.options).some(option => option.value === size);
+
+  if (mainMatch) {
+    mainSizeSelect.value = size;
+    checkMainSize(mainSizeSelect);
+  } else {
+    mainSizeSelect.value = "__OTHER__";
+    checkMainSize(mainSizeSelect);
+
+    if (specialSizeSelect) {
+      const specialMatch = Array.from(specialSizeSelect.options).some(option => option.value === size);
+
+      if (specialMatch) {
+        specialSizeSelect.value = size;
+      } else if (size) {
+        addMissingOption(specialSizeSelect, size);
+        specialSizeSelect.value = size;
+      }
+
+      checkSpecialSize(specialSizeSelect);
+    }
+  }
+
+  qtyInput.value = qty;
+  toggleAddSizeButton(qtyInput);
+}
+
+function restoreMeasurementFromEditData(measurement) {
+
+  if (!measurement) return;
+
+  measurementData.common.height = measurement["身長"] || "";
+  measurementData.common.weight = measurement["体重"] || "";
+  measurementData.common.method = measurement["採寸方法"] || "";
+
+  measurementData.upper.completed =
+    isTrueValue(measurement["上衣入力済"]) ||
+    measurement["採寸区分"] === "上衣" ||
+    measurement["採寸区分"] === "全身";
+
+  measurementData.upper.A = measurement["A_衿回り"] || "";
+  measurementData.upper.B = measurement["B_肩巾"] || "";
+  measurementData.upper.C1 = measurement["C1_袖丈_半袖"] || "";
+  measurementData.upper.C2 = measurement["C2_袖丈_七分袖"] || "";
+  measurementData.upper.C3 = measurement["C3_袖丈_長袖"] || "";
+  measurementData.upper.D = measurement["D_胸回り"] || "";
+  measurementData.upper.E = measurement["E_胴回り"] || "";
+  measurementData.upper.F = measurement["F_腰回り"] || "";
+  measurementData.upper.G = measurement["G_背丈"] || "";
+  measurementData.upper.H = measurement["H_着丈"] || "";
+  measurementData.upper.I = measurement["I_袖付回り"] || "";
+
+  measurementData.lower.completed =
+    isTrueValue(measurement["下衣入力済"]) ||
+    measurement["採寸区分"] === "下衣" ||
+    measurement["採寸区分"] === "全身";
+
+  measurementData.lower.a = measurement["a_胴回り"] || "";
+  measurementData.lower.b = measurement["b_腰回り"] || "";
+  measurementData.lower.c = measurement["c_股上"] || "";
+  measurementData.lower.d = measurement["d_股下"] || "";
+  measurementData.lower.e = measurement["e_総丈"] || "";
+  measurementData.lower.f = measurement["f_太股回り"] || "";
+
+  measurementData.specialNote = measurement["特記事項"] || "";
+  measurementData.memo = measurement["備考"] || "";
+}
+
+function isTrueValue(value) {
+
+  if (value === true) return true;
+  if (value === 1) return true;
+
+  const text = String(value || "").toUpperCase();
+
+  return text === "TRUE" || text === "1";
+}
 
 function changeGender() {
   updateJobOptions();
@@ -1679,13 +1927,17 @@ function submitData() {
 
   const payload = {
     orders: data,
-    measurement: measurementPayload
+    measurement: measurementPayload,
+
+    editMode: isEditMode,
+    measureNo: isEditMode ? editMeasureNo : "",
+    registrationType: isEditMode ? "修正" : "新規"
   };
 
   console.log(payload);
 
   sessionStorage.setItem("uniformDraft", JSON.stringify(payload));
-location.href = "confirm.html";
+  location.href = "confirm.html";
 }
 </script>
 
