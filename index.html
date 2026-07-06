@@ -216,6 +216,17 @@ button {
   font-weight: bold;
 }
 
+.inseam-box.disabled {
+  background: #eee;
+  border-left-color: #999;
+  color: #666;
+}
+
+.inseam-box.disabled input {
+  background: #ddd;
+  color: #666;
+}
+
 /* スマホ表示 */
 @media (max-width: 600px) {
 
@@ -1789,7 +1800,7 @@ function buildInseamAreaHtml(productCategory, inseamAlterable) {
   placeholder="cm"
   oninput="this.value=this.value.replace(/[^0-9]/g,'')"
 > cm
-        <div class="small">特注サイズで股下加工が必要な場合のみ入力してください。</div>
+        <div class="small inseam-help">股下加工が必要な場合のみ入力してください。</div>
       </div>
     `;
   }
@@ -1862,11 +1873,13 @@ function updateInseamAreaForProduct(row) {
     );
   }
 
-  const newInput = getProductInseamInput(productCode);
+ const newInput = getProductInseamInput(productCode);
 
   if (newInput && currentInseamCm) {
     newInput.value = currentInseamCm;
   }
+
+  updateInseamInputStateForProduct(productCode);
 }
 
 function updateAllInseamAreas() {
@@ -1912,6 +1925,50 @@ function restoreInseamFromEditData(orders) {
       restored[productCode] = true;
     }
   });
+}
+
+function updateInseamInputStateForProduct(productCode) {
+  const productRows = getRowsByProductCode(productCode);
+  if (productRows.length === 0) return;
+
+  const input = getProductInseamInput(productCode);
+  if (!input) return;
+
+  const box = input.closest(".inseam-box");
+
+  let hasBespoke = false;
+  let hasNonBespokeSelected = false;
+
+  productRows.forEach(row => {
+    const sizeInfo = getRowSizeInfo(row);
+
+    if (!sizeInfo.valid) return;
+
+    if (sizeInfo.size === "別寸") {
+      hasBespoke = true;
+    } else {
+      hasNonBespokeSelected = true;
+    }
+  });
+
+  // 別寸のみ選択されている場合は入力不可にする
+  if (hasBespoke && !hasNonBespokeSelected) {
+    input.value = "";
+    input.disabled = true;
+
+    if (box) {
+      box.classList.add("disabled");
+    }
+
+    return;
+  }
+
+  // 未選択、または別寸以外が選択されている場合は入力可能
+  input.disabled = false;
+
+  if (box) {
+    box.classList.remove("disabled");
+  }
 }
 
 function buildLimitDeclarationHtml(jobData) {
@@ -2146,14 +2203,17 @@ let inseamCm = "";
 // 股下加工可能商品で、別寸以外なら入力値を取得する
 // 数字が入力されていればOKとする
 if (inseamAlterable === 1 && sizeInfo.size !== "別寸") {
-  inseamCm = getInseamCmForProduct(productCode);
+  const inseamInput = getProductInseamInput(productCode);
+
+  if (inseamInput && !inseamInput.disabled) {
+    inseamCm = inseamInput.value.trim();
+  }
 
   if (inseamCm && !/^\d+$/.test(inseamCm)) {
     errorMessage = product + " の股下加工寸法は数字で入力してください。";
     return;
   }
 }
-
 
 data.push({
   ...common,
