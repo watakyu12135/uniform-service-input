@@ -379,7 +379,7 @@ button {
 
 <!-- 修正画面リンク -->
 <div class="top-links">
-  <a href="revise.html">入力済みの採寸情報を修正する方はこちら</a>
+  <a id="reviseLink" href="revise.html">入力済みの採寸情報を修正する方はこちら</a>
 </div>
 
 <h2>ユニフォーム申請</h2>
@@ -623,6 +623,11 @@ fetch(`config/${getCustomer()}.json`)
 
     document.getElementById("customerInfo").innerText =
       "顧客：" + currentData.customerName;
+
+    const reviseLink = document.getElementById("reviseLink");
+if (reviseLink) {
+  reviseLink.href = "revise.html?customer=" + encodeURIComponent(getCustomer());
+}
 
     document.getElementById("table").innerHTML =
       "<tr><td colspan='6'>性別と職種を選択してください</td></tr>";
