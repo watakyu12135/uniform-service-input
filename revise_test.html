@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>修正検索テスト</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body { font-family: sans-serif; padding: 20px; }
+input { font-size: 16px; padding: 8px; width: 100%; box-sizing: border-box; margin-bottom: 10px; }
+button { padding: 10px 16px; width: 100%; }
+pre { margin-top: 20px; padding: 12px; background: #f5f5f5; white-space: pre-wrap; }
+</style>
+</head>
+<body>
+
+<h2>修正検索テスト</h2>
+
+<label>顧客コード</label>
+<input id="customerCode" value="31015597">
+
+<label>採寸番号</label>
+<input id="measureNo" placeholder="例：E683218">
+
+<button onclick="searchTest()">検索テスト</button>
+
+<pre id="result">ここに結果が表示されます</pre>
+
+<script>
+const GAS_URL = "https://script.google.com/macros/s/AKfycbzifpGEKoydnvI9RAU6evgnHoWQh2YTx7WfXtqsi8O7tMoGbnyXzCC5bIVUY9QmUGZdlA/exec";
+
+async function searchTest() {
+  const customerCode = document.getElementById("customerCode").value.trim();
+  const measureNo = document.getElementById("measureNo").value.trim();
+  const resultArea = document.getElementById("result");
+
+  if (!customerCode) {
+    alert("顧客コードを入力してください。");
+    return;
+  }
+
+  if (!measureNo) {
+    alert("採寸番号を入力してください。");
+    return;
+  }
+
+  const payload = {
+    searchOnly: true,
+    customerCode: customerCode,
+    measureNo: measureNo
+  };
+
+  resultArea.innerText = "検索中...";
+
+  try {
+    const res = await fetch(GAS_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "text/plain;charset=utf-8"
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const text = await res.text();
+
+    try {
+      const json = JSON.parse(text);
+      resultArea.innerText = JSON.stringify(json, null, 2);
+    } catch (e) {
+      resultArea.innerText = text;
+    }
+
+  } catch (err) {
+    resultArea.innerText =
+      "エラーが発生しました。\n\n" +
+      err.message +
+      "\n\nブラウザのConsoleも確認してください。";
+  }
+}
+</script>
+
+</body>
+</html>
