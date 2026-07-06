@@ -28,9 +28,9 @@ p {
   font-size: 16px;
 }
 
-button {
+.back-button {
   margin-top: 24px;
-  padding: 12px 24px;
+  padding: 12px 28px;
   font-size: 16px;
 }
 </style>
@@ -46,10 +46,19 @@ button {
     施設ご担当者様にお問い合わせください。
   </p>
 
-  https://www.yahoo.co.jp/
-    戻る
-  </button>
+  <input
+    type="button"
+    class="back-button"
+    value="戻る"
+    id="backButton"
+  >
 </div>
+
+<script>
+document.getElementById("backButton").addEventListener("click", function() {
+  location.href = "https://www.yahoo.co.jp/";
+});
+</script>
 
 </body>
 </html>
