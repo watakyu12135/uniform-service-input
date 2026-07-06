@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>ユニフォーム受付フォーム</title>
+<title>ユニフォーム申請</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -1167,7 +1167,9 @@ function createTable(data, selectedJob, selectedGender) {
         const specialSizes = p.sizes.filter(size => size.type !== "standard");
 
         row += `<td class="cell-size">
-          <select class="mainSize" onchange="checkMainSize(this); toggleAddSizeButton(this.closest('tr').querySelector('input[type=number]')); updateCategorySummary();">
+          <select class="mainSize" onchange="checkMainSize(this); 
+toggleAddSizeButton(this.closest('tr').querySelector('.cell-qty input')); 
+updateCategorySummary();">
             <option value="">選択</option>`;
 
         standardSizes.forEach(size => {
@@ -1183,7 +1185,9 @@ function createTable(data, selectedJob, selectedGender) {
         row += `</select>`;
 
         row += `<div class="specialSizeArea hidden" style="margin-top:6px;">
-          <select class="specialSize" onchange="checkSpecialSize(this); toggleAddSizeButton(this.closest('tr').querySelector('input[type=number]')); updateCategorySummary();">
+          <select class="specialSize" onchange="checkSpecialSize(this); 
+toggleAddSizeButton(this.closest('tr').querySelector('.cell-qty input'));
+ updateCategorySummary();">
             <option value="">特注サイズを選択</option>`;
 
         specialSizes.forEach(size => {
@@ -1797,29 +1801,32 @@ function updateInseamAreaForProduct(row) {
   const currentInput = getProductInseamInput(productCode);
   const currentInseamCm = currentInput ? currentInput.value.trim() : "";
 
-  const firstRow = productRows[0];
-  const firstInseamCell = firstRow.querySelector(".cell-inseam");
-
   productRows.forEach(r => {
     const cell = r.querySelector(".cell-inseam");
     if (cell) {
       cell.innerHTML = "";
+      cell.classList.add("hidden");
     }
   });
 
-  if (!firstInseamCell) return;
-
-  const hasCustomSize = productRows.some(r => {
+  const customRows = productRows.filter(r => {
     const sizeInfo = getRowSizeInfo(r);
     return sizeInfo.valid && sizeInfo.sizeType === "custom";
   });
 
-  if (!hasCustomSize) {
+  if (customRows.length === 0) {
     return;
   }
 
-  if (isInseamAlterable(firstRow)) {
-    firstInseamCell.innerHTML = `
+  const displayRow = customRows[0];
+  const targetCell = displayRow.querySelector(".cell-inseam");
+
+  if (!targetCell) return;
+
+  targetCell.classList.remove("hidden");
+
+  if (isInseamAlterable(displayRow)) {
+    targetCell.innerHTML = `
       <div class="inseam-box">
         <label>股下加工寸法</label><br>
         <input
@@ -1836,19 +1843,20 @@ function updateInseamAreaForProduct(row) {
       </div>
     `;
 
-    const newInput = firstInseamCell.querySelector(".inseamCmInput");
+    const newInput = targetCell.querySelector(".inseamCmInput");
     if (newInput) {
       newInput.value = currentInseamCm;
     }
 
   } else {
-    firstInseamCell.innerHTML = `
+    targetCell.innerHTML = `
       <div class="inseam-message">
         股下加工のできない商品です
       </div>
     `;
   }
 }
+
 function updateAllInseamAreas() {
   const rows = Array.from(document.querySelectorAll("#table tr[data-product-code]"));
   const productCodes = [...new Set(rows.map(row => row.dataset.productCode))];
