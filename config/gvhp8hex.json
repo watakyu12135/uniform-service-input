@@ -19,15 +19,15 @@
     {
       "job": "看護師",
       "gender": "",
-      "department": "外来",
-      "displayOrder": 3,
+      "department": "手術室",
+      "displayOrder": 4,
       "active": true
     },
     {
       "job": "看護師",
       "gender": "",
-      "department": "手術室",
-      "displayOrder": 4,
+      "department": "外来",
+      "displayOrder": 3,
       "active": true
     },
     {
@@ -75,684 +75,8 @@
   ],
   "jobs": [
     {
-      "job": "一般事務",
-      "gender": "女性",
-      "products": [
-        {
-          "productCode": "GVEL-2208-B2",
-          "name": "ベスト",
-          "color": "グレー系",
-          "gender": "女性",
-          "productCategory": "ベスト",
-          "sizeSuffix": "号",
-          "sizes": [
-            {
-              "value": "5",
-              "label": "5号",
-              "type": "standard"
-            },
-            {
-              "value": "7",
-              "label": "7号",
-              "type": "standard"
-            },
-            {
-              "value": "9",
-              "label": "9号",
-              "type": "standard"
-            },
-            {
-              "value": "11",
-              "label": "11号",
-              "type": "standard"
-            },
-            {
-              "value": "13",
-              "label": "13号",
-              "type": "standard"
-            },
-            {
-              "value": "15",
-              "label": "15号",
-              "type": "standard"
-            },
-            {
-              "value": "17",
-              "label": "17号",
-              "type": "standard"
-            },
-            {
-              "value": "19",
-              "label": "19号",
-              "type": "standard"
-            },
-            {
-              "value": "別寸",
-              "label": "別寸",
-              "type": "bespoke"
-            }
-          ]
-        },
-        {
-          "productCode": "GSKL-2205-B9",
-          "name": "Aラインスカート",
-          "color": "黒",
-          "gender": "女性",
-          "productCategory": "スカート",
-          "sizeSuffix": "号",
-          "sizes": [
-            {
-              "value": "5",
-              "label": "5号",
-              "type": "standard"
-            },
-            {
-              "value": "7",
-              "label": "7号",
-              "type": "standard"
-            },
-            {
-              "value": "9",
-              "label": "9号",
-              "type": "standard"
-            },
-            {
-              "value": "11",
-              "label": "11号",
-              "type": "standard"
-            },
-            {
-              "value": "13",
-              "label": "13号",
-              "type": "standard"
-            },
-            {
-              "value": "15",
-              "label": "15号",
-              "type": "standard"
-            },
-            {
-              "value": "17",
-              "label": "17号",
-              "type": "standard"
-            },
-            {
-              "value": "19",
-              "label": "19号",
-              "type": "standard"
-            },
-            {
-              "value": "21",
-              "label": "21号",
-              "type": "standard"
-            },
-            {
-              "value": "別寸",
-              "label": "別寸",
-              "type": "bespoke"
-            }
-          ]
-        },
-        {
-          "productCode": "GBLL-1868-A1",
-          "name": "長袖ブラウス",
-          "color": "ホワイト",
-          "gender": "女性",
-          "productCategory": "ブラウス",
-          "sizeSuffix": "号",
-          "sizes": [
-            {
-              "value": "5",
-              "label": "5号",
-              "type": "standard"
-            },
-            {
-              "value": "7",
-              "label": "7号",
-              "type": "standard"
-            },
-            {
-              "value": "9",
-              "label": "9号",
-              "type": "standard"
-            },
-            {
-              "value": "11",
-              "label": "11号",
-              "type": "standard"
-            },
-            {
-              "value": "13",
-              "label": "13号",
-              "type": "standard"
-            },
-            {
-              "value": "15",
-              "label": "15号",
-              "type": "standard"
-            },
-            {
-              "value": "17",
-              "label": "17号",
-              "type": "standard"
-            },
-            {
-              "value": "19",
-              "label": "19号",
-              "type": "standard"
-            },
-            {
-              "value": "21",
-              "label": "21号",
-              "type": "standard"
-            },
-            {
-              "value": "別寸",
-              "label": "別寸",
-              "type": "bespoke"
-            }
-          ]
-        },
-        {
-          "productCode": "GBLL-1869-A1",
-          "name": "七分袖ブラウス",
-          "color": "ホワイト",
-          "gender": "女性",
-          "productCategory": "ブラウス",
-          "sizeSuffix": "号",
-          "sizes": [
-            {
-              "value": "5",
-              "label": "5号",
-              "type": "standard"
-            },
-            {
-              "value": "7",
-              "label": "7号",
-              "type": "standard"
-            },
-            {
-              "value": "9",
-              "label": "9号",
-              "type": "standard"
-            },
-            {
-              "value": "11",
-              "label": "11号",
-              "type": "standard"
-            },
-            {
-              "value": "13",
-              "label": "13号",
-              "type": "standard"
-            },
-            {
-              "value": "15",
-              "label": "15号",
-              "type": "standard"
-            },
-            {
-              "value": "17",
-              "label": "17号",
-              "type": "standard"
-            },
-            {
-              "value": "19",
-              "label": "19号",
-              "type": "standard"
-            },
-            {
-              "value": "21",
-              "label": "21号",
-              "type": "standard"
-            },
-            {
-              "value": "別寸",
-              "label": "別寸",
-              "type": "bespoke"
-            }
-          ]
-        },
-        {
-          "productCode": "GBLL-1870-A1",
-          "name": "半袖ブラウス",
-          "color": "ホワイト",
-          "gender": "女性",
-          "productCategory": "ブラウス",
-          "sizeSuffix": "号",
-          "sizes": [
-            {
-              "value": "5",
-              "label": "5号",
-              "type": "standard"
-            },
-            {
-              "value": "7",
-              "label": "7号",
-              "type": "standard"
-            },
-            {
-              "value": "9",
-              "label": "9号",
-              "type": "standard"
-            },
-            {
-              "value": "11",
-              "label": "11号",
-              "type": "standard"
-            },
-            {
-              "value": "13",
-              "label": "13号",
-              "type": "standard"
-            },
-            {
-              "value": "15",
-              "label": "15号",
-              "type": "standard"
-            },
-            {
-              "value": "17",
-              "label": "17号",
-              "type": "standard"
-            },
-            {
-              "value": "19",
-              "label": "19号",
-              "type": "standard"
-            },
-            {
-              "value": "21",
-              "label": "21号",
-              "type": "standard"
-            },
-            {
-              "value": "別寸",
-              "label": "別寸",
-              "type": "bespoke"
-            }
-          ]
-        }
-      ],
-      "categoryLimits": [
-        {
-          "productCategory": "ベスト",
-          "limit": 2
-        },
-        {
-          "productCategory": "スカート",
-          "limit": 2
-        },
-        {
-          "productCategory": "ブラウス",
-          "limit": 6
-        }
-      ],
-      "conversionRules": [
-        {
-          "fromProductCategory": "ベスト",
-          "toConsumptionCategory": "ベスト",
-          "qty": 1
-        },
-        {
-          "fromProductCategory": "スカート",
-          "toConsumptionCategory": "スカート",
-          "qty": 1
-        },
-        {
-          "fromProductCategory": "ブラウス",
-          "toConsumptionCategory": "ブラウス",
-          "qty": 1
-        }
-      ],
-      "categoryDisplay": [
-        {
-          "productCategory": "ベスト",
-          "displayOrder": 1,
-          "heading": "ベストを選んで下さい",
-          "note": ""
-        },
-        {
-          "productCategory": "ブラウス",
-          "displayOrder": 2,
-          "heading": "ブラウスを選んで下さい",
-          "note": ""
-        },
-        {
-          "productCategory": "スカート",
-          "displayOrder": 3,
-          "heading": "スカートを選んで下さい",
-          "note": ""
-        }
-      ]
-    },
-    {
-      "job": "健診センター",
-      "gender": "女性",
-      "products": [
-        {
-          "productCode": "GOBL-2004-B2",
-          "name": "オーバーブラウス",
-          "color": "グレー系",
-          "gender": "女性",
-          "productCategory": "ブラウス",
-          "sizeSuffix": "号",
-          "sizes": [
-            {
-              "value": "5",
-              "label": "5号",
-              "type": "standard"
-            },
-            {
-              "value": "7",
-              "label": "7号",
-              "type": "standard"
-            },
-            {
-              "value": "9",
-              "label": "9号",
-              "type": "standard"
-            },
-            {
-              "value": "11",
-              "label": "11号",
-              "type": "standard"
-            },
-            {
-              "value": "13",
-              "label": "13号",
-              "type": "standard"
-            },
-            {
-              "value": "15",
-              "label": "15号",
-              "type": "standard"
-            },
-            {
-              "value": "17",
-              "label": "17号",
-              "type": "standard"
-            },
-            {
-              "value": "19",
-              "label": "19号",
-              "type": "standard"
-            },
-            {
-              "value": "21",
-              "label": "21号",
-              "type": "standard"
-            },
-            {
-              "value": "別寸",
-              "label": "別寸",
-              "type": "bespoke"
-            }
-          ]
-        },
-        {
-          "productCode": "GSKL-2205-B9",
-          "name": "Aラインスカート",
-          "color": "黒",
-          "gender": "女性",
-          "productCategory": "スカート",
-          "sizeSuffix": "号",
-          "sizes": [
-            {
-              "value": "5",
-              "label": "5号",
-              "type": "standard"
-            },
-            {
-              "value": "7",
-              "label": "7号",
-              "type": "standard"
-            },
-            {
-              "value": "9",
-              "label": "9号",
-              "type": "standard"
-            },
-            {
-              "value": "11",
-              "label": "11号",
-              "type": "standard"
-            },
-            {
-              "value": "13",
-              "label": "13号",
-              "type": "standard"
-            },
-            {
-              "value": "15",
-              "label": "15号",
-              "type": "standard"
-            },
-            {
-              "value": "17",
-              "label": "17号",
-              "type": "standard"
-            },
-            {
-              "value": "19",
-              "label": "19号",
-              "type": "standard"
-            },
-            {
-              "value": "21",
-              "label": "21号",
-              "type": "standard"
-            },
-            {
-              "value": "別寸",
-              "label": "別寸",
-              "type": "bespoke"
-            }
-          ]
-        }
-      ],
-      "categoryLimits": [
-        {
-          "productCategory": "ブラウス",
-          "limit": 6
-        },
-        {
-          "productCategory": "スカート",
-          "limit": 2
-        }
-      ],
-      "conversionRules": [
-        {
-          "fromProductCategory": "ブラウス",
-          "toConsumptionCategory": "ブラウス",
-          "qty": 1
-        },
-        {
-          "fromProductCategory": "スカート",
-          "toConsumptionCategory": "スカート",
-          "qty": 1
-        }
-      ],
-      "categoryDisplay": [
-        {
-          "productCategory": "ブラウス",
-          "displayOrder": 1,
-          "heading": "ブラウスを選んで下さい",
-          "note": ""
-        },
-        {
-          "productCategory": "スカート",
-          "displayOrder": 2,
-          "heading": "スカートを選んで下さい",
-          "note": ""
-        }
-      ]
-    },
-    {
-      "job": "医療秘書",
-      "gender": "女性",
-      "products": [
-        {
-          "productCode": "GOBL-2004-B2",
-          "name": "オーバーブラウス",
-          "color": "グレー系",
-          "gender": "女性",
-          "productCategory": "ブラウス",
-          "sizeSuffix": "号",
-          "sizes": [
-            {
-              "value": "5",
-              "label": "5号",
-              "type": "standard"
-            },
-            {
-              "value": "7",
-              "label": "7号",
-              "type": "standard"
-            },
-            {
-              "value": "9",
-              "label": "9号",
-              "type": "standard"
-            },
-            {
-              "value": "11",
-              "label": "11号",
-              "type": "standard"
-            },
-            {
-              "value": "13",
-              "label": "13号",
-              "type": "standard"
-            },
-            {
-              "value": "15",
-              "label": "15号",
-              "type": "standard"
-            },
-            {
-              "value": "17",
-              "label": "17号",
-              "type": "standard"
-            },
-            {
-              "value": "19",
-              "label": "19号",
-              "type": "standard"
-            },
-            {
-              "value": "21",
-              "label": "21号",
-              "type": "standard"
-            },
-            {
-              "value": "別寸",
-              "label": "別寸",
-              "type": "bespoke"
-            }
-          ]
-        },
-        {
-          "productCode": "GSKL-2205-B9",
-          "name": "Aラインスカート",
-          "color": "黒",
-          "gender": "女性",
-          "productCategory": "スカート",
-          "sizeSuffix": "号",
-          "sizes": [
-            {
-              "value": "5",
-              "label": "5号",
-              "type": "standard"
-            },
-            {
-              "value": "7",
-              "label": "7号",
-              "type": "standard"
-            },
-            {
-              "value": "9",
-              "label": "9号",
-              "type": "standard"
-            },
-            {
-              "value": "11",
-              "label": "11号",
-              "type": "standard"
-            },
-            {
-              "value": "13",
-              "label": "13号",
-              "type": "standard"
-            },
-            {
-              "value": "15",
-              "label": "15号",
-              "type": "standard"
-            },
-            {
-              "value": "17",
-              "label": "17号",
-              "type": "standard"
-            },
-            {
-              "value": "19",
-              "label": "19号",
-              "type": "standard"
-            },
-            {
-              "value": "21",
-              "label": "21号",
-              "type": "standard"
-            },
-            {
-              "value": "別寸",
-              "label": "別寸",
-              "type": "bespoke"
-            }
-          ]
-        }
-      ],
-      "categoryLimits": [
-        {
-          "productCategory": "ブラウス",
-          "limit": 6
-        },
-        {
-          "productCategory": "スカート",
-          "limit": 2
-        }
-      ],
-      "conversionRules": [
-        {
-          "fromProductCategory": "ブラウス",
-          "toConsumptionCategory": "ブラウス",
-          "qty": 1
-        },
-        {
-          "fromProductCategory": "スカート",
-          "toConsumptionCategory": "スカート",
-          "qty": 1
-        }
-      ],
-      "categoryDisplay": [
-        {
-          "productCategory": "ブラウス",
-          "displayOrder": 1,
-          "heading": "ブラウスを選んで下さい",
-          "note": ""
-        },
-        {
-          "productCategory": "スカート",
-          "displayOrder": 2,
-          "heading": "スカートを選んで下さい",
-          "note": ""
-        }
-      ]
-    },
-    {
       "job": "看護師",
-      "gender": "女性",
+      "gender": "男性",
       "products": [
         {
           "productCode": "RT5402-5",
@@ -761,6 +85,7 @@
           "gender": "兼用",
           "productCategory": "上衣",
           "sizeSuffix": "サイズ",
+          "inseamAlterable": 0,
           "sizes": [
             {
               "value": "SS",
@@ -826,6 +151,7 @@
           "gender": "兼用",
           "productCategory": "上衣",
           "sizeSuffix": "サイズ",
+          "inseamAlterable": 0,
           "sizes": [
             {
               "value": "SS",
@@ -891,6 +217,7 @@
           "gender": "兼用",
           "productCategory": "上衣",
           "sizeSuffix": "サイズ",
+          "inseamAlterable": 0,
           "sizes": [
             {
               "value": "SS",
@@ -956,6 +283,7 @@
           "gender": "兼用",
           "productCategory": "上衣",
           "sizeSuffix": "サイズ",
+          "inseamAlterable": 0,
           "sizes": [
             {
               "value": "SS",
@@ -1021,6 +349,7 @@
           "gender": "兼用",
           "productCategory": "上衣",
           "sizeSuffix": "サイズ",
+          "inseamAlterable": 0,
           "sizes": [
             {
               "value": "SS",
@@ -1086,6 +415,7 @@
           "gender": "兼用",
           "productCategory": "上衣",
           "sizeSuffix": "サイズ",
+          "inseamAlterable": 0,
           "sizes": [
             {
               "value": "SS",
@@ -1151,6 +481,7 @@
           "gender": "兼用",
           "productCategory": "上衣",
           "sizeSuffix": "サイズ",
+          "inseamAlterable": 0,
           "sizes": [
             {
               "value": "SS",
@@ -1216,6 +547,7 @@
           "gender": "兼用",
           "productCategory": "上衣",
           "sizeSuffix": "サイズ",
+          "inseamAlterable": 0,
           "sizes": [
             {
               "value": "SS",
@@ -1281,6 +613,7 @@
           "gender": "兼用",
           "productCategory": "上衣",
           "sizeSuffix": "サイズ",
+          "inseamAlterable": 0,
           "sizes": [
             {
               "value": "SS",
@@ -1346,6 +679,7 @@
           "gender": "兼用",
           "productCategory": "上衣",
           "sizeSuffix": "サイズ",
+          "inseamAlterable": 0,
           "sizes": [
             {
               "value": "SS",
@@ -1411,6 +745,7 @@
           "gender": "兼用",
           "productCategory": "上衣",
           "sizeSuffix": "サイズ",
+          "inseamAlterable": 0,
           "sizes": [
             {
               "value": "SS",
@@ -1476,6 +811,973 @@
           "gender": "兼用",
           "productCategory": "下衣",
           "sizeSuffix": "サイズ",
+          "inseamAlterable": 1,
+          "sizes": [
+            {
+              "value": "SS",
+              "label": "SSサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "S",
+              "label": "Sサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "M",
+              "label": "Mサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "L",
+              "label": "Lサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "LL",
+              "label": "LLサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "BL",
+              "label": "BLサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "3S",
+              "label": "3Sサイズ",
+              "type": "custom"
+            },
+            {
+              "value": "B1",
+              "label": "B1サイズ",
+              "type": "custom"
+            },
+            {
+              "value": "B3",
+              "label": "B3サイズ",
+              "type": "custom"
+            },
+            {
+              "value": "B5",
+              "label": "B5サイズ",
+              "type": "custom"
+            },
+            {
+              "value": "別寸",
+              "label": "別寸",
+              "type": "bespoke"
+            }
+          ]
+        },
+        {
+          "productCode": "CFS9999-02",
+          "name": "男女兼用パンツ",
+          "color": "サックス",
+          "gender": "兼用",
+          "productCategory": "下衣",
+          "sizeSuffix": "サイズ",
+          "inseamAlterable": 0,
+          "sizes": [
+            {
+              "value": "SS",
+              "label": "SSサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "S",
+              "label": "Sサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "M",
+              "label": "Mサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "L",
+              "label": "Lサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "LL",
+              "label": "LLサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "BL",
+              "label": "BLサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "3S",
+              "label": "3Sサイズ",
+              "type": "custom"
+            },
+            {
+              "value": "B1",
+              "label": "B1サイズ",
+              "type": "custom"
+            },
+            {
+              "value": "B3",
+              "label": "B3サイズ",
+              "type": "custom"
+            },
+            {
+              "value": "B5",
+              "label": "B5サイズ",
+              "type": "custom"
+            },
+            {
+              "value": "別寸",
+              "label": "別寸",
+              "type": "bespoke"
+            }
+          ]
+        }
+      ],
+      "categoryLimits": [
+        {
+          "productCategory": "上衣",
+          "limit": 6
+        },
+        {
+          "productCategory": "下衣",
+          "limit": 6
+        }
+      ],
+      "conversionRules": [
+        {
+          "fromProductCategory": "上衣",
+          "toConsumptionCategory": "上衣",
+          "qty": 1
+        },
+        {
+          "fromProductCategory": "下衣",
+          "toConsumptionCategory": "下衣",
+          "qty": 1
+        }
+      ],
+      "categoryDisplay": [
+        {
+          "productCategory": "上衣",
+          "displayOrder": 1,
+          "heading": "上衣を選んで下さい",
+          "note": ""
+        },
+        {
+          "productCategory": "下衣",
+          "displayOrder": 1,
+          "heading": "下衣を選んで下さい",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "job": "看護師",
+      "gender": "女性",
+      "products": [
+        {
+          "productCode": "RT5402-5",
+          "name": "男女兼用スクラブ",
+          "color": "ピンク",
+          "gender": "兼用",
+          "productCategory": "上衣",
+          "sizeSuffix": "サイズ",
+          "inseamAlterable": 0,
+          "sizes": [
+            {
+              "value": "SS",
+              "label": "SSサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "S",
+              "label": "Sサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "M",
+              "label": "Mサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "L",
+              "label": "Lサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "LL",
+              "label": "LLサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "BL",
+              "label": "BLサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "3S",
+              "label": "3Sサイズ",
+              "type": "custom"
+            },
+            {
+              "value": "B1",
+              "label": "B1サイズ",
+              "type": "custom"
+            },
+            {
+              "value": "B3",
+              "label": "B3サイズ",
+              "type": "custom"
+            },
+            {
+              "value": "B5",
+              "label": "B5サイズ",
+              "type": "custom"
+            },
+            {
+              "value": "別寸",
+              "label": "別寸",
+              "type": "bespoke"
+            }
+          ]
+        },
+        {
+          "productCode": "RT5402-14",
+          "name": "男女兼用スクラブ",
+          "color": "ネイビー",
+          "gender": "兼用",
+          "productCategory": "上衣",
+          "sizeSuffix": "サイズ",
+          "inseamAlterable": 0,
+          "sizes": [
+            {
+              "value": "SS",
+              "label": "SSサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "S",
+              "label": "Sサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "M",
+              "label": "Mサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "L",
+              "label": "Lサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "LL",
+              "label": "LLサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "BL",
+              "label": "BLサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "3S",
+              "label": "3Sサイズ",
+              "type": "custom"
+            },
+            {
+              "value": "B1",
+              "label": "B1サイズ",
+              "type": "custom"
+            },
+            {
+              "value": "B3",
+              "label": "B3サイズ",
+              "type": "custom"
+            },
+            {
+              "value": "B5",
+              "label": "B5サイズ",
+              "type": "custom"
+            },
+            {
+              "value": "別寸",
+              "label": "別寸",
+              "type": "bespoke"
+            }
+          ]
+        },
+        {
+          "productCode": "RT5402-51",
+          "name": "男女兼用スクラブ",
+          "color": "バーガンディ",
+          "gender": "兼用",
+          "productCategory": "上衣",
+          "sizeSuffix": "サイズ",
+          "inseamAlterable": 0,
+          "sizes": [
+            {
+              "value": "SS",
+              "label": "SSサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "S",
+              "label": "Sサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "M",
+              "label": "Mサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "L",
+              "label": "Lサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "LL",
+              "label": "LLサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "BL",
+              "label": "BLサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "3S",
+              "label": "3Sサイズ",
+              "type": "custom"
+            },
+            {
+              "value": "B1",
+              "label": "B1サイズ",
+              "type": "custom"
+            },
+            {
+              "value": "B3",
+              "label": "B3サイズ",
+              "type": "custom"
+            },
+            {
+              "value": "B5",
+              "label": "B5サイズ",
+              "type": "custom"
+            },
+            {
+              "value": "別寸",
+              "label": "別寸",
+              "type": "bespoke"
+            }
+          ]
+        },
+        {
+          "productCode": "RT5402-36",
+          "name": "男女兼用スクラブ",
+          "color": "ロイヤルブルー",
+          "gender": "兼用",
+          "productCategory": "上衣",
+          "sizeSuffix": "サイズ",
+          "inseamAlterable": 0,
+          "sizes": [
+            {
+              "value": "SS",
+              "label": "SSサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "S",
+              "label": "Sサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "M",
+              "label": "Mサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "L",
+              "label": "Lサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "LL",
+              "label": "LLサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "BL",
+              "label": "BLサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "3S",
+              "label": "3Sサイズ",
+              "type": "custom"
+            },
+            {
+              "value": "B1",
+              "label": "B1サイズ",
+              "type": "custom"
+            },
+            {
+              "value": "B3",
+              "label": "B3サイズ",
+              "type": "custom"
+            },
+            {
+              "value": "B5",
+              "label": "B5サイズ",
+              "type": "custom"
+            },
+            {
+              "value": "別寸",
+              "label": "別寸",
+              "type": "bespoke"
+            }
+          ]
+        },
+        {
+          "productCode": "RT5402-53",
+          "name": "男女兼用スクラブ",
+          "color": "スカイブルー",
+          "gender": "兼用",
+          "productCategory": "上衣",
+          "sizeSuffix": "サイズ",
+          "inseamAlterable": 0,
+          "sizes": [
+            {
+              "value": "SS",
+              "label": "SSサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "S",
+              "label": "Sサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "M",
+              "label": "Mサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "L",
+              "label": "Lサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "LL",
+              "label": "LLサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "BL",
+              "label": "BLサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "3S",
+              "label": "3Sサイズ",
+              "type": "custom"
+            },
+            {
+              "value": "B1",
+              "label": "B1サイズ",
+              "type": "custom"
+            },
+            {
+              "value": "B3",
+              "label": "B3サイズ",
+              "type": "custom"
+            },
+            {
+              "value": "B5",
+              "label": "B5サイズ",
+              "type": "custom"
+            },
+            {
+              "value": "別寸",
+              "label": "別寸",
+              "type": "bespoke"
+            }
+          ]
+        },
+        {
+          "productCode": "RT5402-84",
+          "name": "男女兼用スクラブ",
+          "color": "ディープピンク",
+          "gender": "兼用",
+          "productCategory": "上衣",
+          "sizeSuffix": "サイズ",
+          "inseamAlterable": 0,
+          "sizes": [
+            {
+              "value": "SS",
+              "label": "SSサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "S",
+              "label": "Sサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "M",
+              "label": "Mサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "L",
+              "label": "Lサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "LL",
+              "label": "LLサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "BL",
+              "label": "BLサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "3S",
+              "label": "3Sサイズ",
+              "type": "custom"
+            },
+            {
+              "value": "B1",
+              "label": "B1サイズ",
+              "type": "custom"
+            },
+            {
+              "value": "B3",
+              "label": "B3サイズ",
+              "type": "custom"
+            },
+            {
+              "value": "B5",
+              "label": "B5サイズ",
+              "type": "custom"
+            },
+            {
+              "value": "別寸",
+              "label": "別寸",
+              "type": "bespoke"
+            }
+          ]
+        },
+        {
+          "productCode": "RT5402-89",
+          "name": "男女兼用スクラブ",
+          "color": "ターコイズ",
+          "gender": "兼用",
+          "productCategory": "上衣",
+          "sizeSuffix": "サイズ",
+          "inseamAlterable": 0,
+          "sizes": [
+            {
+              "value": "SS",
+              "label": "SSサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "S",
+              "label": "Sサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "M",
+              "label": "Mサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "L",
+              "label": "Lサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "LL",
+              "label": "LLサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "BL",
+              "label": "BLサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "3S",
+              "label": "3Sサイズ",
+              "type": "custom"
+            },
+            {
+              "value": "B1",
+              "label": "B1サイズ",
+              "type": "custom"
+            },
+            {
+              "value": "B3",
+              "label": "B3サイズ",
+              "type": "custom"
+            },
+            {
+              "value": "B5",
+              "label": "B5サイズ",
+              "type": "custom"
+            },
+            {
+              "value": "別寸",
+              "label": "別寸",
+              "type": "bespoke"
+            }
+          ]
+        },
+        {
+          "productCode": "FT4492-40",
+          "name": "男女兼用上衣",
+          "color": "Tピンク",
+          "gender": "兼用",
+          "productCategory": "上衣",
+          "sizeSuffix": "サイズ",
+          "inseamAlterable": 0,
+          "sizes": [
+            {
+              "value": "SS",
+              "label": "SSサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "S",
+              "label": "Sサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "M",
+              "label": "Mサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "L",
+              "label": "Lサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "LL",
+              "label": "LLサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "BL",
+              "label": "BLサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "3S",
+              "label": "3Sサイズ",
+              "type": "custom"
+            },
+            {
+              "value": "B1",
+              "label": "B1サイズ",
+              "type": "custom"
+            },
+            {
+              "value": "B3",
+              "label": "B3サイズ",
+              "type": "custom"
+            },
+            {
+              "value": "B5",
+              "label": "B5サイズ",
+              "type": "custom"
+            },
+            {
+              "value": "別寸",
+              "label": "別寸",
+              "type": "bespoke"
+            }
+          ]
+        },
+        {
+          "productCode": "FT4492-71",
+          "name": "男女兼用上衣",
+          "color": "Tネイビー",
+          "gender": "兼用",
+          "productCategory": "上衣",
+          "sizeSuffix": "サイズ",
+          "inseamAlterable": 0,
+          "sizes": [
+            {
+              "value": "SS",
+              "label": "SSサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "S",
+              "label": "Sサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "M",
+              "label": "Mサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "L",
+              "label": "Lサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "LL",
+              "label": "LLサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "BL",
+              "label": "BLサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "3S",
+              "label": "3Sサイズ",
+              "type": "custom"
+            },
+            {
+              "value": "B1",
+              "label": "B1サイズ",
+              "type": "custom"
+            },
+            {
+              "value": "B3",
+              "label": "B3サイズ",
+              "type": "custom"
+            },
+            {
+              "value": "B5",
+              "label": "B5サイズ",
+              "type": "custom"
+            },
+            {
+              "value": "別寸",
+              "label": "別寸",
+              "type": "bespoke"
+            }
+          ]
+        },
+        {
+          "productCode": "FT4492-79",
+          "name": "男女兼用上衣",
+          "color": "Tバーガンディ",
+          "gender": "兼用",
+          "productCategory": "上衣",
+          "sizeSuffix": "サイズ",
+          "inseamAlterable": 0,
+          "sizes": [
+            {
+              "value": "SS",
+              "label": "SSサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "S",
+              "label": "Sサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "M",
+              "label": "Mサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "L",
+              "label": "Lサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "LL",
+              "label": "LLサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "BL",
+              "label": "BLサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "3S",
+              "label": "3Sサイズ",
+              "type": "custom"
+            },
+            {
+              "value": "B1",
+              "label": "B1サイズ",
+              "type": "custom"
+            },
+            {
+              "value": "B3",
+              "label": "B3サイズ",
+              "type": "custom"
+            },
+            {
+              "value": "B5",
+              "label": "B5サイズ",
+              "type": "custom"
+            },
+            {
+              "value": "別寸",
+              "label": "別寸",
+              "type": "bespoke"
+            }
+          ]
+        },
+        {
+          "productCode": "FT4492-80",
+          "name": "男女兼用上衣",
+          "color": "TPグリーン",
+          "gender": "兼用",
+          "productCategory": "上衣",
+          "sizeSuffix": "サイズ",
+          "inseamAlterable": 0,
+          "sizes": [
+            {
+              "value": "SS",
+              "label": "SSサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "S",
+              "label": "Sサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "M",
+              "label": "Mサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "L",
+              "label": "Lサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "LL",
+              "label": "LLサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "BL",
+              "label": "BLサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "3S",
+              "label": "3Sサイズ",
+              "type": "custom"
+            },
+            {
+              "value": "B1",
+              "label": "B1サイズ",
+              "type": "custom"
+            },
+            {
+              "value": "B3",
+              "label": "B3サイズ",
+              "type": "custom"
+            },
+            {
+              "value": "B5",
+              "label": "B5サイズ",
+              "type": "custom"
+            },
+            {
+              "value": "別寸",
+              "label": "別寸",
+              "type": "bespoke"
+            }
+          ]
+        },
+        {
+          "productCode": "CFS2603-14",
+          "name": "男女兼用パンツ",
+          "color": "ネイビー",
+          "gender": "兼用",
+          "productCategory": "下衣",
+          "sizeSuffix": "サイズ",
+          "inseamAlterable": 1,
+          "sizes": [
+            {
+              "value": "SS",
+              "label": "SSサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "S",
+              "label": "Sサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "M",
+              "label": "Mサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "L",
+              "label": "Lサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "LL",
+              "label": "LLサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "BL",
+              "label": "BLサイズ",
+              "type": "standard"
+            },
+            {
+              "value": "3S",
+              "label": "3Sサイズ",
+              "type": "custom"
+            },
+            {
+              "value": "B1",
+              "label": "B1サイズ",
+              "type": "custom"
+            },
+            {
+              "value": "B3",
+              "label": "B3サイズ",
+              "type": "custom"
+            },
+            {
+              "value": "B5",
+              "label": "B5サイズ",
+              "type": "custom"
+            },
+            {
+              "value": "別寸",
+              "label": "別寸",
+              "type": "bespoke"
+            }
+          ]
+        },
+        {
+          "productCode": "CFS9999-02",
+          "name": "男女兼用パンツ",
+          "color": "サックス",
+          "gender": "兼用",
+          "productCategory": "下衣",
+          "sizeSuffix": "サイズ",
+          "inseamAlterable": 0,
           "sizes": [
             {
               "value": "SS",
@@ -1541,6 +1843,7 @@
           "gender": "女性",
           "productCategory": "ワンピース",
           "sizeSuffix": "サイズ",
+          "inseamAlterable": 0,
           "sizes": [
             {
               "value": "S",
@@ -1649,66 +1952,57 @@
       ]
     },
     {
-      "job": "看護師",
-      "gender": "男性",
+      "job": "一般事務",
+      "gender": "女性",
       "products": [
         {
-          "productCode": "RT5402-5",
-          "name": "男女兼用スクラブ",
-          "color": "ピンク",
-          "gender": "兼用",
-          "productCategory": "上衣",
-          "sizeSuffix": "サイズ",
+          "productCode": "GVEL-2208-B2",
+          "name": "ベスト",
+          "color": "グレー系",
+          "gender": "女性",
+          "productCategory": "ベスト",
+          "sizeSuffix": "号",
+          "inseamAlterable": 0,
           "sizes": [
             {
-              "value": "SS",
-              "label": "SSサイズ",
+              "value": "5",
+              "label": "5号",
               "type": "standard"
             },
             {
-              "value": "S",
-              "label": "Sサイズ",
+              "value": "7",
+              "label": "7号",
               "type": "standard"
             },
             {
-              "value": "M",
-              "label": "Mサイズ",
+              "value": "9",
+              "label": "9号",
               "type": "standard"
             },
             {
-              "value": "L",
-              "label": "Lサイズ",
+              "value": "11",
+              "label": "11号",
               "type": "standard"
             },
             {
-              "value": "LL",
-              "label": "LLサイズ",
+              "value": "13",
+              "label": "13号",
               "type": "standard"
             },
             {
-              "value": "BL",
-              "label": "BLサイズ",
+              "value": "15",
+              "label": "15号",
               "type": "standard"
             },
             {
-              "value": "3S",
-              "label": "3Sサイズ",
-              "type": "custom"
+              "value": "17",
+              "label": "17号",
+              "type": "standard"
             },
             {
-              "value": "B1",
-              "label": "B1サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "B3",
-              "label": "B3サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "B5",
-              "label": "B5サイズ",
-              "type": "custom"
+              "value": "19",
+              "label": "19号",
+              "type": "standard"
             },
             {
               "value": "別寸",
@@ -1718,62 +2012,58 @@
           ]
         },
         {
-          "productCode": "RT5402-14",
-          "name": "男女兼用スクラブ",
-          "color": "ネイビー",
-          "gender": "兼用",
-          "productCategory": "上衣",
-          "sizeSuffix": "サイズ",
+          "productCode": "GSKL-2205-B9",
+          "name": "Aラインスカート",
+          "color": "黒",
+          "gender": "女性",
+          "productCategory": "スカート",
+          "sizeSuffix": "号",
+          "inseamAlterable": 0,
           "sizes": [
             {
-              "value": "SS",
-              "label": "SSサイズ",
+              "value": "5",
+              "label": "5号",
               "type": "standard"
             },
             {
-              "value": "S",
-              "label": "Sサイズ",
+              "value": "7",
+              "label": "7号",
               "type": "standard"
             },
             {
-              "value": "M",
-              "label": "Mサイズ",
+              "value": "9",
+              "label": "9号",
               "type": "standard"
             },
             {
-              "value": "L",
-              "label": "Lサイズ",
+              "value": "11",
+              "label": "11号",
               "type": "standard"
             },
             {
-              "value": "LL",
-              "label": "LLサイズ",
+              "value": "13",
+              "label": "13号",
               "type": "standard"
             },
             {
-              "value": "BL",
-              "label": "BLサイズ",
+              "value": "15",
+              "label": "15号",
               "type": "standard"
             },
             {
-              "value": "3S",
-              "label": "3Sサイズ",
-              "type": "custom"
+              "value": "17",
+              "label": "17号",
+              "type": "standard"
             },
             {
-              "value": "B1",
-              "label": "B1サイズ",
-              "type": "custom"
+              "value": "19",
+              "label": "19号",
+              "type": "standard"
             },
             {
-              "value": "B3",
-              "label": "B3サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "B5",
-              "label": "B5サイズ",
-              "type": "custom"
+              "value": "21",
+              "label": "21号",
+              "type": "standard"
             },
             {
               "value": "別寸",
@@ -1783,62 +2073,58 @@
           ]
         },
         {
-          "productCode": "RT5402-51",
-          "name": "男女兼用スクラブ",
-          "color": "バーガンディ",
-          "gender": "兼用",
-          "productCategory": "上衣",
-          "sizeSuffix": "サイズ",
+          "productCode": "GBLL-1868-A1",
+          "name": "長袖ブラウス",
+          "color": "ホワイト",
+          "gender": "女性",
+          "productCategory": "ブラウス",
+          "sizeSuffix": "号",
+          "inseamAlterable": 0,
           "sizes": [
             {
-              "value": "SS",
-              "label": "SSサイズ",
+              "value": "5",
+              "label": "5号",
               "type": "standard"
             },
             {
-              "value": "S",
-              "label": "Sサイズ",
+              "value": "7",
+              "label": "7号",
               "type": "standard"
             },
             {
-              "value": "M",
-              "label": "Mサイズ",
+              "value": "9",
+              "label": "9号",
               "type": "standard"
             },
             {
-              "value": "L",
-              "label": "Lサイズ",
+              "value": "11",
+              "label": "11号",
               "type": "standard"
             },
             {
-              "value": "LL",
-              "label": "LLサイズ",
+              "value": "13",
+              "label": "13号",
               "type": "standard"
             },
             {
-              "value": "BL",
-              "label": "BLサイズ",
+              "value": "15",
+              "label": "15号",
               "type": "standard"
             },
             {
-              "value": "3S",
-              "label": "3Sサイズ",
-              "type": "custom"
+              "value": "17",
+              "label": "17号",
+              "type": "standard"
             },
             {
-              "value": "B1",
-              "label": "B1サイズ",
-              "type": "custom"
+              "value": "19",
+              "label": "19号",
+              "type": "standard"
             },
             {
-              "value": "B3",
-              "label": "B3サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "B5",
-              "label": "B5サイズ",
-              "type": "custom"
+              "value": "21",
+              "label": "21号",
+              "type": "standard"
             },
             {
               "value": "別寸",
@@ -1848,62 +2134,58 @@
           ]
         },
         {
-          "productCode": "RT5402-36",
-          "name": "男女兼用スクラブ",
-          "color": "ロイヤルブルー",
-          "gender": "兼用",
-          "productCategory": "上衣",
-          "sizeSuffix": "サイズ",
+          "productCode": "GBLL-1869-A1",
+          "name": "七分袖ブラウス",
+          "color": "ホワイト",
+          "gender": "女性",
+          "productCategory": "ブラウス",
+          "sizeSuffix": "号",
+          "inseamAlterable": 0,
           "sizes": [
             {
-              "value": "SS",
-              "label": "SSサイズ",
+              "value": "5",
+              "label": "5号",
               "type": "standard"
             },
             {
-              "value": "S",
-              "label": "Sサイズ",
+              "value": "7",
+              "label": "7号",
               "type": "standard"
             },
             {
-              "value": "M",
-              "label": "Mサイズ",
+              "value": "9",
+              "label": "9号",
               "type": "standard"
             },
             {
-              "value": "L",
-              "label": "Lサイズ",
+              "value": "11",
+              "label": "11号",
               "type": "standard"
             },
             {
-              "value": "LL",
-              "label": "LLサイズ",
+              "value": "13",
+              "label": "13号",
               "type": "standard"
             },
             {
-              "value": "BL",
-              "label": "BLサイズ",
+              "value": "15",
+              "label": "15号",
               "type": "standard"
             },
             {
-              "value": "3S",
-              "label": "3Sサイズ",
-              "type": "custom"
+              "value": "17",
+              "label": "17号",
+              "type": "standard"
             },
             {
-              "value": "B1",
-              "label": "B1サイズ",
-              "type": "custom"
+              "value": "19",
+              "label": "19号",
+              "type": "standard"
             },
             {
-              "value": "B3",
-              "label": "B3サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "B5",
-              "label": "B5サイズ",
-              "type": "custom"
+              "value": "21",
+              "label": "21号",
+              "type": "standard"
             },
             {
               "value": "別寸",
@@ -1913,517 +2195,58 @@
           ]
         },
         {
-          "productCode": "RT5402-53",
-          "name": "男女兼用スクラブ",
-          "color": "スカイブルー",
-          "gender": "兼用",
-          "productCategory": "上衣",
-          "sizeSuffix": "サイズ",
+          "productCode": "GBLL-1870-A1",
+          "name": "半袖ブラウス",
+          "color": "ホワイト",
+          "gender": "女性",
+          "productCategory": "ブラウス",
+          "sizeSuffix": "号",
+          "inseamAlterable": 0,
           "sizes": [
             {
-              "value": "SS",
-              "label": "SSサイズ",
+              "value": "5",
+              "label": "5号",
               "type": "standard"
             },
             {
-              "value": "S",
-              "label": "Sサイズ",
+              "value": "7",
+              "label": "7号",
               "type": "standard"
             },
             {
-              "value": "M",
-              "label": "Mサイズ",
+              "value": "9",
+              "label": "9号",
               "type": "standard"
             },
             {
-              "value": "L",
-              "label": "Lサイズ",
+              "value": "11",
+              "label": "11号",
               "type": "standard"
             },
             {
-              "value": "LL",
-              "label": "LLサイズ",
+              "value": "13",
+              "label": "13号",
               "type": "standard"
             },
             {
-              "value": "BL",
-              "label": "BLサイズ",
+              "value": "15",
+              "label": "15号",
               "type": "standard"
             },
             {
-              "value": "3S",
-              "label": "3Sサイズ",
-              "type": "custom"
-            },
-            {
-              "value": "B1",
-              "label": "B1サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "B3",
-              "label": "B3サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "B5",
-              "label": "B5サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "別寸",
-              "label": "別寸",
-              "type": "bespoke"
-            }
-          ]
-        },
-        {
-          "productCode": "RT5402-84",
-          "name": "男女兼用スクラブ",
-          "color": "ディープピンク",
-          "gender": "兼用",
-          "productCategory": "上衣",
-          "sizeSuffix": "サイズ",
-          "sizes": [
-            {
-              "value": "SS",
-              "label": "SSサイズ",
+              "value": "17",
+              "label": "17号",
               "type": "standard"
             },
             {
-              "value": "S",
-              "label": "Sサイズ",
+              "value": "19",
+              "label": "19号",
               "type": "standard"
             },
             {
-              "value": "M",
-              "label": "Mサイズ",
+              "value": "21",
+              "label": "21号",
               "type": "standard"
-            },
-            {
-              "value": "L",
-              "label": "Lサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "LL",
-              "label": "LLサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "BL",
-              "label": "BLサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "3S",
-              "label": "3Sサイズ",
-              "type": "custom"
-            },
-            {
-              "value": "B1",
-              "label": "B1サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "B3",
-              "label": "B3サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "B5",
-              "label": "B5サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "別寸",
-              "label": "別寸",
-              "type": "bespoke"
-            }
-          ]
-        },
-        {
-          "productCode": "RT5402-89",
-          "name": "男女兼用スクラブ",
-          "color": "ターコイズ",
-          "gender": "兼用",
-          "productCategory": "上衣",
-          "sizeSuffix": "サイズ",
-          "sizes": [
-            {
-              "value": "SS",
-              "label": "SSサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "S",
-              "label": "Sサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "M",
-              "label": "Mサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "L",
-              "label": "Lサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "LL",
-              "label": "LLサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "BL",
-              "label": "BLサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "3S",
-              "label": "3Sサイズ",
-              "type": "custom"
-            },
-            {
-              "value": "B1",
-              "label": "B1サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "B3",
-              "label": "B3サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "B5",
-              "label": "B5サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "別寸",
-              "label": "別寸",
-              "type": "bespoke"
-            }
-          ]
-        },
-        {
-          "productCode": "FT4492-40",
-          "name": "男女兼用上衣",
-          "color": "Tピンク",
-          "gender": "兼用",
-          "productCategory": "上衣",
-          "sizeSuffix": "サイズ",
-          "sizes": [
-            {
-              "value": "SS",
-              "label": "SSサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "S",
-              "label": "Sサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "M",
-              "label": "Mサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "L",
-              "label": "Lサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "LL",
-              "label": "LLサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "BL",
-              "label": "BLサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "3S",
-              "label": "3Sサイズ",
-              "type": "custom"
-            },
-            {
-              "value": "B1",
-              "label": "B1サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "B3",
-              "label": "B3サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "B5",
-              "label": "B5サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "別寸",
-              "label": "別寸",
-              "type": "bespoke"
-            }
-          ]
-        },
-        {
-          "productCode": "FT4492-71",
-          "name": "男女兼用上衣",
-          "color": "Tネイビー",
-          "gender": "兼用",
-          "productCategory": "上衣",
-          "sizeSuffix": "サイズ",
-          "sizes": [
-            {
-              "value": "SS",
-              "label": "SSサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "S",
-              "label": "Sサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "M",
-              "label": "Mサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "L",
-              "label": "Lサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "LL",
-              "label": "LLサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "BL",
-              "label": "BLサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "3S",
-              "label": "3Sサイズ",
-              "type": "custom"
-            },
-            {
-              "value": "B1",
-              "label": "B1サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "B3",
-              "label": "B3サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "B5",
-              "label": "B5サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "別寸",
-              "label": "別寸",
-              "type": "bespoke"
-            }
-          ]
-        },
-        {
-          "productCode": "FT4492-79",
-          "name": "男女兼用上衣",
-          "color": "Tバーガンディ",
-          "gender": "兼用",
-          "productCategory": "上衣",
-          "sizeSuffix": "サイズ",
-          "sizes": [
-            {
-              "value": "SS",
-              "label": "SSサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "S",
-              "label": "Sサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "M",
-              "label": "Mサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "L",
-              "label": "Lサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "LL",
-              "label": "LLサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "BL",
-              "label": "BLサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "3S",
-              "label": "3Sサイズ",
-              "type": "custom"
-            },
-            {
-              "value": "B1",
-              "label": "B1サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "B3",
-              "label": "B3サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "B5",
-              "label": "B5サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "別寸",
-              "label": "別寸",
-              "type": "bespoke"
-            }
-          ]
-        },
-        {
-          "productCode": "FT4492-80",
-          "name": "男女兼用上衣",
-          "color": "TPグリーン",
-          "gender": "兼用",
-          "productCategory": "上衣",
-          "sizeSuffix": "サイズ",
-          "sizes": [
-            {
-              "value": "SS",
-              "label": "SSサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "S",
-              "label": "Sサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "M",
-              "label": "Mサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "L",
-              "label": "Lサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "LL",
-              "label": "LLサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "BL",
-              "label": "BLサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "3S",
-              "label": "3Sサイズ",
-              "type": "custom"
-            },
-            {
-              "value": "B1",
-              "label": "B1サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "B3",
-              "label": "B3サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "B5",
-              "label": "B5サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "別寸",
-              "label": "別寸",
-              "type": "bespoke"
-            }
-          ]
-        },
-        {
-          "productCode": "CFS2603-14",
-          "name": "男女兼用パンツ",
-          "color": "ネイビー",
-          "gender": "兼用",
-          "productCategory": "下衣",
-          "sizeSuffix": "サイズ",
-          "sizes": [
-            {
-              "value": "SS",
-              "label": "SSサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "S",
-              "label": "Sサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "M",
-              "label": "Mサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "L",
-              "label": "Lサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "LL",
-              "label": "LLサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "BL",
-              "label": "BLサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "3S",
-              "label": "3Sサイズ",
-              "type": "custom"
-            },
-            {
-              "value": "B1",
-              "label": "B1サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "B3",
-              "label": "B3サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "B5",
-              "label": "B5サイズ",
-              "type": "custom"
             },
             {
               "value": "別寸",
@@ -2435,37 +2258,380 @@
       ],
       "categoryLimits": [
         {
-          "productCategory": "上衣",
-          "limit": 6
+          "productCategory": "ベスト",
+          "limit": 2
         },
         {
-          "productCategory": "下衣",
+          "productCategory": "スカート",
+          "limit": 2
+        },
+        {
+          "productCategory": "ブラウス",
           "limit": 6
         }
       ],
       "conversionRules": [
         {
-          "fromProductCategory": "上衣",
-          "toConsumptionCategory": "上衣",
+          "fromProductCategory": "ベスト",
+          "toConsumptionCategory": "ベスト",
           "qty": 1
         },
         {
-          "fromProductCategory": "下衣",
-          "toConsumptionCategory": "下衣",
+          "fromProductCategory": "スカート",
+          "toConsumptionCategory": "スカート",
+          "qty": 1
+        },
+        {
+          "fromProductCategory": "ブラウス",
+          "toConsumptionCategory": "ブラウス",
           "qty": 1
         }
       ],
       "categoryDisplay": [
         {
-          "productCategory": "上衣",
+          "productCategory": "ベスト",
           "displayOrder": 1,
-          "heading": "上衣を選んで下さい",
+          "heading": "ベストを選んで下さい",
           "note": ""
         },
         {
-          "productCategory": "下衣",
+          "productCategory": "ブラウス",
+          "displayOrder": 2,
+          "heading": "ブラウスを選んで下さい",
+          "note": ""
+        },
+        {
+          "productCategory": "スカート",
+          "displayOrder": 3,
+          "heading": "スカートを選んで下さい",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "job": "医療秘書",
+      "gender": "女性",
+      "products": [
+        {
+          "productCode": "GOBL-2004-B2",
+          "name": "オーバーブラウス",
+          "color": "グレー系",
+          "gender": "女性",
+          "productCategory": "ブラウス",
+          "sizeSuffix": "号",
+          "inseamAlterable": 0,
+          "sizes": [
+            {
+              "value": "5",
+              "label": "5号",
+              "type": "standard"
+            },
+            {
+              "value": "7",
+              "label": "7号",
+              "type": "standard"
+            },
+            {
+              "value": "9",
+              "label": "9号",
+              "type": "standard"
+            },
+            {
+              "value": "11",
+              "label": "11号",
+              "type": "standard"
+            },
+            {
+              "value": "13",
+              "label": "13号",
+              "type": "standard"
+            },
+            {
+              "value": "15",
+              "label": "15号",
+              "type": "standard"
+            },
+            {
+              "value": "17",
+              "label": "17号",
+              "type": "standard"
+            },
+            {
+              "value": "19",
+              "label": "19号",
+              "type": "standard"
+            },
+            {
+              "value": "21",
+              "label": "21号",
+              "type": "standard"
+            },
+            {
+              "value": "別寸",
+              "label": "別寸",
+              "type": "bespoke"
+            }
+          ]
+        },
+        {
+          "productCode": "GSKL-2205-B9",
+          "name": "Aラインスカート",
+          "color": "黒",
+          "gender": "女性",
+          "productCategory": "スカート",
+          "sizeSuffix": "号",
+          "inseamAlterable": 0,
+          "sizes": [
+            {
+              "value": "5",
+              "label": "5号",
+              "type": "standard"
+            },
+            {
+              "value": "7",
+              "label": "7号",
+              "type": "standard"
+            },
+            {
+              "value": "9",
+              "label": "9号",
+              "type": "standard"
+            },
+            {
+              "value": "11",
+              "label": "11号",
+              "type": "standard"
+            },
+            {
+              "value": "13",
+              "label": "13号",
+              "type": "standard"
+            },
+            {
+              "value": "15",
+              "label": "15号",
+              "type": "standard"
+            },
+            {
+              "value": "17",
+              "label": "17号",
+              "type": "standard"
+            },
+            {
+              "value": "19",
+              "label": "19号",
+              "type": "standard"
+            },
+            {
+              "value": "21",
+              "label": "21号",
+              "type": "standard"
+            },
+            {
+              "value": "別寸",
+              "label": "別寸",
+              "type": "bespoke"
+            }
+          ]
+        }
+      ],
+      "categoryLimits": [
+        {
+          "productCategory": "ブラウス",
+          "limit": 6
+        },
+        {
+          "productCategory": "スカート",
+          "limit": 2
+        }
+      ],
+      "conversionRules": [
+        {
+          "fromProductCategory": "ブラウス",
+          "toConsumptionCategory": "ブラウス",
+          "qty": 1
+        },
+        {
+          "fromProductCategory": "スカート",
+          "toConsumptionCategory": "スカート",
+          "qty": 1
+        }
+      ],
+      "categoryDisplay": [
+        {
+          "productCategory": "ブラウス",
           "displayOrder": 1,
-          "heading": "下衣を選んで下さい",
+          "heading": "ブラウスを選んで下さい",
+          "note": ""
+        },
+        {
+          "productCategory": "スカート",
+          "displayOrder": 2,
+          "heading": "スカートを選んで下さい",
+          "note": ""
+        }
+      ]
+    },
+    {
+      "job": "健診センター",
+      "gender": "女性",
+      "products": [
+        {
+          "productCode": "GOBL-2004-B2",
+          "name": "オーバーブラウス",
+          "color": "グレー系",
+          "gender": "女性",
+          "productCategory": "ブラウス",
+          "sizeSuffix": "号",
+          "inseamAlterable": 0,
+          "sizes": [
+            {
+              "value": "5",
+              "label": "5号",
+              "type": "standard"
+            },
+            {
+              "value": "7",
+              "label": "7号",
+              "type": "standard"
+            },
+            {
+              "value": "9",
+              "label": "9号",
+              "type": "standard"
+            },
+            {
+              "value": "11",
+              "label": "11号",
+              "type": "standard"
+            },
+            {
+              "value": "13",
+              "label": "13号",
+              "type": "standard"
+            },
+            {
+              "value": "15",
+              "label": "15号",
+              "type": "standard"
+            },
+            {
+              "value": "17",
+              "label": "17号",
+              "type": "standard"
+            },
+            {
+              "value": "19",
+              "label": "19号",
+              "type": "standard"
+            },
+            {
+              "value": "21",
+              "label": "21号",
+              "type": "standard"
+            },
+            {
+              "value": "別寸",
+              "label": "別寸",
+              "type": "bespoke"
+            }
+          ]
+        },
+        {
+          "productCode": "GSKL-2205-B9",
+          "name": "Aラインスカート",
+          "color": "黒",
+          "gender": "女性",
+          "productCategory": "スカート",
+          "sizeSuffix": "号",
+          "inseamAlterable": 0,
+          "sizes": [
+            {
+              "value": "5",
+              "label": "5号",
+              "type": "standard"
+            },
+            {
+              "value": "7",
+              "label": "7号",
+              "type": "standard"
+            },
+            {
+              "value": "9",
+              "label": "9号",
+              "type": "standard"
+            },
+            {
+              "value": "11",
+              "label": "11号",
+              "type": "standard"
+            },
+            {
+              "value": "13",
+              "label": "13号",
+              "type": "standard"
+            },
+            {
+              "value": "15",
+              "label": "15号",
+              "type": "standard"
+            },
+            {
+              "value": "17",
+              "label": "17号",
+              "type": "standard"
+            },
+            {
+              "value": "19",
+              "label": "19号",
+              "type": "standard"
+            },
+            {
+              "value": "21",
+              "label": "21号",
+              "type": "standard"
+            },
+            {
+              "value": "別寸",
+              "label": "別寸",
+              "type": "bespoke"
+            }
+          ]
+        }
+      ],
+      "categoryLimits": [
+        {
+          "productCategory": "ブラウス",
+          "limit": 6
+        },
+        {
+          "productCategory": "スカート",
+          "limit": 2
+        }
+      ],
+      "conversionRules": [
+        {
+          "fromProductCategory": "ブラウス",
+          "toConsumptionCategory": "ブラウス",
+          "qty": 1
+        },
+        {
+          "fromProductCategory": "スカート",
+          "toConsumptionCategory": "スカート",
+          "qty": 1
+        }
+      ],
+      "categoryDisplay": [
+        {
+          "productCategory": "ブラウス",
+          "displayOrder": 1,
+          "heading": "ブラウスを選んで下さい",
+          "note": ""
+        },
+        {
+          "productCategory": "スカート",
+          "displayOrder": 2,
+          "heading": "スカートを選んで下さい",
           "note": ""
         }
       ]
