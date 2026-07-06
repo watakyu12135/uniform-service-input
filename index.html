@@ -142,6 +142,37 @@ button {
   color: red;
 }
 
+/* 商品行の色分け */
+tr.product-row.row-theme-0,
+tr.product-row.row-theme-0 td {
+  background: #ffffff;
+}
+
+tr.product-row.row-theme-1,
+tr.product-row.row-theme-1 td {
+  background: #f7fbff;
+}
+
+tr.product-row.row-theme-2,
+tr.product-row.row-theme-2 td {
+  background: #fffaf2;
+}
+
+tr.product-row.row-theme-3,
+tr.product-row.row-theme-3 td {
+  background: #f8fff7;
+}
+
+/* 「他のサイズも選択する」で追加された行 */
+tr.product-row.extra-size-row,
+tr.product-row.extra-size-row td {
+  background: #fff1f1 !important;
+}
+
+tr.product-row.extra-size-row {
+  border-left: 6px solid #e57373;
+}
+
 /* 採寸画面 */
 .measurement-area {
   margin-top: 20px;
@@ -1210,13 +1241,13 @@ function createTable(data, selectedJob, selectedGender) {
   <th>採寸</th>
 </tr>`;
 
-      products.forEach(p => {
+      products.forEach((p, productIndex) => {
 
-        let row = `<tr
+       let row = `<tr
   data-product-code="${p.productCode}"
   data-product-category="${p.productCategory}"
   data-inseam-alterable="${p.inseamAlterable || 0}"
-  class="product-row"
+  class="product-row row-theme-${productIndex % 4}"
 >
           <td class="cell-product">${p.name}</td>
           <td class="cell-code">${p.productCode}</td>
@@ -1332,6 +1363,7 @@ function addSameProductRow(button) {
   }
 
   const clone = row.cloneNode(true);
+clone.classList.add("extra-size-row");
 
   clone.querySelectorAll("input").forEach(input => {
     input.value = "";
