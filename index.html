@@ -1782,15 +1782,13 @@ function buildInseamAreaHtml(productCategory, inseamAlterable) {
       <div class="inseam-box">
         <label>股下加工寸法</label><br>
         <input
-          type="number"
-          class="inseamCmInput"
-          min="1"
-          max="120"
-          step="1"
-          inputmode="numeric"
-          placeholder="cm"
-          oninput="this.value=this.value.replace(/[^0-9]/g,'')"
-        > cm
+  type="number"
+  class="inseamCmInput"
+  step="1"
+  inputmode="numeric"
+  placeholder="cm"
+  oninput="this.value=this.value.replace(/[^0-9]/g,'')"
+> cm
         <div class="small">特注サイズで股下加工が必要な場合のみ入力してください。</div>
       </div>
     `;
@@ -2145,22 +2143,16 @@ function submitData() {
     const inseamAlterable = isInseamAlterable(row) ? 1 : 0;
 let inseamCm = "";
 
-if (sizeInfo.sizeType === "custom" && inseamAlterable === 1) {
+// 股下加工可能商品で、別寸以外なら入力値を取得する
+// 数字が入力されていればOKとする
+if (inseamAlterable === 1 && sizeInfo.size !== "別寸") {
   inseamCm = getInseamCmForProduct(productCode);
 
-  if (inseamCm && !/^\d{1,3}$/.test(inseamCm)) {
-    errorMessage = product + " の股下加工寸法は半角数字で入力してください。";
+  if (inseamCm && !/^\d+$/.test(inseamCm)) {
+    errorMessage = product + " の股下加工寸法は数字で入力してください。";
     return;
   }
-
-  if (inseamCm) {
-    const inseamNumber = Number(inseamCm);
-
-    if (inseamNumber < 1 || inseamNumber > 120) {
-      errorMessage = product + " の股下加工寸法は1〜120cmで入力してください。";
-      return;
-    }
-  }
+}
 }
 
 data.push({
