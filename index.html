@@ -281,6 +281,28 @@ button {
 
 .cell-inseam {
   grid-area: inseam;
+  display: block !important;
+  width: 100%;
+  box-sizing: border-box;
+  border-top: 1px solid #ddd !important;
+  margin-top: 6px;
+  padding-top: 8px;
+}
+
+.cell-inseam:empty {
+  display: none !important;
+}
+
+.cell-inseam .inseam-box {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.cell-inseam .inseam-message {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
 }
 
   .cell-measure {
