@@ -113,7 +113,19 @@ function loadDraft() {
 
   renderOrders(orders);
   renderMeasurement(draft.measurement);
+
+  if (draft.editMode) {
+    document.querySelector("h2").innerText = "登録内容確認（修正）";
+    document.getElementById("submitBtn").innerText = "修正内容を登録する";
+
+    const message = document.getElementById("message");
+    if (message) {
+      message.classList.remove("error");
+      message.innerText = "修正登録です。採寸番号は現在の番号を引き継ぎます。";
+    }
+  }
 }
+
 
 function renderOrders(orders) {
   const area = document.getElementById("orderArea");
@@ -187,35 +199,54 @@ function validatePin() {
 }
 
 document.getElementById("submitBtn").addEventListener("click", () => {
+
   if (!validatePin()) return;
 
   const registrationNo = document.getElementById("pin").value.trim();
-  const measurementNo = generateMeasurementNo();
+
+  const isEdit = draft && draft.editMode === true;
+
+  const measurementNo = isEdit
+    ? draft.measureNo
+    : generateMeasurementNo();
+
+  const registrationType = isEdit
+    ? "修正"
+    : "新規";
+
+  if (isEdit && !measurementNo) {
+    alert("修正対象の採寸番号が取得できません。もう一度検索からやり直してください。");
+    return;
+  }
 
   const payload = JSON.parse(JSON.stringify(draft));
 
   payload["採寸番号"] = measurementNo;
   payload["登録番号"] = registrationNo;
-  payload["登録区分"] = "新規";
+  payload["登録区分"] = registrationType;
   payload["有効フラグ"] = 1;
+
+  payload.editMode = isEdit;
+  payload.measureNo = measurementNo;
+  payload.registrationType = registrationType;
 
   // 既存GAS互換用
   payload.measurementNo = measurementNo;
   payload.registrationNo = registrationNo;
-  payload.entryType = "新規";
+  payload.entryType = registrationType;
   payload.activeFlag = 1;
   payload.contactPin = registrationNo;
 
   payload.orders?.forEach(o => {
     o["採寸番号"] = measurementNo;
     o["登録番号"] = registrationNo;
-    o["登録区分"] = "新規";
+    o["登録区分"] = registrationType;
     o["有効フラグ"] = 1;
 
     // 既存GAS互換用
     o.measurementNo = measurementNo;
     o.registrationNo = registrationNo;
-    o.entryType = "新規";
+    o.entryType = registrationType;
     o.activeFlag = 1;
     o.contactPin = registrationNo;
   });
@@ -223,11 +254,16 @@ document.getElementById("submitBtn").addEventListener("click", () => {
   if (payload.measurement) {
     payload.measurement["採寸番号"] = measurementNo;
     payload.measurement["登録番号"] = registrationNo;
-    payload.measurement["登録区分"] = "新規";
+    payload.measurement["登録区分"] = registrationType;
     payload.measurement["有効フラグ"] = 1;
 
     // 既存互換用。あとで不要になったら削除可
     payload.measurement["修正用番号"] = registrationNo;
+    payload.measurement.measurementNo = measurementNo;
+    payload.measurement.registrationNo = registrationNo;
+    payload.measurement.entryType = registrationType;
+    payload.measurement.activeFlag = 1;
+    payload.measurement.contactPin = registrationNo;
   }
 
   fetch(GAS_URL, {
@@ -237,19 +273,27 @@ document.getElementById("submitBtn").addEventListener("click", () => {
     body: JSON.stringify(payload)
   });
 
-sessionStorage.setItem("uniformComplete", JSON.stringify({
-  measureNo: measurementNo,
-  registrationNo: registrationNo
-}));
+  sessionStorage.setItem("uniformComplete", JSON.stringify({
+    measureNo: measurementNo,
+    registrationNo: registrationNo,
+    editMode: isEdit,
+    registrationType: registrationType
+  }));
 
-// 完了画面で控えメールを送るため、メール本文用の登録内容を保持する
-// ※メールアドレスはここには保存しない
-sessionStorage.setItem("uniformMailDraft", JSON.stringify(payload));
+  // 完了画面で控えメールを送るため、メール本文用の登録内容を保持する
+  // ※メールアドレスはここには保存しない
+  sessionStorage.setItem("uniformMailDraft", JSON.stringify(payload));
 
-sessionStorage.removeItem("uniformDraft");
-location.href = "complete.html";
+  sessionStorage.removeItem("uniformDraft");
+
+  // 修正モード用データは、登録後は不要なので削除
+  if (isEdit) {
+    sessionStorage.removeItem("uniformEditData");
+    sessionStorage.removeItem("uniformEditCustomer");
+  }
+
+  location.href = "complete.html";
 });
-
 loadDraft();
 </script>
 </body>
