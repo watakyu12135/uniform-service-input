@@ -16,7 +16,7 @@ pre { margin-top: 20px; padding: 12px; background: #f5f5f5; white-space: pre-wra
 <h2>修正検索テスト</h2>
 
 <label>顧客コード</label>
-<input id="customerCode" value="31015597">
+<input id="customerCode" value="31019999">
 
 <label>採寸番号</label>
 <input id="measureNo" placeholder="例：E683218">
@@ -44,10 +44,13 @@ async function searchTest() {
   }
 
   const payload = {
-    searchOnly: true,
-    customerCode: customerCode,
-    measureNo: measureNo
-  };
+  searchOnly: true,
+  customerCode: customerCode,
+  sei: "minami",
+  mei: "てすこ",
+  job: "看護師",
+  registrationNo: "2486"
+};
 
   resultArea.innerText = "検索中...";
 
