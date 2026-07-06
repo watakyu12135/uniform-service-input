@@ -142,7 +142,7 @@ button {
   color: red;
 }
 
-/* 商品行の色分け */
+/* 通常の商品行：色A・色Bの交互表示 */
 tr.product-row.row-theme-0,
 tr.product-row.row-theme-0 td {
   background: #ffffff;
@@ -153,23 +153,25 @@ tr.product-row.row-theme-1 td {
   background: #f7fbff;
 }
 
-tr.product-row.row-theme-2,
-tr.product-row.row-theme-2 td {
-  background: #fffaf2;
-}
-
-tr.product-row.row-theme-3,
-tr.product-row.row-theme-3 td {
-  background: #f8fff7;
-}
-
-/* 「他のサイズも選択する」で追加された行 */
-tr.product-row.extra-size-row,
-tr.product-row.extra-size-row td {
+/* 「他のサイズも選択する」で追加された行：色C・色D・色E */
+tr.product-row.extra-size-row-1,
+tr.product-row.extra-size-row-1 td {
   background: #fff1f1 !important;
 }
 
-tr.product-row.extra-size-row {
+tr.product-row.extra-size-row-2,
+tr.product-row.extra-size-row-2 td {
+  background: #fff7e6 !important;
+}
+
+tr.product-row.extra-size-row-3,
+tr.product-row.extra-size-row-3 td {
+  background: #f1fff1 !important;
+}
+
+tr.product-row.extra-size-row-1,
+tr.product-row.extra-size-row-2,
+tr.product-row.extra-size-row-3 {
   border-left: 6px solid #e57373;
 }
 
@@ -1247,7 +1249,7 @@ function createTable(data, selectedJob, selectedGender) {
   data-product-code="${p.productCode}"
   data-product-category="${p.productCategory}"
   data-inseam-alterable="${p.inseamAlterable || 0}"
-  class="product-row row-theme-${productIndex % 4}"
+  class="product-row row-theme-${productIndex % 2}"
 >
           <td class="cell-product">${p.name}</td>
           <td class="cell-code">${p.productCode}</td>
@@ -1362,8 +1364,16 @@ function addSameProductRow(button) {
     return;
   }
 
-  const clone = row.cloneNode(true);
-clone.classList.add("extra-size-row");
+const clone = row.cloneNode(true);
+
+const extraIndex = productRows.length;
+clone.classList.remove(
+  "extra-size-row",
+  "extra-size-row-1",
+  "extra-size-row-2",
+  "extra-size-row-3"
+);
+clone.classList.add("extra-size-row-" + extraIndex);
 
   clone.querySelectorAll("input").forEach(input => {
     input.value = "";
