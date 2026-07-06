@@ -136,10 +136,13 @@ function renderOrders(orders) {
       currentCategory = o.productCategory;
       html += `<div class="category">${escapeHtml(currentCategory)}</div>`;
     }
+    const inseamCm = o["股下cm"] || o.inseamCm || "";
+
     html += `
       <div class="item">
         <div><strong>${escapeHtml(o.product)}</strong> ${escapeHtml(o.productCode)}</div>
         <div>色：${escapeHtml(o.color)} ／ サイズ：${escapeHtml(o.size)} ／ 数量：${escapeHtml(o.qty)}</div>
+        ${inseamCm ? `<div>股下加工：${escapeHtml(inseamCm)}cm</div>` : ""}
       </div>
     `;
   });
