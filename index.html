@@ -36,25 +36,31 @@ button {
   margin-top: 10px;
 }
 
-/* 氏名 */
+/* 氏名・フリガナ */
 .name-area {
-  display: flex;
-  gap: 12px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 12px;
   margin-bottom: 16px;
+  max-width: 520px;
 }
 
 .name-field {
-  display: flex;
+  display: grid;
+  grid-template-columns: 32px 1fr;
   align-items: center;
   gap: 6px;
 }
 
 .name-field label {
   font-weight: bold;
+  white-space: nowrap;
 }
 
 .name-field input {
-  width: 140px;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 16px;
 }
 
 /* 貸与枚数 */
@@ -353,26 +359,31 @@ button {
     min-height: 36px;
   }
 
-  .name-area {
-    display: block;
-  }
+.name-area {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 8px;
+  width: 100%;
+  max-width: none;
+}
 
-  .name-field {
-    display: flex;
-    align-items: center;
-    margin-bottom: 8px;
-  }
+.name-field {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  align-items: center;
+  gap: 4px;
+}
 
-  .name-field label {
-    width: 32px;
-  }
+.name-field label {
+  width: auto;
+  font-size: 14px;
+}
 
-  .name-field input {
-    flex: 1;
-    width: auto;
-    font-size: 16px;
-    box-sizing: border-box;
-  }
+.name-field input {
+  width: 100%;
+  font-size: 16px;
+  box-sizing: border-box;
+}
 
   .measure-inline:not(.hidden) {
     display: inline-block;
@@ -455,14 +466,25 @@ button {
 <div class="name-area">
   <div class="name-field">
     <label for="sei">氏</label>
-    <input id="sei">
+    <input id="sei" inputmode="text" autocomplete="family-name">
   </div>
 
   <div class="name-field">
     <label for="mei">名</label>
-    <input id="mei">
+    <input id="mei" inputmode="text" autocomplete="given-name">
+  </div>
+
+  <div class="name-field">
+    <label for="seiKana">シ</label>
+    <input id="seiKana" inputmode="katakana" autocomplete="off">
+  </div>
+
+  <div class="name-field">
+    <label for="meiKana">メイ</label>
+    <input id="meiKana" inputmode="katakana" autocomplete="off">
   </div>
 </div>
+
 
 性別：
 <select id="gender" onchange="changeGender()">
@@ -786,6 +808,9 @@ function applyEditModeData() {
   document.getElementById("sei").value = base["氏"] || "";
   document.getElementById("mei").value = base["名"] || "";
 
+document.getElementById("seiKana").value = base["シ"] || base.seiKana || "";
+document.getElementById("meiKana").value = base["メイ"] || base.meiKana || "";
+
   document.getElementById("gender").value = base["性別"] || "";
   updateJobOptions();
 
@@ -827,12 +852,14 @@ function addMissingOption(select, value) {
 function setBasicInfoReadOnly() {
 
   const ids = [
-    "sei",
-    "mei",
-    "gender",
-    "job",
-    "department"
-  ];
+  "sei",
+  "mei",
+  "seiKana",
+  "meiKana",
+  "gender",
+  "job",
+  "department"
+];
 
   ids.forEach(id => {
     const el = document.getElementById(id);
@@ -1666,8 +1693,10 @@ function buildMeasurementPayload(common) {
   "顧客コード": common.customerCode,
   "顧客名": common.customerName,
   "氏": common.sei,
-  "名": common.mei,
-  "性別": common.gender,
+"名": common.mei,
+"シ": common.seiKana,
+"メイ": common.meiKana,
+"性別": common.gender,
   "職種": common.job,
   "部署": common.department,
   "採寸区分": measurementType,
@@ -2170,16 +2199,71 @@ function validateCategoryLimitsBeforeSubmit() {
   return "";
 }
 
+function isFullWidthText(value) {
+  const text = String(value || "").trim();
+
+  if (!text) {
+    return false;
+  }
+
+  // 半角ASCII・半角カナを含まない = 全角のみ
+  return !/[\x00-\x7F\uFF61-\uFF9F]/.test(text);
+}
+
+function isFullWidthKatakana(value) {
+  const text = String(value || "").trim();
+
+  if (!text) {
+    return false;
+  }
+
+  // 全角カタカナ、長音、全角スペースのみ許可
+  return /^[ァ-ヶー　]+$/.test(text);
+}
 
 function submitData() {
+  const sei = document.getElementById("sei").value.trim();
+  const mei = document.getElementById("mei").value.trim();
+  const seiKana = document.getElementById("seiKana").value.trim();
+  const meiKana = document.getElementById("meiKana").value.trim();
 
-  if (!document.getElementById("sei").value) {
+  if (!sei) {
     alert("氏を入力してください");
     return;
   }
 
-  if (!document.getElementById("mei").value) {
+  if (!mei) {
     alert("名を入力してください");
+    return;
+  }
+
+  if (!seiKana) {
+    alert("シを入力してください");
+    return;
+  }
+
+  if (!meiKana) {
+    alert("メイを入力してください");
+    return;
+  }
+
+  if (!isFullWidthText(sei)) {
+    alert("氏は全角で入力してください");
+    return;
+  }
+
+  if (!isFullWidthText(mei)) {
+    alert("名は全角で入力してください");
+    return;
+  }
+
+  if (!isFullWidthKatakana(seiKana)) {
+    alert("シは全角カタカナで入力してください");
+    return;
+  }
+
+  if (!isFullWidthKatakana(meiKana)) {
+    alert("メイは全角カタカナで入力してください");
     return;
   }
 
@@ -2214,8 +2298,10 @@ function submitData() {
   updatedAt: now.toLocaleString("ja-JP"),
   customerCode: currentData.customerCode,
   customerName: currentData.customerName,
-  sei: document.getElementById("sei").value,
-  mei: document.getElementById("mei").value,
+sei: sei,
+mei: mei,
+seiKana: seiKana,
+meiKana: meiKana,
   gender: document.getElementById("gender").value,
   job: document.getElementById("job").value,
   department: departmentSelect ? departmentSelect.value : ""
