@@ -1999,15 +1999,11 @@ function getRowSizeInfo(row) {
   };
 }
 
-function isInseamTargetCategory(productCategory) {
-  const category = String(productCategory || "").trim();
-  return ["下衣", "パンツ", "スカート", "ズボン"].includes(category);
-}
-
 function buildInseamAreaHtml(productCategory, inseamAlterable) {
+  const category = String(productCategory || "");
   const canAlter = String(inseamAlterable || "").trim() === "1";
 
-  if (!isInseamTargetCategory(productCategory)) {
+  if (category !== "下衣") {
     return "";
   }
 
@@ -2080,15 +2076,16 @@ function updateInseamAreaForProduct(row) {
     cell.innerHTML = "";
   });
 
-  // 股下加工欄は、同じ商品の最後の行に表示する
-  const lastRow = productRows[productRows.length - 1];
-  const lastCell = lastRow.querySelector(".cell-inseam");
+  // 股下加工欄は、同じ商品の最初の行に表示する
+  // 追加サイズ行の背景色に巻き込まれないようにする
+  const baseRow = productRows[0];
+  const baseCell = baseRow.querySelector(".cell-inseam");
 
-  if (!lastCell) return;
+  if (!baseCell) return;
 
-  lastCell.innerHTML = buildInseamAreaHtml(
-    lastRow.dataset.productCategory,
-    lastRow.dataset.inseamAlterable || 0
+  baseCell.innerHTML = buildInseamAreaHtml(
+    baseRow.dataset.productCategory,
+    baseRow.dataset.inseamAlterable || 0
   );
 
   const newInput = getProductInseamInput(productCode);
@@ -2099,6 +2096,7 @@ function updateInseamAreaForProduct(row) {
 
   updateInseamInputStateForProduct(productCode);
 }
+
 function updateAllInseamAreas() {
   const rows = Array.from(document.querySelectorAll("#table tr[data-product-code]"));
   const productCodes = [...new Set(rows.map(row => row.dataset.productCode))];
