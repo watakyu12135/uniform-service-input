@@ -1,4 +1,4 @@
-﻿{
+{
   "customerCode": "31019999",
   "customerName": "サンプル病院",
   "basicInfos": [
@@ -172,15 +172,15 @@
       ],
       "categoryDisplay": [
         {
-          "productCategory": "下衣",
-          "displayOrder": 1,
-          "heading": "下衣を選んで下さい",
-          "note": ""
-        },
-        {
           "productCategory": "上衣",
           "displayOrder": 1,
           "heading": "上衣を選んで下さい",
+          "note": ""
+        },
+        {
+          "productCategory": "下衣",
+          "displayOrder": 2,
+          "heading": "下衣を選んで下さい",
           "note": ""
         }
       ]
