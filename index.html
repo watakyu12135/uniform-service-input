@@ -36,6 +36,22 @@ button {
   margin-top: 10px;
 }
 
+.basic-field {
+  margin-bottom: 12px;
+  max-width: 520px;
+}
+.basic-field label {
+  font-weight: bold;
+  display: inline-block;
+  min-width: 80px;
+}
+.basic-field input {
+  width: 260px;
+  max-width: 100%;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
 /* 氏名・フリガナ */
 .name-area {
   display: grid;
@@ -509,6 +525,12 @@ tr.product-row.extra-size-row-3 {
 <div id="customerInfo">顧客：読み込み中...</div>
 <br>
 
+<div id="employeeNoArea" class="basic-field hidden">
+  <label for="employeeNo">職員番号</label>
+  <input id="employeeNo" inputmode="latin" autocomplete="off" maxlength="30" oninput="normalizeEmployeeNoInput(this)">
+  <div class="small">半角英数字のみ</div>
+</div>
+
 <div class="name-area">
   <div class="name-field">
     <label for="sei">氏</label>
@@ -743,6 +765,45 @@ let editData = null;
 let editMeasureNo = "";
 /* ======================== */
 
+function getBasicInfoSetting(name) {
+  const infos = currentData && Array.isArray(currentData.basicInfos)
+    ? currentData.basicInfos
+    : [];
+  return infos.find(info => String(info.name || "") === name) || null;
+}
+
+function isBasicInfoActive(name) {
+  const info = getBasicInfoSetting(name);
+  if (["氏名", "性別", "職種"].includes(name)) return true;
+  if (!info) return false;
+  return info.active === true || info.active === 1 || String(info.active).toLowerCase() === "true";
+}
+
+function isEmployeeNoActive() {
+  return isBasicInfoActive("職員番号");
+}
+
+function setupBasicInfoVisibility() {
+  const employeeArea = document.getElementById("employeeNoArea");
+  if (!employeeArea) return;
+  if (isEmployeeNoActive()) {
+    employeeArea.classList.remove("hidden");
+  } else {
+    employeeArea.classList.add("hidden");
+    const employeeInput = document.getElementById("employeeNo");
+    if (employeeInput) employeeInput.value = "";
+  }
+}
+
+function normalizeEmployeeNoInput(input) {
+  if (!input) return;
+  input.value = String(input.value || "").replace(/[^A-Za-z0-9]/g, "");
+}
+
+function validateEmployeeNoValue(value) {
+  return /^[A-Za-z0-9]+$/.test(String(value || "").trim());
+}
+
 let currentMeasurementType = "";
 let currentMeasurementButton = null;
 
@@ -862,6 +923,11 @@ function applyEditModeData() {
     reviseLink.href = "revise.html?customer=" + encodeURIComponent(getCustomer());
   }
 
+  const employeeNoInput = document.getElementById("employeeNo");
+  if (employeeNoInput) {
+    employeeNoInput.value = base["職員番号"] || base.employeeNo || base.staffNo || "";
+  }
+
   document.getElementById("sei").value = base["氏"] || "";
   document.getElementById("mei").value = base["名"] || "";
 
@@ -909,6 +975,7 @@ function addMissingOption(select, value) {
 function setBasicInfoReadOnly() {
 
   const ids = [
+  "employeeNo",
   "sei",
   "mei",
   "seiKana",
@@ -1764,6 +1831,12 @@ function buildMeasurementPayload(common) {
   "登録ID": common.id,
   "顧客コード": common.customerCode,
   "顧客名": common.customerName,
+  "職員番号": common.employeeNo || "",
+  employeeNo: common.employeeNo || "",
+  staffNo: common.employeeNo || "",
+  publicKey: common.publicKey || "",
+  customerKey: common.customerKey || "",
+  customer: common.customer || "",
   "氏": common.sei,
 "名": common.mei,
 "シ": common.seiKana,
@@ -2303,6 +2376,20 @@ function isFullWidthKatakana(value) {
 }
 
 function submitData() {
+  const employeeNo = document.getElementById("employeeNo")
+    ? document.getElementById("employeeNo").value.trim()
+    : "";
+  if (isEmployeeNoActive()) {
+    if (!employeeNo) {
+      alert("職員番号を入力してください");
+      return;
+    }
+    if (!validateEmployeeNoValue(employeeNo)) {
+      alert("職員番号は半角英数字で入力してください");
+      return;
+    }
+  }
+
   const sei = document.getElementById("sei").value.trim();
   const mei = document.getElementById("mei").value.trim();
   const seiKana = document.getElementById("seiKana").value.trim();
@@ -2379,6 +2466,9 @@ function submitData() {
   updatedAt: now.toLocaleString("ja-JP"),
   customerCode: currentData.customerCode,
   customerName: currentData.customerName,
+  employeeNo: employeeNo,
+  staffNo: employeeNo,
+  "職員番号": employeeNo,
   publicKey: getCustomer(),
   customerKey: getCustomer(),
   customer: getCustomer(),
