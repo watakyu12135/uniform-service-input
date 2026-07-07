@@ -121,6 +121,23 @@ function escapeHtml(value) {
     .replaceAll("'", "&#039;");
 }
 
+function getCustomerKey() {
+  const url = new URL(window.location.href);
+  const customerKey =
+    url.searchParams.get("customer") ||
+    sessionStorage.getItem("uniformCustomer") ||
+    draft?.publicKey ||
+    draft?.customerKey ||
+    draft?.customer ||
+    "";
+
+  if (customerKey) {
+    sessionStorage.setItem("uniformCustomer", customerKey);
+  }
+
+  return customerKey;
+}
+
 /* 読み込み */
 function loadDraft() {
   const raw = sessionStorage.getItem("uniformDraft");
@@ -136,6 +153,13 @@ function loadDraft() {
     document.getElementById("message").innerText =
       "登録内容の読み込みに失敗しました。入力画面からやり直してください。";
     return;
+  }
+
+  const customerKey = getCustomerKey();
+  if (customerKey) {
+    draft.publicKey = customerKey;
+    draft.customerKey = customerKey;
+    draft.customer = customerKey;
   }
 
   const orders = draft.orders || [];
@@ -240,8 +264,12 @@ async function checkDuplicateBeforeSubmit(payload) {
   const first = orders[0] || {};
   const registrationNo = document.getElementById("pin").value.trim();
 
+  const customerKey = getCustomerKey();
   const checkPayload = {
     duplicateCheckOnly: true,
+    publicKey: customerKey,
+    customerKey: customerKey,
+    customer: customerKey,
     customerCode: first.customerCode || first["顧客コード"] || "",
     sei: first.sei || first["氏"] || "",
     mei: first.mei || first["名"] || "",
@@ -276,8 +304,12 @@ async function checkDuplicateOnLoad() {
   const orders = draft.orders || [];
   const first = orders[0] || {};
 
+  const customerKey = getCustomerKey();
   const checkPayload = {
     duplicateCheckOnly: true,
+    publicKey: customerKey,
+    customerKey: customerKey,
+    customer: customerKey,
     customerCode: first.customerCode || first["顧客コード"] || "",
     sei: first.sei || first["氏"] || "",
     mei: first.mei || first["名"] || "",
@@ -321,9 +353,7 @@ function showDuplicateWarning() {
   }
 
   if (reviseLink) {
-    reviseLink.href = "revise.html?customer=" + encodeURIComponent(
-      (draft.orders && draft.orders[0] && draft.orders[0].customerCode) || ""
-    );
+    reviseLink.href = "revise.html?customer=" + encodeURIComponent(getCustomerKey());
   }
 
   window.scrollTo({
@@ -393,6 +423,11 @@ document.getElementById("submitBtn").addEventListener("click", async () => {
   }
 
   const payload = JSON.parse(JSON.stringify(draft));
+  const customerKey = getCustomerKey();
+  payload.publicKey = customerKey;
+  payload.customerKey = customerKey;
+  payload.customer = customerKey;
+
 
   payload["採寸番号"] = measurementNo;
   payload["登録番号"] = registrationNo;
@@ -426,6 +461,9 @@ payload.rosterMismatchInfo = duplicateAlreadyConfirmed
   o.entryType = registrationType;
   o.activeFlag = 1;
   o.contactPin = registrationNo;
+  o.publicKey = customerKey;
+  o.customerKey = customerKey;
+  o.customer = customerKey;
 
   o.overrideDuplicate = duplicateAlreadyConfirmed;
   o.rosterMismatchInfo = duplicateAlreadyConfirmed
@@ -446,6 +484,9 @@ payload.rosterMismatchInfo = duplicateAlreadyConfirmed
     payload.measurement.entryType = registrationType;
     payload.measurement.activeFlag = 1;
     payload.measurement.contactPin = registrationNo;
+    payload.measurement.publicKey = customerKey;
+    payload.measurement.customerKey = customerKey;
+    payload.measurement.customer = customerKey;
   }
 
   try {
@@ -471,7 +512,8 @@ payload.rosterMismatchInfo = duplicateAlreadyConfirmed
       measureNo: measurementNo,
       registrationNo: registrationNo,
       editMode: isEdit,
-      registrationType: registrationType
+      registrationType: registrationType,
+      customerKey: customerKey
     }));
 
     sessionStorage.setItem("uniformMailDraft", JSON.stringify(payload));
