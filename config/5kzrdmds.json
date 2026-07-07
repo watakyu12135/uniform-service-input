@@ -176,13 +176,13 @@
           "productCategory": "上衣①",
           "displayOrder": 1,
           "heading": "上衣①を選んで下さい",
-          "note": ""
+          "note": "上衣は①と②合計で6枚です"
         },
         {
           "productCategory": "上衣②",
           "displayOrder": 1,
           "heading": "上衣②を選んで下さい",
-          "note": ""
+          "note": "上衣は①と②合計で6枚です"
         },
         {
           "productCategory": "パンツ",
@@ -359,13 +359,13 @@
           "productCategory": "上衣①",
           "displayOrder": 1,
           "heading": "上衣①を選んで下さい",
-          "note": ""
+          "note": "上衣は①と②合計で6枚です"
         },
         {
           "productCategory": "上衣②",
           "displayOrder": 1,
           "heading": "上衣②を選んで下さい",
-          "note": ""
+          "note": "上衣は①と②合計で6枚です"
         },
         {
           "productCategory": "ワンピース",
