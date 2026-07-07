@@ -690,7 +690,16 @@ const GAS_URL = "https://script.google.com/macros/s/AKfycbzifpGEKoydnvI9RAU6evgn
 
 function getCustomer() {
   const url = new URL(window.location.href);
-  return url.searchParams.get("customer") || "gvhp8hex";
+  const customerKey =
+    url.searchParams.get("customer") ||
+    sessionStorage.getItem("uniformCustomer") ||
+    "gvhp8hex";
+
+  if (customerKey) {
+    sessionStorage.setItem("uniformCustomer", customerKey);
+  }
+
+  return customerKey;
 }
 
 
@@ -2370,6 +2379,9 @@ function submitData() {
   updatedAt: now.toLocaleString("ja-JP"),
   customerCode: currentData.customerCode,
   customerName: currentData.customerName,
+  publicKey: getCustomer(),
+  customerKey: getCustomer(),
+  customer: getCustomer(),
 sei: sei,
 mei: mei,
 seiKana: seiKana,
@@ -2478,19 +2490,35 @@ if (hasBespokeWithoutMeasurement()) {
 
   const measurementPayload = buildMeasurementPayload(common);
 
+  const customerKey = getCustomer();
   const payload = {
     orders: data,
     measurement: measurementPayload,
-
     editMode: isEditMode,
     measureNo: isEditMode ? editMeasureNo : "",
-    registrationType: isEditMode ? "修正" : "新規"
+    registrationType: isEditMode ? "修正" : "新規",
+    publicKey: customerKey,
+    customerKey: customerKey,
+    customer: customerKey
   };
+
+  payload.orders.forEach(o => {
+    o.publicKey = customerKey;
+    o.customerKey = customerKey;
+    o.customer = customerKey;
+  });
+
+  if (payload.measurement) {
+    payload.measurement.publicKey = customerKey;
+    payload.measurement.customerKey = customerKey;
+    payload.measurement.customer = customerKey;
+  }
 
   console.log(payload);
 
+  sessionStorage.setItem("uniformCustomer", customerKey);
   sessionStorage.setItem("uniformDraft", JSON.stringify(payload));
-  location.href = "confirm.html";
+  location.href = "confirm.html?customer=" + encodeURIComponent(customerKey);
 }
 </script>
 
