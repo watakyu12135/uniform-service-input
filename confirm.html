@@ -60,8 +60,8 @@ label { font-weight: bold; display: block; margin-top: 10px; }
   <div id="orderArea"></div>
 </div>
 
-<!-- 採寸内容 -->
-<div class="section">
+<!-- 採寸内容：採寸入力がある場合のみ表示 -->
+<div id="measurementSection" class="section hidden">
   <h3>採寸入力内容</h3>
   <div id="measurementContent"></div>
 </div>
@@ -225,19 +225,27 @@ function renderOrders(orders) {
 }
 
 function renderMeasurement(measurement) {
+  const section = document.getElementById("measurementSection");
   const area = document.getElementById("measurementContent");
+
+  if (!section || !area) return;
+
   if (!measurement) {
-    area.innerText = "採寸入力なし";
+    section.classList.add("hidden");
+    area.innerHTML = "";
     return;
   }
 
-  const entries = Object.entries(measurement).filter(([k,v]) => v);
+  const entries = Object.entries(measurement).filter(([k, v]) => v);
+
   if (entries.length === 0) {
-    area.innerText = "採寸入力なし";
+    section.classList.add("hidden");
+    area.innerHTML = "";
     return;
   }
 
-  area.innerHTML = entries.map(([k,v]) =>
+  section.classList.remove("hidden");
+  area.innerHTML = entries.map(([k, v]) =>
     `<div>${escapeHtml(k)}：${escapeHtml(v)}</div>`
   ).join("");
 }
