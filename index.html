@@ -782,35 +782,43 @@ function isEmployeeNoActive() {
   return isBasicInfoActive("職員番号");
 }
 
+function isDepartmentActive() {
+  return isBasicInfoActive("部署");
+}
+
+
 function setupBasicInfoVisibility() {
   const employeeArea = document.getElementById("employeeNoArea");
   const employeeInput = document.getElementById("employeeNo");
 
-  if (!employeeArea) return;
+  if (employeeArea) {
+    if (isEmployeeNoActive()) {
+      employeeArea.classList.remove("hidden");
+    } else {
+      employeeArea.classList.add("hidden");
 
-  const infos = currentData && Array.isArray(currentData.basicInfos)
-    ? currentData.basicInfos
-    : [];
+      if (employeeInput) {
+        employeeInput.value = "";
+      }
+    }
+  }
 
-  const employeeInfo = infos.find(info =>
-    String(info.name || "").trim() === "職員番号"
-  );
+  const departmentArea = document.getElementById("departmentArea");
+  const departmentSelect = document.getElementById("department");
 
-  const activeValue = employeeInfo ? employeeInfo.active : false;
+  if (departmentArea && departmentSelect) {
+    if (isDepartmentActive()) {
+      departmentArea.classList.remove("hidden");
 
-  const showEmployeeNo =
-    activeValue === true ||
-    activeValue === 1 ||
-    String(activeValue).trim().toLowerCase() === "true" ||
-    String(activeValue).trim() === "1";
-
-  if (showEmployeeNo) {
-    employeeArea.classList.remove("hidden");
-  } else {
-    employeeArea.classList.add("hidden");
-
-    if (employeeInput) {
-      employeeInput.value = "";
+      if (!departmentSelect.value && departmentSelect.options.length <= 1) {
+        departmentSelect.innerHTML =
+          '<option value="">性別と職種を選択してください</option>';
+        departmentSelect.disabled = true;
+      }
+    } else {
+      departmentArea.classList.add("hidden");
+      departmentSelect.innerHTML = '<option value="">選択</option>';
+      departmentSelect.disabled = false;
     }
   }
 }
@@ -1198,28 +1206,33 @@ function updateJobOptions() {
 }
 
 function changeJob() {
-
   const job = document.getElementById("job").value;
   const gender = document.getElementById("gender").value;
 
-  
-if (!job || !gender) {
-  document.getElementById("table").innerHTML =
-    "<tr><td colspan='7'>性別と職種を選択してください</td></tr>";
-  document.getElementById("categoryStatus").innerHTML = "";
+  if (!job || !gender) {
+    document.getElementById("table").innerHTML =
+      "<tr><td colspan='7'>性別と職種を選択してください</td></tr>";
+    document.getElementById("categoryStatus").innerHTML = "";
 
-  const limitArea = document.getElementById("limitDeclarationArea");
-  if (limitArea) {
-    limitArea.innerHTML = "";
-  }
+    const limitArea = document.getElementById("limitDeclarationArea");
+    if (limitArea) {
+      limitArea.innerHTML = "";
+    }
 
-  const departmentArea = document.getElementById("departmentArea");
-  const departmentSelect = document.getElementById("department");
+    const departmentArea = document.getElementById("departmentArea");
+    const departmentSelect = document.getElementById("department");
 
-
-    if (departmentArea) departmentArea.classList.add("hidden");
-    if (departmentSelect) {
-      departmentSelect.innerHTML = '<option value="">選択</option>';
+    if (departmentArea && departmentSelect) {
+      if (isDepartmentActive()) {
+        departmentArea.classList.remove("hidden");
+        departmentSelect.innerHTML =
+          '<option value="">性別と職種を選択してください</option>';
+        departmentSelect.disabled = true;
+      } else {
+        departmentArea.classList.add("hidden");
+        departmentSelect.innerHTML = '<option value="">選択</option>';
+        departmentSelect.disabled = false;
+      }
     }
 
     return;
@@ -1236,11 +1249,19 @@ if (!job || !gender) {
 }
 
 function updateDepartmentOptions() {
-
   const departmentArea = document.getElementById("departmentArea");
   const departmentSelect = document.getElementById("department");
 
   if (!departmentArea || !departmentSelect) return;
+
+  if (!isDepartmentActive()) {
+    departmentArea.classList.add("hidden");
+    departmentSelect.innerHTML = '<option value="">選択</option>';
+    departmentSelect.disabled = false;
+    return;
+  }
+
+  departmentArea.classList.remove("hidden");
 
   const job = document.getElementById("job").value;
   const gender = document.getElementById("gender").value;
@@ -1248,7 +1269,9 @@ function updateDepartmentOptions() {
   departmentSelect.innerHTML = '<option value="">選択</option>';
 
   if (!currentData || !currentData.departments || !job || !gender) {
-    departmentArea.classList.add("hidden");
+    departmentSelect.innerHTML =
+      '<option value="">性別と職種を選択してください</option>';
+    departmentSelect.disabled = true;
     return;
   }
 
@@ -1261,9 +1284,13 @@ function updateDepartmentOptions() {
     .sort((a, b) => (a.displayOrder || 9999) - (b.displayOrder || 9999));
 
   if (departments.length === 0) {
-    departmentArea.classList.add("hidden");
+    departmentSelect.innerHTML =
+      '<option value="">該当する部署なし</option>';
+    departmentSelect.disabled = true;
     return;
   }
+
+  departmentSelect.disabled = false;
 
   departments.forEach(d => {
     const option = document.createElement("option");
@@ -1271,8 +1298,6 @@ function updateDepartmentOptions() {
     option.textContent = d.department;
     departmentSelect.appendChild(option);
   });
-
-  departmentArea.classList.remove("hidden");
 }
 
 function createTable(data, selectedJob, selectedGender) {
