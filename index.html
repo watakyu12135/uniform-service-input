@@ -528,7 +528,6 @@ tr.product-row.extra-size-row-3 {
 <div id="employeeNoArea" class="basic-field hidden">
   <label for="employeeNo">職員番号</label>
   <input id="employeeNo" inputmode="latin" autocomplete="off" maxlength="30" oninput="normalizeEmployeeNoInput(this)">
-  <div class="small">半角英数字のみ</div>
 </div>
 
 <div class="name-area">
@@ -785,13 +784,34 @@ function isEmployeeNoActive() {
 
 function setupBasicInfoVisibility() {
   const employeeArea = document.getElementById("employeeNoArea");
+  const employeeInput = document.getElementById("employeeNo");
+
   if (!employeeArea) return;
-  if (isEmployeeNoActive()) {
+
+  const infos = currentData && Array.isArray(currentData.basicInfos)
+    ? currentData.basicInfos
+    : [];
+
+  const employeeInfo = infos.find(info =>
+    String(info.name || "").trim() === "職員番号"
+  );
+
+  const activeValue = employeeInfo ? employeeInfo.active : false;
+
+  const showEmployeeNo =
+    activeValue === true ||
+    activeValue === 1 ||
+    String(activeValue).trim().toLowerCase() === "true" ||
+    String(activeValue).trim() === "1";
+
+  if (showEmployeeNo) {
     employeeArea.classList.remove("hidden");
   } else {
     employeeArea.classList.add("hidden");
-    const employeeInput = document.getElementById("employeeNo");
-    if (employeeInput) employeeInput.value = "";
+
+    if (employeeInput) {
+      employeeInput.value = "";
+    }
   }
 }
 
@@ -862,11 +882,11 @@ checkPageDeadline()
       return;
     }
 
-    currentData = data;
+currentData = data;
+setupBasicInfoVisibility();
 
-  
-    document.getElementById("customerInfo").innerText =
-      "顧客：" + currentData.customerName;
+document.getElementById("customerInfo").innerText =
+  "顧客：" + currentData.customerName;
 
     const reviseLink = document.getElementById("reviseLink");
     if (reviseLink) {
