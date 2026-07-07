@@ -313,15 +313,19 @@ document.getElementById("submitBtn").addEventListener("click", async () => {
       const tempPayload = JSON.parse(JSON.stringify(draft));
       const duplicateResult = await checkDuplicateBeforeSubmit(tempPayload);
 
-      if (duplicateResult.sameRegistrationNoFound) {
-        alert("その番号はすでに使われています。別番号で登録してください。");
-        return;
-      }
-
       if (duplicateResult.duplicateNameFound && !duplicateAlreadyConfirmed) {
-        showDuplicateWarning();
-        return;
-      }
+  showDuplicateWarning();
+  return;
+}
+
+if (
+  duplicateResult.duplicateNameFound &&
+  duplicateAlreadyConfirmed &&
+  duplicateResult.sameRegistrationNoFound
+) {
+  alert("その番号はすでに使われています。別番号で登録してください。");
+  return;
+}
 
     } catch (err) {
       alert("重複チェック中にエラーが発生しました。\n" + err.message);
