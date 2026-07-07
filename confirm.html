@@ -378,14 +378,40 @@ function showDuplicateWarning() {
   });
 }
 
+let submitInProgress = false;
+
+function lockSubmitButton(isEdit) {
+  const submitBtn = document.getElementById("submitBtn");
+  submitInProgress = true;
+  submitBtn.disabled = true;
+  submitBtn.innerText = "送信中...";
+}
+
+function resetSubmitButton(isEdit) {
+  const submitBtn = document.getElementById("submitBtn");
+  const confirmCheck = document.getElementById("confirmCheck");
+  submitInProgress = false;
+  submitBtn.innerText = isEdit ? "修正内容を登録する" : "登録する";
+  submitBtn.disabled = !(confirmCheck && confirmCheck.checked);
+}
+
 document.getElementById("submitBtn").addEventListener("click", async () => {
-  if (!validatePin()) return;
+  if (submitInProgress) {
+    return;
+  }
 
   const submitBtn = document.getElementById("submitBtn");
-
   const isEdit = draft && draft.editMode === true;
 
-  const duplicateArea = document.getElementById("duplicateWarningArea");
+  // 二重押し防止のため、登録前チェックより先に即時ロックする
+  lockSubmitButton(isEdit);
+
+  if (!validatePin()) {
+    resetSubmitButton(isEdit);
+    return;
+  }
+
+const duplicateArea = document.getElementById("duplicateWarningArea");
   const duplicateCheck = document.getElementById("duplicateConfirmCheck");
   const duplicateAlreadyConfirmed =
     duplicateArea &&
@@ -401,6 +427,7 @@ document.getElementById("submitBtn").addEventListener("click", async () => {
     if (duplicateResult.duplicateNameFound && !duplicateAlreadyConfirmed) {
       showDuplicateWarning();
       alert("確認の上、このまま登録する場合はチェックを入れてください。");
+      resetSubmitButton(isEdit);
       return;
     }
 
@@ -410,17 +437,16 @@ document.getElementById("submitBtn").addEventListener("click", async () => {
       duplicateResult.sameRegistrationNoFound
     ) {
       alert("その番号はすでに使われています。別番号で登録してください。");
+      resetSubmitButton(isEdit);
       return;
     }
 
   } catch (err) {
     alert("重複チェック中にエラーが発生しました。\n" + err.message);
+    resetSubmitButton(isEdit);
     return;
   }
 }
-
-  submitBtn.disabled = true;
-  submitBtn.innerText = "送信中...";
 
   const registrationNo = document.getElementById("pin").value.trim();
 
@@ -433,8 +459,7 @@ document.getElementById("submitBtn").addEventListener("click", async () => {
     : "新規";
   if (isEdit && !measurementNo) {
     alert("修正対象の採寸番号が取得できません。もう一度検索からやり直してください。");
-    submitBtn.disabled = false;
-    submitBtn.innerText = isEdit ? "修正内容を登録する" : "登録する";
+    resetSubmitButton(isEdit);
     return;
   }
 
@@ -522,8 +547,7 @@ payload.rosterMismatchInfo = duplicateAlreadyConfirmed
 
     if (json.result !== "ok") {
       alert("登録に失敗しました。時間をおいて再度お試しください。\n" + (json.message || ""));
-      submitBtn.disabled = false;
-      submitBtn.innerText = isEdit ? "修正内容を登録する" : "登録する";
+      resetSubmitButton(isEdit);
       return;
     }
 
@@ -549,8 +573,7 @@ payload.rosterMismatchInfo = duplicateAlreadyConfirmed
   } catch (err) {
     alert("登録送信中にエラーが発生しました。\n通信環境を確認して、再度お試しください。\n\n" + err.message);
 
-    submitBtn.disabled = false;
-    submitBtn.innerText = isEdit ? "修正内容を登録する" : "登録する";
+    resetSubmitButton(isEdit);
   }
 });
 
