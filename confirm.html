@@ -157,8 +157,9 @@ document.getElementById("fullNameKana").innerText =
     document.querySelector("h2").innerText = "登録内容確認（修正）";
     document.getElementById("submitBtn").innerText = "修正内容を登録する";
   }
-}
 
+  checkDuplicateOnLoad();
+}
 
 function renderOrders(orders) {
   const area = document.getElementById("orderArea");
@@ -237,7 +238,6 @@ function validatePin() {
 async function checkDuplicateBeforeSubmit(payload) {
   const orders = payload.orders || [];
   const first = orders[0] || {};
-
   const registrationNo = document.getElementById("pin").value.trim();
 
   const checkPayload = {
@@ -266,6 +266,45 @@ async function checkDuplicateBeforeSubmit(payload) {
   }
 
   return json;
+}
+
+async function checkDuplicateOnLoad() {
+  if (!draft || draft.editMode === true) {
+    return;
+  }
+
+  const orders = draft.orders || [];
+  const first = orders[0] || {};
+
+  const checkPayload = {
+    duplicateCheckOnly: true,
+    customerCode: first.customerCode || first["顧客コード"] || "",
+    sei: first.sei || first["氏"] || "",
+    mei: first.mei || first["名"] || "",
+    seiKana: first.seiKana || first["シ"] || "",
+    meiKana: first.meiKana || first["メイ"] || "",
+    registrationNo: ""
+  };
+
+  try {
+    const res = await fetch(GAS_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "text/plain;charset=utf-8"
+      },
+      body: JSON.stringify(checkPayload)
+    });
+
+    const text = await res.text();
+    const json = JSON.parse(text);
+
+    if (json.result === "ok" && json.duplicateNameFound) {
+      showDuplicateWarning();
+    }
+
+  } catch (err) {
+    console.warn("ページ表示時の重複チェックに失敗しました。", err);
+  }
 }
 
 function showDuplicateWarning() {
@@ -309,29 +348,30 @@ document.getElementById("submitBtn").addEventListener("click", async () => {
     duplicateCheck.checked;
 
   if (!isEdit) {
-    try {
-      const tempPayload = JSON.parse(JSON.stringify(draft));
-      const duplicateResult = await checkDuplicateBeforeSubmit(tempPayload);
+  try {
+    const tempPayload = JSON.parse(JSON.stringify(draft));
+    const duplicateResult = await checkDuplicateBeforeSubmit(tempPayload);
 
-      if (duplicateResult.duplicateNameFound && !duplicateAlreadyConfirmed) {
-  showDuplicateWarning();
-  return;
-}
-
-if (
-  duplicateResult.duplicateNameFound &&
-  duplicateAlreadyConfirmed &&
-  duplicateResult.sameRegistrationNoFound
-) {
-  alert("その番号はすでに使われています。別番号で登録してください。");
-  return;
-}
-
-    } catch (err) {
-      alert("重複チェック中にエラーが発生しました。\n" + err.message);
+    if (duplicateResult.duplicateNameFound && !duplicateAlreadyConfirmed) {
+      showDuplicateWarning();
+      alert("確認の上、このまま登録する場合はチェックを入れてください。");
       return;
     }
+
+    if (
+      duplicateResult.duplicateNameFound &&
+      duplicateAlreadyConfirmed &&
+      duplicateResult.sameRegistrationNoFound
+    ) {
+      alert("その番号はすでに使われています。別番号で登録してください。");
+      return;
+    }
+
+  } catch (err) {
+    alert("重複チェック中にエラーが発生しました。\n" + err.message);
+    return;
   }
+}
 
   submitBtn.disabled = true;
   submitBtn.innerText = "送信中...";
