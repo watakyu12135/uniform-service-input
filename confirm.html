@@ -46,6 +46,7 @@ label { font-weight: bold; display: block; margin-top: 10px; }
 <div class="section">
   <h3>基本情報</h3>
   <div class="info-row">顧客：<span id="customerName"></span></div>
+  <div id="employeeNoRow" class="info-row hidden">職員番号：<span id="employeeNo"></span></div>
   <div class="info-row">氏名：<span id="fullName"></span></div>
 <div class="info-row">フリガナ：<span id="fullNameKana"></span></div>
   <div class="info-row">性別：<span id="gender"></span></div>
@@ -164,6 +165,15 @@ function loadDraft() {
 
   const orders = draft.orders || [];
   const first = orders[0] || {};
+  const employeeNo = first.employeeNo || first.staffNo || first["職員番号"] || "";
+  const employeeNoRow = document.getElementById("employeeNoRow");
+  const employeeNoSpan = document.getElementById("employeeNo");
+  if (employeeNoRow && employeeNoSpan && employeeNo) {
+    employeeNoRow.classList.remove("hidden");
+    employeeNoSpan.innerText = employeeNo;
+  } else if (employeeNoRow) {
+    employeeNoRow.classList.add("hidden");
+  }
 
   document.getElementById("customerName").innerText = first.customerName || "";
   document.getElementById("fullName").innerText =
@@ -271,6 +281,9 @@ async function checkDuplicateBeforeSubmit(payload) {
     customerKey: customerKey,
     customer: customerKey,
     customerCode: first.customerCode || first["顧客コード"] || "",
+    employeeNo: first.employeeNo || first.staffNo || first["職員番号"] || "",
+    staffNo: first.employeeNo || first.staffNo || first["職員番号"] || "",
+    "職員番号": first.employeeNo || first.staffNo || first["職員番号"] || "",
     sei: first.sei || first["氏"] || "",
     mei: first.mei || first["名"] || "",
     seiKana: first.seiKana || first["シ"] || "",
@@ -311,6 +324,9 @@ async function checkDuplicateOnLoad() {
     customerKey: customerKey,
     customer: customerKey,
     customerCode: first.customerCode || first["顧客コード"] || "",
+    employeeNo: first.employeeNo || first.staffNo || first["職員番号"] || "",
+    staffNo: first.employeeNo || first.staffNo || first["職員番号"] || "",
+    "職員番号": first.employeeNo || first.staffNo || first["職員番号"] || "",
     sei: first.sei || first["氏"] || "",
     mei: first.mei || first["名"] || "",
     seiKana: first.seiKana || first["シ"] || "",
@@ -487,6 +503,9 @@ payload.rosterMismatchInfo = duplicateAlreadyConfirmed
     payload.measurement.publicKey = customerKey;
     payload.measurement.customerKey = customerKey;
     payload.measurement.customer = customerKey;
+    payload.measurement.employeeNo = payload.measurement.employeeNo || payload.measurement.staffNo || payload.measurement["職員番号"] || payload.employeeNo || "";
+    payload.measurement.staffNo = payload.measurement.employeeNo;
+    payload.measurement["職員番号"] = payload.measurement.employeeNo;
   }
 
   try {
