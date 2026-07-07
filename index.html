@@ -1999,11 +1999,15 @@ function getRowSizeInfo(row) {
   };
 }
 
+function isInseamTargetCategory(productCategory) {
+  const category = String(productCategory || "").trim();
+  return ["下衣", "パンツ", "スカート", "ズボン"].includes(category);
+}
+
 function buildInseamAreaHtml(productCategory, inseamAlterable) {
-  const category = String(productCategory || "");
   const canAlter = String(inseamAlterable || "").trim() === "1";
 
-  if (category !== "下衣") {
+  if (!isInseamTargetCategory(productCategory)) {
     return "";
   }
 
