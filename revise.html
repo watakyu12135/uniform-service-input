@@ -133,8 +133,18 @@ let lastSearchResult = null;
 
 function getCustomer() {
   const url = new URL(window.location.href);
-  return url.searchParams.get("customer") || "gvhp8hex";
+  const customerKey =
+    url.searchParams.get("customer") ||
+    sessionStorage.getItem("uniformCustomer") ||
+    "gvhp8hex";
+
+  if (customerKey) {
+    sessionStorage.setItem("uniformCustomer", customerKey);
+  }
+
+  return customerKey;
 }
+
 
 function escapeHtml(value) {
   return String(value ?? "")
@@ -184,7 +194,7 @@ function loadCustomerConfig() {
         return null;
       }
 
-      return fetch(`config/${customerKey}.json`);
+ return fetch(`config/${customerKey}.json?ts=${Date.now()}`);
     })
     .then(res => {
       if (!res) {
