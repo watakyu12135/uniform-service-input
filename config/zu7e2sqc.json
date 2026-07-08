@@ -1,11 +1,20 @@
 {
   "customerCode": "31015597",
   "customerName": "土井整形外科",
-  "departments": [],
+  "basicInfos": [
+    {"name": "氏名", "displayOrder": 0, "active": true},
+    {"name": "性別", "displayOrder": 0, "active": true},
+    {"name": "職員番号", "displayOrder": 0, "active": false},
+    {"name": "職種", "displayOrder": 0, "active": true},
+    {"name": "部署", "displayOrder": 0, "active": false}
+  ],
+  "departments": [
+
+  ],
   "jobs": [
     {
-      "job": "技師",
       "gender": "男性",
+      "job": "技師",
       "products": [
         {
           "productCode": "MPA3902-14",
@@ -14,58 +23,8 @@
           "gender": "兼用",
           "productCategory": "上衣",
           "sizeSuffix": "サイズ",
-          "sizes": [
-            {
-              "value": "S",
-              "label": "Sサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "M",
-              "label": "Mサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "L",
-              "label": "Lサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "LL",
-              "label": "LLサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "BL",
-              "label": "BLサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "S1",
-              "label": "S1サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "B1",
-              "label": "B1サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "B3",
-              "label": "B3サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "B5",
-              "label": "B5サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "別寸",
-              "label": "別寸",
-              "type": "bespoke"
-            }
-          ]
+          "inseamAlterable": 0,
+          "sizes": [{"value": "S", "label": "Sサイズ", "type": "standard"},{"value": "M", "label": "Mサイズ", "type": "standard"},{"value": "L", "label": "Lサイズ", "type": "standard"},{"value": "LL", "label": "LLサイズ", "type": "standard"},{"value": "BL", "label": "BLサイズ", "type": "standard"},{"value": "S1", "label": "S1サイズ", "type": "custom"},{"value": "B1､B3､B5", "label": "B1､B3､B5サイズ", "type": "custom"},{"value": "別寸", "label": "別寸", "type": "bespoke"}]
         },
         {
           "productCode": "MPA3903-14",
@@ -74,63 +33,8 @@
           "gender": "兼用",
           "productCategory": "パンツ",
           "sizeSuffix": "サイズ",
-          "sizes": [
-            {
-              "value": "SS",
-              "label": "SSサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "S",
-              "label": "Sサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "M",
-              "label": "Mサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "L",
-              "label": "Lサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "LL",
-              "label": "LLサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "BL",
-              "label": "BLサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "3S",
-              "label": "3Sサイズ",
-              "type": "custom"
-            },
-            {
-              "value": "B1",
-              "label": "B1サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "B3",
-              "label": "B3サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "B5",
-              "label": "B5サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "別寸",
-              "label": "別寸",
-              "type": "bespoke"
-            }
-          ]
+          "inseamAlterable": 0,
+          "sizes": [{"value": "SS", "label": "SSサイズ", "type": "standard"},{"value": "S", "label": "Sサイズ", "type": "standard"},{"value": "M", "label": "Mサイズ", "type": "standard"},{"value": "L", "label": "Lサイズ", "type": "standard"},{"value": "LL", "label": "LLサイズ", "type": "standard"},{"value": "BL", "label": "BLサイズ", "type": "standard"},{"value": "3S", "label": "3Sサイズ", "type": "custom"},{"value": "B1", "label": "B1サイズ", "type": "custom"},{"value": "B3", "label": "B3サイズ", "type": "custom"},{"value": "B5", "label": "B5サイズ", "type": "custom"},{"value": "別寸", "label": "別寸", "type": "bespoke"}]
         }
       ],
       "categoryLimits": [
@@ -144,16 +48,8 @@
         }
       ],
       "conversionRules": [
-        {
-          "fromProductCategory": "上衣",
-          "toConsumptionCategory": "上衣",
-          "qty": 1
-        },
-        {
-          "fromProductCategory": "パンツ",
-          "toConsumptionCategory": "パンツ",
-          "qty": 1
-        }
+        {"fromProductCategory": "上衣", "toConsumptionCategory": "上衣", "qty": 1},
+        {"fromProductCategory": "パンツ", "toConsumptionCategory": "パンツ", "qty": 1}
       ],
       "categoryDisplay": [
         {
@@ -171,8 +67,8 @@
       ]
     },
     {
-      "job": "看護師",
       "gender": "女性",
+      "job": "看護師",
       "products": [
         {
           "productCode": "MPA3912-135",
@@ -181,138 +77,18 @@
           "gender": "兼用",
           "productCategory": "上衣",
           "sizeSuffix": "サイズ",
-          "sizes": [
-            {
-              "value": "SS",
-              "label": "SSサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "S",
-              "label": "Sサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "M",
-              "label": "Mサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "L",
-              "label": "Lサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "LL",
-              "label": "LLサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "BL",
-              "label": "BLサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "3S",
-              "label": "3Sサイズ",
-              "type": "custom"
-            },
-            {
-              "value": "B1",
-              "label": "B1サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "B3",
-              "label": "B3サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "B5",
-              "label": "B5サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "別寸",
-              "label": "別寸",
-              "type": "bespoke"
-            }
-          ]
+          "inseamAlterable": 0,
+          "sizes": [{"value": "SS", "label": "SSサイズ", "type": "standard"},{"value": "S", "label": "Sサイズ", "type": "standard"},{"value": "M", "label": "Mサイズ", "type": "standard"},{"value": "L", "label": "Lサイズ", "type": "standard"},{"value": "LL", "label": "LLサイズ", "type": "standard"},{"value": "BL", "label": "BLサイズ", "type": "standard"},{"value": "3S", "label": "3Sサイズ", "type": "custom"},{"value": "B1", "label": "B1サイズ", "type": "custom"},{"value": "B3", "label": "B3サイズ", "type": "custom"},{"value": "B5", "label": "B5サイズ", "type": "custom"},{"value": "別寸", "label": "別寸", "type": "bespoke"}]
         },
         {
-          "productCode": "MPW3908-135",
+          "productCode": "MPA3908-135",
           "name": "MPレディースパンツ",
           "color": "ボトルグリーン",
           "gender": "女性",
           "productCategory": "パンツ",
           "sizeSuffix": "サイズ",
-          "sizes": [
-            {
-              "value": "S",
-              "label": "Sサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "M",
-              "label": "Mサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "L",
-              "label": "Lサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "LL",
-              "label": "LLサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "EL",
-              "label": "ELサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "S1",
-              "label": "S1サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "E1",
-              "label": "E1サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "E2",
-              "label": "E2サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "E3",
-              "label": "E3サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "E4",
-              "label": "E4サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "E5",
-              "label": "E5サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "E6",
-              "label": "E6サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "別寸",
-              "label": "別寸",
-              "type": "bespoke"
-            }
-          ]
+          "inseamAlterable": 0,
+          "sizes": [{"value": "S", "label": "Sサイズ", "type": "standard"},{"value": "M", "label": "Mサイズ", "type": "standard"},{"value": "L", "label": "Lサイズ", "type": "standard"},{"value": "LL", "label": "LLサイズ", "type": "standard"},{"value": "EL", "label": "ELサイズ", "type": "standard"},{"value": "S1", "label": "S1サイズ", "type": "custom"},{"value": "E1", "label": "E1サイズ", "type": "custom"},{"value": "E2､E3､E4", "label": "E2､E3､E4サイズ", "type": "custom"},{"value": "E5､E6", "label": "E5､E6サイズ", "type": "custom"},{"value": "別寸", "label": "別寸", "type": "bespoke"}]
         }
       ],
       "categoryLimits": [
@@ -326,16 +102,8 @@
         }
       ],
       "conversionRules": [
-        {
-          "fromProductCategory": "上衣",
-          "toConsumptionCategory": "上衣",
-          "qty": 1
-        },
-        {
-          "fromProductCategory": "パンツ",
-          "toConsumptionCategory": "パンツ",
-          "qty": 1
-        }
+        {"fromProductCategory": "上衣", "toConsumptionCategory": "上衣", "qty": 1},
+        {"fromProductCategory": "パンツ", "toConsumptionCategory": "パンツ", "qty": 1}
       ],
       "categoryDisplay": [
         {
@@ -353,8 +121,8 @@
       ]
     },
     {
-      "job": "看護師",
       "gender": "男性",
+      "job": "看護師",
       "products": [
         {
           "productCode": "MPA3912-135",
@@ -363,63 +131,8 @@
           "gender": "兼用",
           "productCategory": "上衣",
           "sizeSuffix": "サイズ",
-          "sizes": [
-            {
-              "value": "SS",
-              "label": "SSサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "S",
-              "label": "Sサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "M",
-              "label": "Mサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "L",
-              "label": "Lサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "LL",
-              "label": "LLサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "BL",
-              "label": "BLサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "3S",
-              "label": "3Sサイズ",
-              "type": "custom"
-            },
-            {
-              "value": "B1",
-              "label": "B1サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "B3",
-              "label": "B3サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "B5",
-              "label": "B5サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "別寸",
-              "label": "別寸",
-              "type": "bespoke"
-            }
-          ]
+          "inseamAlterable": 0,
+          "sizes": [{"value": "SS", "label": "SSサイズ", "type": "standard"},{"value": "S", "label": "Sサイズ", "type": "standard"},{"value": "M", "label": "Mサイズ", "type": "standard"},{"value": "L", "label": "Lサイズ", "type": "standard"},{"value": "LL", "label": "LLサイズ", "type": "standard"},{"value": "BL", "label": "BLサイズ", "type": "standard"},{"value": "3S", "label": "3Sサイズ", "type": "custom"},{"value": "B1", "label": "B1サイズ", "type": "custom"},{"value": "B3", "label": "B3サイズ", "type": "custom"},{"value": "B5", "label": "B5サイズ", "type": "custom"},{"value": "別寸", "label": "別寸", "type": "bespoke"}]
         },
         {
           "productCode": "MPA3903-135",
@@ -428,58 +141,8 @@
           "gender": "男性",
           "productCategory": "パンツ",
           "sizeSuffix": "サイズ",
-          "sizes": [
-            {
-              "value": "S",
-              "label": "Sサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "M",
-              "label": "Mサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "L",
-              "label": "Lサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "LL",
-              "label": "LLサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "BL",
-              "label": "BLサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "S1",
-              "label": "S1サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "B1",
-              "label": "B1サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "B3",
-              "label": "B3サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "B5",
-              "label": "B5サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "別寸",
-              "label": "別寸",
-              "type": "bespoke"
-            }
-          ]
+          "inseamAlterable": 0,
+          "sizes": [{"value": "S", "label": "Sサイズ", "type": "standard"},{"value": "M", "label": "Mサイズ", "type": "standard"},{"value": "L", "label": "Lサイズ", "type": "standard"},{"value": "LL", "label": "LLサイズ", "type": "standard"},{"value": "BL", "label": "BLサイズ", "type": "standard"},{"value": "S1", "label": "S1サイズ", "type": "custom"},{"value": "B1", "label": "B1サイズ", "type": "custom"},{"value": "B3", "label": "B3サイズ", "type": "custom"},{"value": "B5", "label": "B5サイズ", "type": "custom"},{"value": "別寸", "label": "別寸", "type": "bespoke"}]
         }
       ],
       "categoryLimits": [
@@ -493,16 +156,8 @@
         }
       ],
       "conversionRules": [
-        {
-          "fromProductCategory": "上衣",
-          "toConsumptionCategory": "上衣",
-          "qty": 1
-        },
-        {
-          "fromProductCategory": "パンツ",
-          "toConsumptionCategory": "パンツ",
-          "qty": 1
-        }
+        {"fromProductCategory": "上衣", "toConsumptionCategory": "上衣", "qty": 1},
+        {"fromProductCategory": "パンツ", "toConsumptionCategory": "パンツ", "qty": 1}
       ],
       "categoryDisplay": [
         {
@@ -520,8 +175,8 @@
       ]
     },
     {
-      "job": "事務",
       "gender": "女性",
+      "job": "事務",
       "products": [
         {
           "productCode": "LH6282-66",
@@ -530,73 +185,8 @@
           "gender": "兼用",
           "productCategory": "上衣",
           "sizeSuffix": "サイズ",
-          "sizes": [
-            {
-              "value": "S",
-              "label": "Sサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "M",
-              "label": "Mサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "L",
-              "label": "Lサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "LL",
-              "label": "LLサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "EL",
-              "label": "ELサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "S1",
-              "label": "S1サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "E1",
-              "label": "E1サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "E2",
-              "label": "E2サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "E3",
-              "label": "E3サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "E4",
-              "label": "E4サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "E5",
-              "label": "E5サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "E6",
-              "label": "E6サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "別寸",
-              "label": "別寸",
-              "type": "bespoke"
-            }
-          ]
+          "inseamAlterable": 0,
+          "sizes": [{"value": "S", "label": "Sサイズ", "type": "standard"},{"value": "M", "label": "Mサイズ", "type": "standard"},{"value": "L", "label": "Lサイズ", "type": "standard"},{"value": "LL", "label": "LLサイズ", "type": "standard"},{"value": "EL", "label": "ELサイズ", "type": "standard"},{"value": "S1", "label": "S1サイズ", "type": "custom"},{"value": "E1", "label": "E1サイズ", "type": "custom"},{"value": "E2､E3､E4", "label": "E2､E3､E4サイズ", "type": "custom"},{"value": "E5､E6", "label": "E5､E6サイズ", "type": "custom"},{"value": "別寸", "label": "別寸", "type": "bespoke"}]
         },
         {
           "productCode": "LH6203-66",
@@ -605,73 +195,8 @@
           "gender": "兼用",
           "productCategory": "パンツ",
           "sizeSuffix": "サイズ",
-          "sizes": [
-            {
-              "value": "S",
-              "label": "Sサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "M",
-              "label": "Mサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "L",
-              "label": "Lサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "LL",
-              "label": "LLサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "EL",
-              "label": "ELサイズ",
-              "type": "standard"
-            },
-            {
-              "value": "S1",
-              "label": "S1サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "E1",
-              "label": "E1サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "E2",
-              "label": "E2サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "E3",
-              "label": "E3サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "E4",
-              "label": "E4サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "E5",
-              "label": "E5サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "E6",
-              "label": "E6サイズ",
-              "type": "custom"
-            },
-            {
-              "value": "別寸",
-              "label": "別寸",
-              "type": "bespoke"
-            }
-          ]
+          "inseamAlterable": 0,
+          "sizes": [{"value": "S", "label": "Sサイズ", "type": "standard"},{"value": "M", "label": "Mサイズ", "type": "standard"},{"value": "L", "label": "Lサイズ", "type": "standard"},{"value": "LL", "label": "LLサイズ", "type": "standard"},{"value": "EL", "label": "ELサイズ", "type": "standard"},{"value": "S1", "label": "S1サイズ", "type": "custom"},{"value": "E1", "label": "E1サイズ", "type": "custom"},{"value": "E2､E3､E4", "label": "E2､E3､E4サイズ", "type": "custom"},{"value": "E5､E6", "label": "E5､E6サイズ", "type": "custom"},{"value": "別寸", "label": "別寸", "type": "bespoke"}]
         }
       ],
       "categoryLimits": [
@@ -685,16 +210,8 @@
         }
       ],
       "conversionRules": [
-        {
-          "fromProductCategory": "上衣",
-          "toConsumptionCategory": "上衣",
-          "qty": 1
-        },
-        {
-          "fromProductCategory": "パンツ",
-          "toConsumptionCategory": "パンツ",
-          "qty": 1
-        }
+        {"fromProductCategory": "上衣", "toConsumptionCategory": "上衣", "qty": 1},
+        {"fromProductCategory": "パンツ", "toConsumptionCategory": "パンツ", "qty": 1}
       ],
       "categoryDisplay": [
         {
