@@ -1581,14 +1581,32 @@ updateInseamAreaForProduct(row);
 }
 
 function getMeasurementTypeByCategory(category) {
+  const categoryText = String(category || "").trim();
 
-  const upperCategories = ["上衣", "ベスト", "ブラウス"];
-  const lowerCategories = ["下衣", "パンツ", "スカート"];
-  const fullCategories = ["ワンピース"];
+  if (!categoryText) return "";
 
-  if (fullCategories.includes(category)) return "全身";
-  if (upperCategories.includes(category)) return "上衣";
-  if (lowerCategories.includes(category)) return "下衣";
+  // ワンピースは上下両方の採寸対象
+  if (categoryText === "ワンピース") return "全身";
+
+  // 上衣①・上衣②のような派生カテゴリも上衣扱いにする
+  if (
+    categoryText === "上衣" ||
+    categoryText.startsWith("上衣") ||
+    categoryText === "ベスト" ||
+    categoryText === "ブラウス"
+  ) {
+    return "上衣";
+  }
+
+  // 下衣・パンツ・スカート・ズボンは下衣扱いにする
+  if (
+    categoryText === "下衣" ||
+    categoryText === "パンツ" ||
+    categoryText === "スカート" ||
+    categoryText === "ズボン"
+  ) {
+    return "下衣";
+  }
 
   return "";
 }
