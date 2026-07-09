@@ -1,4 +1,711 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>ユニフォーム申請</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<style>
+body {
+  font-family: sans-serif;
+  padding: 20px;
+  overflow-x: hidden;
+}
+
+table {
+  border-collapse: collapse;
+  min-width: 600px;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  width: 100%;
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 4px;
+  text-align: center;
+}
+
+.hidden {
+  display: none;
+}
+
+button {
+  margin-top: 10px;
+}
+
+.basic-field {
+  margin-bottom: 12px;
+  max-width: 520px;
+}
+.basic-field label {
+  font-weight: bold;
+  display: inline-block;
+  min-width: 80px;
+}
+.basic-field input {
+  width: 260px;
+  max-width: 100%;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
+/* 氏名・フリガナ */
+.name-area {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 12px;
+  margin-bottom: 16px;
+  max-width: 520px;
+}
+
+.name-field {
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  align-items: center;
+  gap: 6px;
+}
+
+.name-field label {
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.name-field input {
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
+/* 貸与枚数 */
+#categoryStatus {
+  margin-top: 15px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  background: #f9f9f9;
+}
+
+#limitDeclarationArea {
+  margin: 10px 0 14px 0;
+  padding: 10px;
+  border: 1px solid #ccc;
+  background: #f9f9f9;
+  font-weight: bold;
+  line-height: 1.6;
+}
+
+#limitDeclarationArea:empty {
+  display: none;
+}
+
+.category-ok {
+  color: green;
+  font-weight: bold;
+}
+
+.category-warning {
+  color: orange;
+  font-weight: bold;
+}
+
+.category-over {
+  color: red;
+  font-weight: bold;
+}
+
+.category-normal {
+  color: black;
+  font-weight: bold;
+}
+
+.category-heading {
+  margin-top: 18px;
+  padding: 10px;
+  background: #eef5ff;
+  border-left: 5px solid #4a90e2;
+  font-weight: bold;
+}
+
+.category-note {
+  margin: 6px 0 8px 0;
+  padding: 8px;
+  background: #fff7e6;
+  border-left: 4px solid #f5a623;
+  font-size: 14px;
+}
+
+.category-title {
+  font-weight: bold;
+}
+
+.category-count {
+  margin-left: 8px;
+  font-size: 14px;
+  color: #333;
+}
+
+.category-count-ok {
+  color: green;
+}
+
+.category-count-warning {
+  color: orange;
+}
+
+.category-count-over {
+  color: red;
+}
+
+/* 通常の商品行：色A・色Bの交互表示 */
+tr.product-row.row-theme-0,
+tr.product-row.row-theme-0 td {
+  background: #ffffff;
+}
+
+tr.product-row.row-theme-1,
+tr.product-row.row-theme-1 td {
+  background: #f7fbff;
+}
+
+/* 「他のサイズも選択する」で追加された行：色C・色D・色E */
+tr.product-row.extra-size-row-1,
+tr.product-row.extra-size-row-1 td {
+  background: #fff1f1 !important;
+}
+
+tr.product-row.extra-size-row-2,
+tr.product-row.extra-size-row-2 td {
+  background: #fff7e6 !important;
+}
+
+tr.product-row.extra-size-row-3,
+tr.product-row.extra-size-row-3 td {
+  background: #f1fff1 !important;
+}
+
+tr.product-row.extra-size-row-1,
+tr.product-row.extra-size-row-2,
+tr.product-row.extra-size-row-3 {
+  border-left: 6px solid #e57373;
+}
+
+/* 採寸画面 */
+.measurement-area {
+  margin-top: 20px;
+  padding: 15px;
+  border: 2px solid #4a90e2;
+  background: #f7fbff;
+}
+
+.measure-section {
+  margin-top: 15px;
+  padding: 12px;
+  border: 1px solid #ccc;
+  background: #fff;
+}
+
+.measure-section label {
+  display: inline-block;
+  min-width: 130px;
+  margin-top: 8px;
+  font-weight: bold;
+}
+
+.measure-section input,
+.measure-section select {
+  width: 120px;
+}
+
+.measure-help {
+  margin: 2px 0 8px 135px;
+  font-size: 13px;
+  color: #555;
+}
+
+.disabled-section {
+  opacity: 0.45;
+  background: #eee;
+}
+
+.guide-placeholder {
+  margin-top: 8px;
+  padding: 20px;
+  border: 1px dashed #999;
+  background: #fff;
+  text-align: center;
+  color: #666;
+}
+
+.measurement-image {
+  max-width: 100%;
+  height: auto;
+  margin-top: 8px;
+  border: 1px solid #ccc;
+  background: #fff;
+}
+
+.measure-required-message {
+  margin-top: 6px;
+  font-size: 13px;
+  color: #c00;
+  font-weight: bold;
+}
+
+.measure-inline {
+  display: none;
+}
+
+.cell-inseam {
+  font-size: 13px;
+  color: #333;
+}
+
+.inseam-box {
+  margin-top: 6px;
+  padding: 6px;
+  background: #fff7e6;
+  border-left: 4px solid #f5a623;
+}
+
+.inseam-box label {
+  font-weight: bold;
+}
+
+.inseam-box input {
+  width: 80px;
+  margin-top: 4px;
+}
+
+.inseam-message {
+  margin-top: 6px;
+  color: #c00;
+  font-weight: bold;
+}
+
+.inseam-box.disabled {
+  background: #eee;
+  border-left-color: #999;
+  color: #666;
+}
+
+.inseam-box.disabled input {
+  background: #ddd;
+  color: #666;
+}
+
+/* スマホ表示 */
+@media (max-width: 600px) {
+
+  table {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .product-header {
+    display: none;
+  }
+
+  tr.product-row {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1.2fr;
+    grid-template-areas:
+      "product code size"
+  "product color qty"
+  "inseam inseam inseam"
+  "measure measure measure";
+    border: 1px solid #ccc;
+    margin-bottom: 8px;
+    padding: 6px;
+    background: #fff;
+  }
+
+  tr.product-row td {
+    border: none;
+    padding: 4px;
+    text-align: left;
+  }
+
+  .cell-product {
+    grid-area: product;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    border-right: 1px solid #ddd !important;
+    padding-right: 8px;
+  }
+
+  .cell-code {
+    grid-area: code;
+    font-size: 12px;
+    border-right: 1px solid #ddd !important;
+    border-bottom: 1px solid #ddd !important;
+  }
+
+  .cell-color {
+    grid-area: color;
+    font-size: 12px;
+    border-right: 1px solid #ddd !important;
+  }
+
+  .cell-size {
+    grid-area: size;
+    border-bottom: 1px solid #ddd !important;
+  }
+
+  .cell-qty {
+    grid-area: qty;
+  }
+
+.cell-inseam {
+  grid-area: inseam;
+  display: block !important;
+  width: 100%;
+  box-sizing: border-box;
+  border-top: 1px solid #ddd !important;
+  margin-top: 6px;
+  padding-top: 8px;
+}
+
+.cell-inseam:empty {
+  display: none !important;
+}
+
+.cell-inseam .inseam-box {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.cell-inseam .inseam-message {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+  .cell-measure {
+    grid-area: measure;
+    text-align: right;
+    display: none;
+  }
+
+  .cell-size select,
+  .cell-qty input {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .category-header {
+    display: block;
+  }
+
+  .category-header td {
+    display: block;
+    width: 100%;
+  }
+
+  .category-heading {
+    margin-top: 14px;
+  }
+
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+
+  .cell-qty input,
+  .cell-size select,
+  .specialSize {
+    min-height: 36px;
+  }
+
+.name-area {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 8px;
+  width: 100%;
+  max-width: none;
+}
+
+.name-field {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  align-items: center;
+  gap: 4px;
+}
+
+.name-field label {
+  width: auto;
+  font-size: 14px;
+}
+
+.name-field input {
+  width: 100%;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+  .measure-inline:not(.hidden) {
+    display: inline-block;
+    margin-top: 6px;
+  }
+
+  .measure-section {
+    font-size: 14px;
+  }
+
+  .measure-section label {
+    min-width: 140px;
+    width: 140px;
+    display: inline-block;
+    margin-top: 10px;
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+
+  .measure-section input[type="number"] {
+    width: 72px;
+    box-sizing: border-box;
+  }
+
+  .measure-section select {
+    width: 150px;
+    box-sizing: border-box;
+  }
+
+  .measure-help {
+    display: block;
+    margin: 4px 0 10px 0;
+    width: 100%;
+    font-size: 12px;
+    line-height: 1.4;
+    color: #555;
+  }
+}
+
+
+/* 上部リンク */
+#policyLink {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 13px;
+}
+
+#policyLink a,
+.top-links a {
+  color: #0066cc;
+  text-decoration: none;
+}
+
+.top-links {
+  margin: 10px 0 16px 0;
+  font-size: 15px;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- プライバシーポリシー・免責事項リンク -->
+<div id="policyLink">
+  <a href="privacy.html">プライバシーポリシー・免責事項</a>
+</div>
+
+<!-- 修正画面リンク -->
+<div class="top-links">
+  <a id="reviseLink" href="revise.html">入力済みの採寸情報を修正する方はこちら</a>
+</div>
+
+<h2>ユニフォーム申請</h2>
+
+<div id="customerInfo">顧客：読み込み中...</div>
+<br>
+
+<div id="employeeNoArea" class="basic-field hidden">
+  <label for="employeeNo">職員番号</label>
+  <input id="employeeNo" inputmode="latin" autocomplete="off" maxlength="30" oninput="normalizeEmployeeNoInput(this)">
+</div>
+
+<div class="name-area">
+  <div class="name-field">
+    <label for="sei">氏</label>
+    <input id="sei" inputmode="text" autocomplete="family-name">
+  </div>
+
+  <div class="name-field">
+    <label for="mei">名</label>
+    <input id="mei" inputmode="text" autocomplete="given-name">
+  </div>
+
+  <div class="name-field">
+    <label for="seiKana">シ</label>
+    <input id="seiKana" inputmode="katakana" autocomplete="off">
+  </div>
+
+  <div class="name-field">
+    <label for="meiKana">メイ</label>
+    <input id="meiKana" inputmode="katakana" autocomplete="off">
+  </div>
+</div>
+
+
+性別：
+<select id="gender" onchange="changeGender()">
+  <option value="">選択</option>
+  <option value="男性">男性</option>
+  <option value="女性">女性</option>
+</select><br><br>
+
+
+職種：
+<select id="job" onchange="changeJob()">
+  <option value="">選択</option>
+</select><br><br>
+
+<div id="departmentArea" class="hidden">
+  部署：
+  <select id="department">
+    <option value="">選択</option>
+  </select>
+  <br><br>
+</div>
+
+<div id="limitDeclarationArea"></div>
+
+<div class="table-wrap">
+  <table id="table"></table>
+</div>
+
+<div id="categoryStatus"></div>
+
+<button id="submitButton" onclick="submitData()">確認</button>
+
+<div id="measurementArea" class="hidden measurement-area">
+
+  <h2>別寸採寸表入力</h2>
+
+  <div id="measurementMessage"></div>
+
+  <div class="measurement-guide">
+    <strong>採寸図：</strong><br>
+    <img src="images/measurement-guide.png" alt="採寸図" class="measurement-image">
+  </div>
+
+  <section class="measure-section" id="measureCommon">
+    <h3>共通項目</h3>
+
+    <label>身長</label>
+    <input type="number" id="m_height"> cm<br>
+
+    <label>体重</label>
+    <input type="number" id="m_weight"> kg<br>
+
+    <label>採寸方法</label>
+    <select id="m_method">
+      <option value="">選択</option>
+      <option value="ヌード寸法">ヌード寸法</option>
+      <option value="出来上がり寸法">出来上がり寸法</option>
+    </select>
+  </section>
+
+  <section class="measure-section" id="measureUpper">
+    <h3>上衣採寸</h3>
+
+    <label>A_衿回り</label>
+    <input type="number" id="m_A"> cm
+    <div class="measure-help">のどぼとけのすぐ下で測る。</div>
+
+    <label>B_肩巾</label>
+    <input type="number" id="m_B"> cm
+    <div class="measure-help">左、右の肩先まで測る。</div>
+
+    <label>C1_袖丈_半袖</label>
+    <input type="number" id="m_C1"> cm<br>
+
+    <label>C2_袖丈_七分袖</label>
+    <input type="number" id="m_C2"> cm<br>
+
+    <label>C3_袖丈_長袖</label>
+    <input type="number" id="m_C3"> cm
+
+    <div class="measure-help">
+      肩先から本人希望の長さ。該当する袖丈のみ入力してください。<br>
+      ※半袖の商品を長袖で製作することはできません。
+    </div>
+
+    <label>D_胸回り</label>
+    <input type="number" id="m_D"> cm
+    <div class="measure-help">脇のすぐ下で水平にメジャーを回して測る。</div>
+
+    <label>E_胴回り</label>
+    <input type="number" id="m_E"> cm
+    <div class="measure-help">ベルトの上、へそのあたりを測る。</div>
+
+    <label>F_腰回り</label>
+    <input type="number" id="m_F"> cm
+    <div class="measure-help">腰の一番張ったところを測る。</div>
+
+    <label>G_背丈</label>
+    <input type="number" id="m_G"> cm
+    <div class="measure-help">首の付け根の中心から胴回りの測定位置まで。</div>
+
+    <label>H_着丈</label>
+    <input type="number" id="m_H"> cm
+    <div class="measure-help">首の付け根の中心から本人希望の長さまで。</div>
+
+    <label>I_袖付回り</label>
+    <input type="number" id="m_I"> cm
+    <div class="measure-help">肩先から腕の付け根部分回りを測る。</div>
+  </section>
+
+  <section class="measure-section" id="measureLower">
+    <h3>下衣採寸</h3>
+
+    <label>a_胴回り</label>
+    <input type="number" id="m_a"> cm
+    <div class="measure-help">ベルトの上、へそのあたりを測る。</div>
+
+    <label>b_腰回り</label>
+    <input type="number" id="m_b"> cm
+    <div class="measure-help">腰の一番張ったところを測る。</div>
+
+    <label>c_股上</label>
+    <input type="number" id="m_c"> cm
+    <div class="measure-help">胴回り位置から股下までを測る。</div>
+
+    <label>d_股下</label>
+    <input type="number" id="m_d"> cm
+    <div class="measure-help">股下より本人希望の長さ。</div>
+
+    <label>e_総丈</label>
+    <input type="number" id="m_e"> cm
+    <div class="measure-help">胴回り位置からズボン裾まで。</div>
+
+    <label>f_太股回り</label>
+    <input type="number" id="m_f"> cm
+    <div class="measure-help">股下より10cm下がった位置を測る。</div>
+  </section>
+
+  <section class="measure-section">
+    <h3>特記事項・備考</h3>
+
+    <label>特記事項</label><br>
+    <textarea id="m_specialNote" rows="3"></textarea><br>
+
+    <label>備考</label><br>
+    <textarea id="m_memo" rows="3"></textarea>
+  </section>
+
+  <button onclick="saveMeasurement()">採寸表を保存して戻る</button>
+  <button onclick="cancelMeasurement()">保存せず戻る</button>
+
+</div>
+
+<script>
 
 const GAS_URL = "https://script.google.com/macros/s/AKfycbzifpGEKoydnvI9RAU6evgnHoWQh2YTx7WfXtqsi8O7tMoGbnyXzCC5bIVUY9QmUGZdlA/exec";
 
@@ -874,32 +1581,14 @@ updateInseamAreaForProduct(row);
 }
 
 function getMeasurementTypeByCategory(category) {
-  const categoryText = String(category || "").trim();
 
-  if (!categoryText) return "";
+  const upperCategories = ["上衣", "ベスト", "ブラウス"];
+  const lowerCategories = ["下衣", "パンツ", "スカート"];
+  const fullCategories = ["ワンピース"];
 
-  // ワンピースは上下両方の採寸対象
-  if (categoryText === "ワンピース") return "全身";
-
-  // 上衣①・上衣②のような派生カテゴリも上衣扱いにする
-  if (
-    categoryText === "上衣" ||
-    categoryText.startsWith("上衣") ||
-    categoryText === "ベスト" ||
-    categoryText === "ブラウス"
-  ) {
-    return "上衣";
-  }
-
-  // 下衣・パンツ・スカート・ズボンは下衣扱いにする
-  if (
-    categoryText === "下衣" ||
-    categoryText === "パンツ" ||
-    categoryText === "スカート" ||
-    categoryText === "ズボン"
-  ) {
-    return "下衣";
-  }
+  if (fullCategories.includes(category)) return "全身";
+  if (upperCategories.includes(category)) return "上衣";
+  if (lowerCategories.includes(category)) return "下衣";
 
   return "";
 }
@@ -1972,3 +2661,7 @@ if (hasBespokeWithoutMeasurement()) {
   sessionStorage.setItem("uniformDraft", JSON.stringify(payload));
   location.href = "confirm.html?customer=" + encodeURIComponent(customerKey);
 }
+</script>
+
+</body>
+</html>
